@@ -575,6 +575,7 @@ async function boot(){
   }catch(e){$('startBody').innerHTML=`<h1>Can’t load 😕</h1><p>Check your internet connection and reload.</p>`;return}
   A.onAuthStateChanged(auth,async user=>{
     if(!user){stopAll();showAuth('in');return}
+    if(needsVerify(user)){stopAll();showVerify(user);return}
     ME.uid=user.uid;
     let prof=null;try{const d=await F.getDoc(F.doc(db,'profiles',user.uid));if(d.exists())prof=d.data()}catch(e){}
     if(prof&&prof.uname){Object.assign(ME,{nick:prof.nick||prof.uname,uname:prof.uname,emoji:EMOJIS.includes(prof.emoji)?prof.emoji:ME.emoji,color:prof.color||ME.color,status:prof.status||'',mode:['online','away','dnd'].includes(prof.mode)?prof.mode:'online'});enterApp()}
@@ -605,7 +606,7 @@ function showAuth(mode){
     if(!em||!pw)return err('Type your email and password.');
     if(up&&pw!==$('pw2').value)return err("The two passwords don't match.");
     const btn=$('ago');btn.disabled=true;err('');
-    try{await persist();if(up)await A.createUserWithEmailAndPassword(auth,em,pw);else await A.signInWithEmailAndPassword(auth,em,pw)}
+    try{await persist();if(up){const cr=await A.createUserWithEmailAndPassword(auth,em,pw);try{await A.sendEmailVerification(cr.user)}catch(e){}}else await A.signInWithEmailAndPassword(auth,em,pw)}
     catch(e){if($('aerr'))err(niceErr(e))}
     btn.disabled=false;
   };
@@ -656,6 +657,31 @@ async function signOut(){
   stopAll();await A.signOut(auth);
 }
 
+
+/* ---------- email verification ---------- */
+function needsVerify(user){return !user.emailVerified&&(user.providerData||[]).some(p=>p.providerId==='password')&&!(user.providerData||[]).some(p=>p.providerId==='google.com')}
+function showVerify(user){
+  $('start').classList.add('show');const b=$('startBody');
+  b.innerHTML=`<h1>📧 Check your email</h1><p>We sent a link to <b id="vem"></b>. Open it and click the link to prove it’s really your email.</p>
+    <p class="hint">Can’t find it? Check your <b>Spam</b> or <b>Promotions</b> folder.</p>
+    <div class="err" id="verr"></div>
+    <button class="big" id="vdone">✅ I clicked the link</button>
+    <button class="big ghost" id="vresend">📨 Send the email again</button>
+    <button class="linkbtn" id="vout">Use a different account</button>`;
+  $('vem').textContent=user.email||'your email';
+  $('vdone').onclick=async()=>{
+    $('vdone').disabled=true;$('verr').textContent='';
+    try{await user.reload();const u=auth.currentUser;
+      if(u&&u.emailVerified){await u.getIdToken(true);location.reload();return}
+      $('verr').textContent='Not verified yet. Click the link in the email first, then try again.'}
+    catch(e){$('verr').textContent=niceErr(e)}
+    $('vdone').disabled=false;
+  };
+  let last=0;
+  $('vresend').onclick=async()=>{if(Date.now()-last<60000){$('verr').textContent='Wait a minute before sending another one.';return}
+    last=Date.now();try{await A.sendEmailVerification(auth.currentUser);$('verr').style.color='var(--good)';$('verr').textContent='📨 Sent! Check your inbox.'}catch(e){$('verr').style.color='';$('verr').textContent=niceErr(e)}};
+  $('vout').onclick=()=>A.signOut(auth);
+}
 
 /* ---------- conversations (DMs + groups) ---------- */
 const isGroup=k=>k&&k[0]==='g';
