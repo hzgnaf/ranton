@@ -1,0 +1,12 @@
+{
+  "name": "Ranton",
+  "short_name": "Ranton",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0f0e16",
+  "theme_color": "#a78bfa",
+  "icons": [
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any"}
+  ]
+}
