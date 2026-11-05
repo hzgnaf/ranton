@@ -390,6 +390,38 @@ body.light .poll,body.light .game,body.light .mfile,body.light .ytcard{backgroun
 body.light .epick,body.light .pmenu{background:#fff}
 body.light .pinrow{background:#ecebf3}
 
+.msg.showtools .mtools{display:flex}
+@media (max-width:900px){
+  #mute{display:none}
+  #chead{gap:6px;padding:0 10px}
+  .callbtn{width:34px;height:32px;margin-left:2px;font-size:15px}
+  #obNote{white-space:nowrap;padding:6px 8px}
+  #chead .sub{display:none}
+  .msg .mtools{top:-16px}
+}
+
+/* ===== batch 1 ===== */
+.spoiler{background:#5b5675;color:transparent;border-radius:4px;cursor:pointer;padding:0 3px;transition:.2s}
+.spoiler.shown{background:#ffffff1a;color:inherit}
+.icode{background:#00000040;border-radius:5px;padding:1px 5px;font-family:ui-monospace,Consolas,monospace;font-size:13.5px}
+.mt.bigemoji{font-size:44px;line-height:1.2}
+.ulv{display:flex;align-items:center;gap:10px;justify-content:center;margin:8px auto;max-width:300px}
+.lvb{font-weight:900;white-space:nowrap}.lvbar{flex:1;height:8px;border-radius:9px;background:#ffffff1a;overflow:hidden}.lvbar i{display:block;height:100%;background:var(--acc);border-radius:9px}
+.lvx{color:var(--mut);font-weight:800;white-space:nowrap}
+.card.wide{width:min(720px,100%)}
+.drawwrap{background:#fff;border-radius:12px;overflow:hidden;touch-action:none}
+#dcv{display:block;width:100%;height:auto;touch-action:none;cursor:crosshair}
+.dtools{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:10px}
+#dcols{display:flex;gap:5px;flex-wrap:wrap}.dcol{width:26px;height:26px;border-radius:50%;border:2px solid #ffffff44}.dcol.on{border:3px solid var(--acc);transform:scale(1.15)}
+.dtools .fbtn.on{background:var(--acc);color:#14121c}
+select{padding:11px;border-radius:10px;border:2px solid var(--line);background:#14121c;color:var(--txt);font:inherit;font-weight:700}
+.ilink{font-size:13px!important;letter-spacing:0!important;word-break:break-all}
+#banov{position:fixed;inset:0;z-index:95;background:#07060bf2;display:grid;place-items:center;padding:16px}
+.reprow{background:#26233a;border-radius:12px;padding:12px;margin-bottom:8px}
+.reprow .rtop{display:flex;justify-content:space-between;gap:8px}.reprow p{margin:4px 0;font-size:14px;color:#cfc9e6}.reprow small{color:var(--mut)}
+.ract{display:flex;gap:6px;margin-top:6px}
+body.light .reprow{background:#ecebf3}body.light select{background:#fff}
+
 .callbtn{background:#ffffff12;color:var(--txt);border-radius:10px;width:38px;height:34px;font-size:17px;margin-left:6px}
 .callbtn:hover{background:var(--good);color:#14121c}
 #callov{position:fixed;inset:0;z-index:70;background:radial-gradient(circle at 50% 30%,#2a2440,#0b0a10);display:none;flex-direction:column;align-items:center;justify-content:center}
@@ -662,7 +694,7 @@ async function signOutWrap(){await signOut()}
 function updateMe(){
   const mp=who(ME.uid).pic;$('meav').style.backgroundImage=mp?`url(${mp})`:'';$('meav').style.backgroundSize='cover';
   $('mename').textContent=ME.nick;$('meav').innerHTML=(mp?'':esc(ME.emoji))+`<i class="${ME.mode==='dnd'?'dnd':ME.mode==='away'?'away':'on'}"></i>`;$('meav').style.background=ME.color+'33';
-  $('merole').textContent=ME.status||PLABEL[ME.mode==='away'?'away':ME.mode==='dnd'?'dnd':'online'];
+  $('merole').textContent='⭐'+levelOf(who(ME.uid).msgs).lv+' · '+(ME.status||PLABEL[ME.mode==='away'?'away':ME.mode==='dnd'?'dnd':'online']);
 }
 function stopAll(){
   if(typeof CALL!=='undefined'&&CALL.pc)hangUp('ended');
@@ -713,6 +745,8 @@ function enterApp(){
     if(ST.conv&&isGroup(ST.conv)&&!ST.groups[cid(ST.conv)]){toast('You’re no longer in that group.');openHome()}
     ST.firstGroups=false;redraw();rTyping();if(ST.conv&&isGroup(ST.conv)){markSeen(ST.conv);rWatch();rChBar()}},W));
   ST.unsub.push(F.onSnapshot(q(c('calls'),F.where('users','array-contains',u)),onCallsSnap,W));
+  ST.unsub.push(F.onSnapshot(F.doc(db,'bans',u),d=>{ST.banned=d.exists();bannedScreen(ST.banned)},()=>{}));
+  setTimeout(()=>{if(ST.started){bdayCheck();handleInvite()}},2500);
   ST.unsub.push(F.onSnapshot(F.doc(db,'users',u,'private','nicks'),d=>{ST.nicks=(d.exists()&&d.data().map)||{};redraw()},()=>{}));
   openHome();
 }
@@ -735,7 +769,7 @@ function openConv(k,ch){
 }
 const openDM=pid=>openConv('d:'+pid);
 function avHTML(id,size){const w=who(id);return `<div class="av${w.pic?' pic':''}" data-uid="${esc(id)}" style="background:${w.pic?`url(${w.pic}) center/cover`:w.color+'33'}${size?`;width:${size}px;height:${size}px;font-size:${Math.round(size/2)}px`:''}">${w.pic?'':w.emoji}<i class="${presence(id)==='offline'?'':presence(id)==='online'?'on':presence(id)}"></i></div>`}
-function gavHTML(g,size){return `<div class="av gav" style="${size?`width:${size}px;height:${size}px;font-size:${Math.round(size/2)}px`:''}">${GEMOJI.includes(g.emoji)?g.emoji:'💬'}</div>`}
+function gavHTML(g,size){const pic=goodPic(g.pic)?g.pic:null;return `<div class="av gav" style="${pic?`background:url(${pic}) center/cover;`:''}${size?`width:${size}px;height:${size}px;font-size:${Math.round(size/2)}px`:''}">${pic?'':GEMOJI.includes(g.emoji)?g.emoji:'💬'}</div>`}
 
 function rSide(){
   const box=$('chlist');box.innerHTML='';
@@ -750,7 +784,7 @@ function rSide(){
     const b=document.createElement('button');b.className='ch dmrow'+(ST.conv===k?' on':'')+(un?' unread':'');
     const live=g&&c.call&&c.call.session&&liveParts(c.call).length;
     b.innerHTML=`${g?gavHTML(c,30):avHTML(otherOf(cid(k)),30)}<span class="lbl"><span class="nm"></span><small class="pv"></small></span>${live?'<span class="badge live">🔊</span>':un?'<span class="badge">new</span>':''}`;
-    b.querySelector('.nm').textContent=convTitle(k);
+    const sk=streakOf(k),bd=!g&&isBday(otherOf(cid(k)));b.querySelector('.nm').textContent=convTitle(k)+(bd?' 🎂':'')+(sk>=2?' 🔥'+sk:'');
     b.querySelector('.pv').textContent=c.last?(c.last.by===ME.uid?'You: ':g?who(c.last.by).nick+': ':'')+(c.last.text||'📷 Picture'):(g?(c.users||[]).length+' members':'');
     b.onclick=()=>openConv(k);box.appendChild(b)}
   const dot=keys.some(isUnread)||ST.reqIn.length;document.title=(dot?'(•) ':'')+'Ranton';
@@ -764,7 +798,7 @@ function rHead(){
   if(isGroup(k)){const g=convData(k)||{};$('htitle').textContent=(GEMOJI.includes(g.emoji)?g.emoji:'💬')+' '+convTitle(k);
     const typers=(g.users||[]).filter(x=>x!==ME.uid&&isTypingIn(k,x));
     $('hsub').textContent='· '+(typers.length?typers.map(x=>who(x).nick).join(', ')+' typing…':(g.users||[]).length+' members');return}
-  const o=otherOf(cid(k));$('htitle').textContent='@ '+who(o).nick;$('hsub').textContent='· '+(isTypingIn(k,o)?'typing…':statusOf(o));
+  const o=otherOf(cid(k)),sk=streakOf(k);$('htitle').textContent='@ '+who(o).nick+(isBday(o)?' 🎂':'')+(sk>=2?' 🔥'+sk:'');$('hsub').textContent='· '+(isTypingIn(k,o)?'typing…':statusOf(o));
 }
 function fmtTime(t){const d=new Date(t),n=new Date(),tm=d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});return d.toDateString()===n.toDateString()?'Today at '+tm:d.toLocaleDateString()+' '+tm}
 
@@ -826,7 +860,10 @@ function friendsPage(box){
   const fids=Object.keys(ST.friends).filter(f=>!ST.blocks.has(f));
   if(ST.tab==='add'){
     body.innerHTML=`<h3>Add a friend</h3><p class="hint" style="margin-bottom:8px">Type their exact username.</p><div style="display:flex;gap:8px"><input type="text" id="fcode" maxlength="16" placeholder="Their username" autocomplete="off"><button class="send" id="fgo">Send request</button></div><div class="err" id="ferr"></div>
-      <h3>Your username</h3><div class="mycode"><span></span><button class="send" id="cpy">Copy</button></div><p class="hint">Tell your friends this so they can add you.</p>`;
+      <h3>Your username</h3><div class="mycode"><span></span><button class="send" id="cpy">Copy</button></div><p class="hint">Tell your friends this so they can add you.</p>
+      <h3>Your invite link</h3><div class="mycode"><span class="ilink"></span><button class="send" id="cpyl">Copy</button></div><p class="hint">Send this link to a friend. When they open it, Ranton asks them to add you.</p>`;
+    body.querySelector('.ilink').textContent=inviteLink();
+    body.querySelector('#cpyl').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(inviteLink()).then(()=>toast('🔗 Invite link copied!'),()=>toast(inviteLink()))};
     body.querySelector('.mycode span').textContent=ME.nick;
     body.querySelector('#cpy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(ME.nick).then(()=>toast('📋 Copied your username!'),()=>toast('Your username: '+ME.nick))};
     body.querySelector('#fgo').onclick=()=>addFriend(body.querySelector('#fcode').value);
@@ -932,7 +969,7 @@ function newGroupModal(){
     if(!sel.length)return $('gerr').textContent='Pick at least one friend.';
     if(sel.length>MAX_GROUP-1)return $('gerr').textContent=`Groups can have up to ${MAX_GROUP} people.`;
     try{const r=await F.addDoc(F.collection(db,'groups'),{name:name.slice(0,24),emoji:emo,owner:ME.uid,users:[ME.uid,...sel],t:Date.now(),seen:{},typing:{}});
-      closeModal();toast('🎉 Group created!');setTimeout(()=>openConv('g:'+r.id),300)}
+      closeModal();toast('🎉 Group created!');setTimeout(()=>{openConv('g:'+r.id);setTimeout(()=>sendMsg('g:'+r.id,{text:'👋 Welcome to **'+name.slice(0,24)+'**, '+sel.map(x=>'@'+(who(x).uname||who(x).real)).join(' ')+'!'}).catch(()=>{}),400)},300)}
     catch(e){$('gerr').textContent=niceErr(e)}
   };
 }
@@ -950,7 +987,7 @@ function rPanel(){
       box.appendChild(d)});
     const acts=document.createElement('div');acts.className='gacts';
     if(mine){const a=document.createElement('button');a.className='fbtn go';a.textContent='➕ Add people';a.onclick=()=>addToGroupModal(k);acts.appendChild(a);
-      const r=document.createElement('button');r.className='fbtn no';r.textContent='✏️ Rename';r.onclick=()=>renameGroupModal(k);acts.appendChild(r)}
+      const r=document.createElement('button');r.className='fbtn no';r.textContent='✏️ Edit group';r.onclick=()=>renameGroupModal(k);acts.appendChild(r)}
     const l=document.createElement('button');l.className='fbtn no';l.style.color='var(--acc2)';l.textContent=mine&&(g.users||[]).length<=1?'🗑 Delete group':'🚪 Leave group';l.onclick=()=>leaveGroup(k);acts.appendChild(l);
     box.appendChild(acts);
     $('ncount').textContent=(g.users||[]).length;return;
@@ -971,13 +1008,15 @@ function addToGroupModal(k){
   can.forEach(f=>{const l=document.createElement('label');l.className='pickrow';l.innerHTML=`<input type="checkbox" value="${esc(f)}">${avHTML(f,30)}<span></span>`;l.querySelector('span').textContent=who(f).nick;$('apick').appendChild(l)});
   $('ago2').onclick=async()=>{const sel=[...$('apick').querySelectorAll('input:checked')].map(x=>x.value);if(!sel.length)return;
     if((g.users||[]).length+sel.length>MAX_GROUP)return $('aerr2').textContent=`Groups can have up to ${MAX_GROUP} people.`;
-    try{await F.updateDoc(convRef(k),{users:F.arrayUnion(...sel)});closeModal();toast('Added!')}catch(e){$('aerr2').textContent=niceErr(e)}};
+    try{await F.updateDoc(convRef(k),{users:F.arrayUnion(...sel)});closeModal();toast('Added!');sendMsg(k,{text:'👋 Welcome '+sel.map(x=>'@'+(who(x).uname||who(x).real)).join(' ')+'!'}).catch(()=>{})}catch(e){$('aerr2').textContent=niceErr(e)}};
 }
 function renameGroupModal(k){
   const g=convData(k)||{};let emo=GEMOJI.includes(g.emoji)?g.emoji:'💬';
-  modal(`<h1>✏️ Rename group</h1><input type="text" id="rgn" maxlength="24"><h3>Icon</h3><div class="emopick" id="rge"></div><button class="big" id="rgo2">Save</button><button class="big ghost" onclick="closeModal()">Cancel</button>`);
+  modal(`<h1>✏️ Edit group</h1><input type="text" id="rgn" maxlength="24"><h3>Icon</h3><div class="emopick" id="rge"></div><h3>Group photo</h3><div style="display:flex;gap:8px"><button class="fbtn go" id="rgp">📷 Upload photo</button>${goodPic(g.pic)?'<button class="fbtn no" id="rgpx">Remove photo</button>':''}</div><button class="big" id="rgo2">Save</button><button class="big ghost" onclick="closeModal()">Cancel</button>`);
   $('rgn').value=g.name||'';
   GEMOJI.forEach(e=>{const b=document.createElement('button');b.textContent=e;b.className=e===emo?'sel':'';b.onclick=()=>{emo=e;$('rge').querySelectorAll('button').forEach(x=>x.classList.toggle('sel',x===b))};$('rge').appendChild(b)});
+  $('rgp').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=async()=>{const f=i.files[0];if(!f)return;try{const pic=await shrinkPic(f);await F.updateDoc(convRef(k),{pic});closeModal();toast('✅ Group photo saved')}catch(e){toast(e&&e.msg?e.msg:niceErr(e))}};i.click()};
+  if($('rgpx'))$('rgpx').onclick=()=>F.updateDoc(convRef(k),{pic:F.deleteField()}).then(()=>closeModal()).catch(e=>toast(niceErr(e)));
   $('rgo2').onclick=async()=>{const n=$('rgn').value.trim();if(!n)return;try{await F.updateDoc(convRef(k),{name:n.slice(0,24),emoji:emo});closeModal()}catch(e){toast(niceErr(e))}};
 }
 function leaveGroup(k){
@@ -1021,7 +1060,7 @@ function shrinkImage(file){
 /* ---------- settings ---------- */
 function settingsModal(sec){
   sec=sec||'profile';
-  const tabs=[['profile','🙂 Profile'],['look','🎨 Look'],['notif','🔔 Alerts'],['blocked','🚫 Blocked'],['account','🔐 Account']];
+  const tabs=[['profile','🙂 Profile'],['look','🎨 Look'],['notif','🔔 Alerts'],['blocked','🚫 Blocked'],['account','🔐 Account'],...(isAdmin()?[['admin','🛡️ Admin']]:[])];
   modal(`<h1>⚙️ Settings</h1><div class="stabs">${tabs.map(([k,l])=>`<button data-s="${k}" class="${k===sec?'on':''}">${l}</button>`).join('')}</div><div id="sbody"></div><button class="big ghost" onclick="closeModal()">Done</button>`);
   $('mcard').querySelectorAll('.stabs button').forEach(b=>b.onclick=()=>settingsModal(b.dataset.s));
   const b=$('sbody');
@@ -1031,6 +1070,8 @@ function settingsModal(sec){
       <h3>Profile picture</h3><div style="display:flex;gap:8px"><button class="fbtn go" id="sPic">📷 Upload picture</button>${who(ME.uid).pic?'<button class="fbtn no" id="sPicX">Remove</button>':''}</div>
       <h3>About me</h3><input type="text" id="sbio" maxlength="150" placeholder="Say something about yourself">
       <h3>Banner color</h3><div class="swatches" id="sban">${['#a78bfa','#60a5fa','#34d399','#f472b6','#fb923c','#f87171','#facc15','#1e293b'].map(c=>`<button data-b="${c}" style="background:${c}" class="${who(ME.uid).banner===c?'on':''}"></button>`).join('')}</div>
+      <h3>Name color</h3><div class="swatches" id="sncol">${NAMECOLORS.map(c=>`<button data-n="${c}" style="background:${c}" class="${ME.color===c?'on':''}"></button>`).join('')}</div>
+      <h3>Birthday 🎂 <span class="hint">(month and day only)</span></h3><div style="display:flex;gap:8px"><select id="sbm"><option value="">Month</option>${['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'].map((n,i)=>`<option value="${String(i+1).padStart(2,'0')}">${n}</option>`).join('')}</select><select id="sbd"><option value="">Day</option>${Array.from({length:31},(_,i)=>`<option value="${String(i+1).padStart(2,'0')}">${i+1}</option>`).join('')}</select><button class="send" id="sbs">Save</button></div>
       <button class="fbtn no" id="sCard" style="margin-top:10px">👀 See my profile card</button>
       <h3>Status</h3><div class="modes">${[['online','🟢 Online'],['away','🌙 Away'],['dnd','⛔ Do not disturb']].map(([m,l])=>`<button data-m="${m}" class="${ME.mode===m?'on':''}">${l}</button>`).join('')}</div>
       <p class="hint">Do not disturb turns off sounds, pop-ups and call ringing.</p>
@@ -1042,6 +1083,9 @@ function settingsModal(sec){
     $('sbio').onchange=()=>F.setDoc(F.doc(db,'profiles',ME.uid),{bio:$('sbio').value.trim().slice(0,150)},{merge:true}).then(()=>toast('✅ Saved')).catch(e=>toast(niceErr(e)));
     b.querySelectorAll('[data-b]').forEach(x=>x.onclick=()=>F.setDoc(F.doc(db,'profiles',ME.uid),{banner:x.dataset.b},{merge:true}).then(()=>settingsModal('profile')).catch(e=>toast(niceErr(e))));
     $('sCard').onclick=()=>userCard(ME.uid);
+    b.querySelectorAll('[data-n]').forEach(x=>x.onclick=()=>{ME.color=x.dataset.n;F.setDoc(F.doc(db,'profiles',ME.uid),{color:ME.color},{merge:true}).then(()=>{updateMe();settingsModal('profile')}).catch(e=>toast(niceErr(e)))});
+    const bd=(ST.profiles[ME.uid]||{}).bday;if(typeof bd==='string'){$('sbm').value=bd.slice(0,2);$('sbd').value=bd.slice(3)}
+    $('sbs').onclick=()=>{const v=$('sbm').value&&$('sbd').value?$('sbm').value+'-'+$('sbd').value:null;F.setDoc(F.doc(db,'profiles',ME.uid),{bday:v||F.deleteField()},{merge:true}).then(()=>toast(v?'🎂 Birthday saved':'Birthday removed')).catch(e=>toast(niceErr(e)))};
     $('sPic').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=async()=>{const f=i.files[0];if(!f)return;
       try{const pic=await shrinkPic(f);await F.setDoc(F.doc(db,'profiles',ME.uid),{pic},{merge:true});toast('✅ Picture saved');setTimeout(()=>{settingsModal('profile');updateMe()},300)}catch(e){toast(e&&e.msg?e.msg:niceErr(e))}};i.click()};
     if($('sPicX'))$('sPicX').onclick=()=>F.setDoc(F.doc(db,'profiles',ME.uid),{pic:F.deleteField()},{merge:true}).then(()=>setTimeout(()=>{settingsModal('profile');updateMe()},300));
@@ -1061,6 +1105,8 @@ function settingsModal(sec){
     $('snd').onchange=e=>{ST.sound=e.target.checked;$('mute').textContent=ST.sound?'🔔':'🔕'};
     $('tsd').onchange=e=>{PREF.tsound=e.target.checked;savePref()};
     $('ntf').onchange=async e=>{if(e.target.checked){const p=await Notification.requestPermission();PREF.notif=p==='granted';if(!PREF.notif)toast('Notifications weren’t allowed.')}else PREF.notif=false;savePref();settingsModal('notif')};
+  }else if(sec==='admin'&&isAdmin()){
+    adminPanel(b);
   }else if(sec==='blocked'){
     const list=[...ST.blocks];
     b.innerHTML=list.length?'':'<div class="empty">You haven’t blocked anyone.</div>';
@@ -1177,7 +1223,7 @@ async function startCall(type){
   const local=await getMedia(type);if(!local)return;
   Object.assign(CALL,{cid:pid,session:rid(),role:'caller',type,local,status:'ringing',muted:false,camOff:false,screen:null,seenCands:new Set(),pendingCands:[]});
   CALL.handled.add(CALL.session);
-  CALL.pc=makePC();callUI();listenCands();ringStart(false);
+  callUI();CALL.pc=makePC();listenCands();ringStart(false);
   try{
     const offer=await CALL.pc.createOffer();await CALL.pc.setLocalDescription(offer);
     await F.setDoc(F.doc(db,'calls',pid),{users:pid.split('_'),from:ME.uid,to:o,type,status:'ringing',session:CALL.session,offer:{type:offer.type,sdp:offer.sdp},answer:null,screen:null,t:Date.now()});
@@ -1191,7 +1237,7 @@ async function acceptCall(pid,data){
   if(!local){F.updateDoc(F.doc(db,'calls',pid),{status:'declined'}).catch(()=>{});return}
   Object.assign(CALL,{cid:pid,session:data.session,role:'callee',type:data.type,local,status:'connecting',muted:false,camOff:false,screen:null,seenCands:new Set(),pendingCands:[]});
   if(ST.conv!=='d:'+pid)openConv('d:'+pid);
-  CALL.pc=makePC();callUI();listenCands();
+  callUI();CALL.pc=makePC();listenCands();
   try{
     await CALL.pc.setRemoteDescription(data.offer);ensureVideoSendable(CALL.pc);flushCands();
     const ans=await CALL.pc.createAnswer();await CALL.pc.setLocalDescription(ans);
@@ -1457,7 +1503,7 @@ function renderText(box,text){
   parts.forEach(p=>{
     if(/^https?:\/\//.test(p)){const a=el('a','lnk',p);a.href=p;a.target='_blank';a.rel='noopener noreferrer nofollow';box.appendChild(a)}
     else if(/^@[A-Za-z0-9_]{2,16}$/.test(p)){const s=el('span','mention'+(mentionsMe(p)?' me':''),p);box.appendChild(s)}
-    else box.appendChild(document.createTextNode(p));
+    else formatInto(box,p);
   });
 }
 
@@ -1467,10 +1513,12 @@ function msgEl(m,k,cont,q){
   const d=el('div','msg'+(cont?' cont':'')+(m.text&&mentionsMe(m.text)&&m.by!==ME.uid?' mentioned':''));d.id='m-'+m.id;
   d.innerHTML=`${avHTML(m.by)}<div class="mb">${m.reply?'<div class="rq"></div>':''}${cont?'':`<div class="mh"><b class="nm" style="color:${a.color}"></b><span class="bdg"></span><span class="tm">${fmtTime(at)}</span></div>`}<div class="body"></div><div class="reacts"></div></div><div class="mtools"></div>`;
   d.querySelector('.av').onclick=()=>userCard(m.by);
-  if(!cont){const n=d.querySelector('.nm');n.textContent=a.nick;n.onclick=()=>userCard(m.by);d.querySelector('.bdg').textContent=BADGES.filter(b=>b.t(a)).map(b=>b.e).join('')}
+  d.addEventListener('click',e=>{if(e.target.closest('button,a,audio,input,img,.av,.nm,.rq,.gcell,.popt'))return;
+    document.querySelectorAll('.msg.showtools').forEach(x=>{if(x!==d)x.classList.remove('showtools')});d.classList.toggle('showtools')});
+  if(!cont){const n=d.querySelector('.nm');n.textContent=a.nick;n.onclick=()=>userCard(m.by);d.querySelector('.bdg').textContent=BADGES.filter(b=>b.t(a)).map(b=>b.e).join('')+(isBday(m.by)?'🎂':'')}
   if(m.reply){const rq=d.querySelector('.rq');rq.textContent='↩ '+who(m.reply.by).nick+': '+(m.reply.text||'…');rq.onclick=()=>{const t=$('m-'+m.reply.id);if(t){t.scrollIntoView({block:'center'});t.classList.add('flash')}}}
   const body=d.querySelector('.body');
-  if(m.text){const t=el('div','mt');renderText(t,m.text);if(m.edited)t.appendChild(el('span','edited',' (edited)'));body.appendChild(t);
+  if(m.text){const t=el('div','mt'+(EMOJI_ONLY.test(String(m.text).trim())?' bigemoji':''));renderText(t,m.text);if(m.edited)t.appendChild(el('span','edited',' (edited)'));body.appendChild(t);
     const vid=ytId(m.text);if(vid)body.appendChild(ytCard(vid,k))}
   if(m.img&&goodPic(m.img)){const im=el('img','mimg');im.alt='picture';im.src=m.img;im.onclick=()=>modal(`<img src="${m.img}" style="width:100%;border-radius:12px"><button class="big ghost" onclick="closeModal()">Close</button>`);body.appendChild(im)}
   if(m.audio&&/^data:audio\/[a-z0-9.+-]+(;codecs=[a-z0-9.,-]+)?;base64,/i.test(m.audio)){const au=el('audio','maud');au.controls=true;au.src=m.audio;au.preload='metadata';body.appendChild(au)}
@@ -1696,7 +1744,7 @@ function pickFile(k){
 function plusMenu(anchor,k){
   const old=document.querySelector('.pmenu');if(old){old.remove();return}
   const p=el('div','pmenu');
-  [['📷','Picture or file',()=>pickFile(k)],['📊','Poll',()=>pollModal(k)],['🎮','Play a game',()=>gameModal(k)],['📺','Watch together',()=>startWatch(k)]]
+  [['📷','Picture or file',()=>pickFile(k)],['🎨','Draw something',()=>drawModal(k)],['📊','Poll',()=>pollModal(k)],['🎮','Play a game',()=>gameModal(k)],['📺','Watch together',()=>startWatch(k)]]
     .forEach(([e,t,fn])=>{const b=el('button',null,e+'  '+t);b.onclick=ev=>{ev.stopPropagation();p.remove();fn()};p.appendChild(b)});
   anchor.appendChild(p);setTimeout(()=>document.addEventListener('click',()=>p.remove(),{once:true}),0);
 }
@@ -1714,19 +1762,20 @@ function rComposer(){
   f.innerHTML='<button type="button" class="att" title="More">＋</button><input id="rin" maxlength="400" autocomplete="off"><button type="button" class="att" id="emo" title="Emoji & stickers">😀</button><button type="button" class="att" id="mic" title="Voice message">🎤</button><button class="send">Send</button>';
   const inp=f.querySelector('#rin');
   inp.placeholder=ST.editing?'Edit message':'Message '+(isGroup(k)?(ST.ch==='general'?convTitle(k):'#'+chName(k,ST.ch)):'@'+convTitle(k));
-  if(ST.editing)inp.value=ST.editing.text;
+  if(ST.editing)inp.value=ST.editing.text;else if(DRAFTS[draftKey(k)])inp.value=DRAFTS[draftKey(k)];
   const plus=f.querySelector('.att');plus.onclick=e=>{e.stopPropagation();plusMenu(f,k)};
   f.querySelector('#emo').onclick=e=>{e.stopPropagation();emojiPicker(f,inp,k)};
   f.querySelector('#mic').onclick=()=>startRec(k);
   inp.onkeydown=e=>{if(e.key.length===1||e.key==='Backspace')clickSound();if(e.key==='Escape'&&(ST.editing||ST.replyTo)){ST.editing=null;ST.replyTo=null;rComposer()}};
-  inp.oninput=()=>{if(inp.value&&Date.now()-ST.typingAt>2500){ST.typingAt=Date.now();convSet(k,{typing:{[ME.uid]:Date.now()}}).catch(()=>{})}};
+  inp.oninput=()=>{if(!ST.editing)saveDraft(k,inp.value);if(inp.value&&Date.now()-ST.typingAt>2500){ST.typingAt=Date.now();convSet(k,{typing:{[ME.uid]:Date.now()}}).catch(()=>{})}};
   inp.onpaste=async e=>{const it=[...((e.clipboardData||{}).items||[])].find(i=>i.type.startsWith('image/'));if(!it)return;e.preventDefault();
     try{toast('📷 Sending picture…');await sendMsg(k,{text:inp.value.trim().slice(0,400),img:await shrinkImage(it.getAsFile())});inp.value=''}catch(er){toast(er&&er.msg?er.msg:niceErr(er))}};
   f.onsubmit=async e=>{
-    e.preventDefault();const text=inp.value.trim().slice(0,400);if(!text)return;
+    e.preventDefault();let text=inp.value.trim().slice(0,400);if(!text)return;
     if(ST.editing){const id=ST.editing.id;ST.editing=null;rComposer();F.updateDoc(F.doc(msgsCol(k),id),{text,edited:true}).catch(er=>toast(niceErr(er)));return}
     if(Date.now()-ST.lastSend<700)return toast('Whoa, slow down a little 🐢');
-    ST.lastSend=Date.now();inp.value='';ST.typingAt=0;
+    const cmd=runCommand(text);if(cmd===null){inp.value='';saveDraft(k,'');return}text=cmd.slice(0,400);
+    ST.lastSend=Date.now();inp.value='';saveDraft(k,'');ST.typingAt=0;
     try{await sendMsg(k,{text});if(isFun(text))confetti()}catch(err){inp.value=text;toast(niceErr(err))}
   };
   c.appendChild(f);if(window.innerWidth>900)inp.focus();
@@ -1738,7 +1787,8 @@ async function sendMsg(k,p){
   if(ST.replyTo){msg.reply=ST.replyTo;ST.replyTo=null;rComposer()}
   await F.addDoc(msgsCol(k),msg);
   const last={by:ME.uid,text:lastSummary(p),at:F.serverTimestamp()};if(isGroup(k))last.ch=ST.ch;
-  await convSet(k,{last,typing:{[ME.uid]:0},seen:{[ME.uid]:Date.now()}});
+  const extra=isGroup(k)?{}:{streak:streakUpdate(k)};
+  await convSet(k,{last,typing:{[ME.uid]:0},seen:{[ME.uid]:Date.now()},...extra});
   F.setDoc(F.doc(db,'profiles',ME.uid),{msgCount:F.increment(1)},{merge:true}).catch(()=>{});
 }
 
@@ -1750,10 +1800,13 @@ function userCard(f){
     <div class="uavwrap">${avHTML(f,84)}</div>
     <h1 class="unick"></h1><p class="uname"></p><p class="ust"></p>
     ${badges.length?`<div class="ubadges">${badges.map(b=>`<span title="${esc(b.n)}">${b.e} ${esc(b.n.replace(/ \(.*/,''))}</span>`).join('')}</div>`:''}
+    <div class="ulv"><span class="lvb"></span><div class="lvbar"><i></i></div><small class="lvx"></small></div>
     <div class="ubio"></div><p class="hint ujoin"></p>
     <div class="uacts"></div><button class="big ghost" onclick="closeModal()">Close</button></div>`);
   const q=s=>$('mcard').querySelector(s);
   q('.unick').textContent=w.nick;q('.uname').textContent='@'+(w.uname||w.real)+(w.nick!==w.real?' · real name: '+w.real:'');q('.ust').textContent=statusOf(f);
+  const L=levelOf(w.msgs);q('.lvb').textContent='⭐ Level '+L.lv;q('.lvbar i').style.width=L.pct+'%';q('.lvx').textContent=L.xp+' XP';
+  if(isBday(f))q('.unick').textContent=w.nick+' 🎂';const sk=streakOf(dmKey(f));if(!me&&sk>=2)q('.ust').textContent+=' · 🔥 '+sk+' day streak';
   q('.ubio').textContent=w.bio||'';q('.ujoin').textContent=w.joined?'Joined '+new Date(w.joined).toLocaleDateString():'';
   const acts=q('.uacts'),btn=(t,cls,fn)=>{const b=el('button','big '+cls,t);b.onclick=fn;acts.appendChild(b)};
   if(me){btn('⚙️ Edit my profile','ghost',()=>settingsModal('profile'));return}
@@ -1781,6 +1834,143 @@ function installApp(){
   if(installEvt){installEvt.prompt();installEvt.userChoice.finally(()=>installEvt=null);return}
   const ios=/iphone|ipad|ipod/i.test(navigator.userAgent);
   modal(`<h1>📲 Install Ranton</h1>${ios?'<p>On iPhone/iPad: tap the <b>Share</b> button in Safari, then <b>Add to Home Screen</b>.</p>':'<p>In Chrome or Edge, click the <b>install icon</b> at the right end of the address bar (it looks like a little screen with a ⬇️), or open the <b>⋮ menu → Install Ranton</b>.</p><p class="hint">If you don’t see it, Ranton may already be installed, or the extra app files aren’t uploaded yet.</p>'}<button class="big ghost" onclick="closeModal()">OK</button>`);
+}
+
+/* =================== BATCH 1 =================== */
+const ADMIN_NAME='hzgnaf';
+const isAdmin=()=>ME.uname===ADMIN_NAME;
+const todayKey=(d=new Date())=>d.toISOString().slice(0,10);
+const yesterdayKey=()=>todayKey(new Date(Date.now()-864e5));
+const NAMECOLORS=['#ff8a5b','#7bd88f','#6cb6ff','#e6c84f','#d68cff','#ff7a90','#5ee6d0','#f5a3ff','#ffffff','#facc15'];
+
+/* ---------- XP + levels ---------- */
+function levelOf(msgs){const xp=(msgs||0)*10;const lv=Math.floor(Math.sqrt(xp/50))+1;const cur=50*(lv-1)**2,next=50*lv**2;return{lv,xp,cur,next,pct:Math.min(100,Math.round((xp-cur)/(next-cur)*100))}}
+
+/* ---------- birthdays ---------- */
+const isBday=id=>{const p=ST.profiles[id]||{};return typeof p.bday==='string'&&p.bday===todayKey().slice(5)};
+function bdayCheck(){
+  const k='ranton-bday-'+todayKey();let seen=false;try{seen=localStorage.getItem(k)}catch(e){}
+  if(seen)return;const list=Object.keys(ST.friends).filter(isBday);
+  if(isBday(ME.uid)){toast('🎂 Happy birthday, '+ME.nick+'!');confetti()}
+  else if(list.length){toast('🎂 Today is '+list.map(x=>who(x).nick).join(' & ')+'’s birthday!')}
+  else return;try{localStorage.setItem(k,'1')}catch(e){}
+}
+
+/* ---------- streaks (DMs) ---------- */
+function streakOf(k){
+  if(!k||isGroup(k))return 0;const s=(convData(k)||{}).streak;if(!s||!s.n)return 0;
+  return (s.day===todayKey()||s.day===yesterdayKey())?s.n:0;
+}
+function streakUpdate(k){
+  const c=convData(k)||{},s=c.streak||{},t=todayKey(),a={...(s.a||{}),[ME.uid]:t};
+  const users=cid(k).split('_');let n=s.n||0,day=s.day||'';
+  if(users.every(u=>a[u]===t)&&day!==t){n=day===yesterdayKey()?n+1:1;day=t;if(n>=2)setTimeout(()=>toast('🔥 '+n+' day streak with '+convTitle(k)+'!'),500)}
+  return{a,n,day};
+}
+
+/* ---------- text formatting ---------- */
+const EMOJI_ONLY=/^(?:\p{Extended_Pictographic}(?:️|‍\p{Extended_Pictographic}|\p{Emoji_Modifier})*\s*){1,3}$/u;
+function formatInto(box,str){
+  // **bold**  *italic*  `code`  ||spoiler||
+  const re=/(\*\*[^*]+\*\*|\|\|[^|]+\|\||`[^`]+`|\*[^*\s][^*]*\*)/g;
+  str.split(re).forEach(p=>{
+    if(!p)return;
+    if(/^\*\*[^*]+\*\*$/.test(p))box.appendChild(el('b',null,p.slice(2,-2)));
+    else if(/^\|\|[^|]+\|\|$/.test(p)){const s=el('span','spoiler',p.slice(2,-2));s.title='Click to reveal';s.onclick=e=>{e.stopPropagation();s.classList.add('shown')};box.appendChild(s)}
+    else if(/^`[^`]+`$/.test(p))box.appendChild(el('code','icode',p.slice(1,-1)));
+    else if(/^\*[^*\s][^*]*\*$/.test(p))box.appendChild(el('i',null,p.slice(1,-1)));
+    else box.appendChild(document.createTextNode(p));
+  });
+}
+
+/* ---------- slash commands ---------- */
+const EIGHT=['Yes!','No.','Definitely 😎','Ask again later…','No way 😂','Maybe 🤔','100% yes','I don’t think so','Signs point to yes','Very doubtful'];
+function runCommand(text){
+  const t=text.trim();
+  let m=t.match(/^\/roll(?:\s+(\d{1,4}))?$/i);if(m){const n=Math.max(2,Math.min(1000,+(m[1]||6)));return`🎲 rolled a **${1+Math.floor(Math.random()*n)}** (1–${n})`}
+  if(/^\/flip$/i.test(t))return`🪙 flipped a coin: **${Math.random()<.5?'Heads':'Tails'}**`;
+  m=t.match(/^\/8ball\s*(.*)$/i);if(m)return`🎱 ${m[1]?'“'+m[1].slice(0,120)+'” → ':''}**${EIGHT[Math.floor(Math.random()*EIGHT.length)]}**`;
+  if(/^\/(help|commands)$/i.test(t)){toast('Commands: /roll  /roll 20  /flip  /8ball question');return null}
+  if(/^\/[a-z0-9]+$/i.test(t)){toast('Unknown command. Try /roll, /flip or /8ball');return null}
+  return t;
+}
+
+/* ---------- drafts ---------- */
+const DRAFTS=(()=>{try{return JSON.parse(localStorage.getItem('ranton-drafts')||'{}')}catch(e){return{}}})();
+let draftT=null;
+function draftKey(k){return k+(isGroup(k)?'#'+ST.ch:'')}
+function saveDraft(k,v){DRAFTS[draftKey(k)]=v;if(!v)delete DRAFTS[draftKey(k)];clearTimeout(draftT);draftT=setTimeout(()=>{try{localStorage.setItem('ranton-drafts',JSON.stringify(DRAFTS))}catch(e){}},400)}
+
+/* ---------- drawing board ---------- */
+function drawModal(k){
+  modal(`<h1>🎨 Draw something</h1><div class="drawwrap"><canvas id="dcv" width="640" height="420"></canvas></div>
+    <div class="dtools"><div id="dcols"></div><input type="range" id="dsz" min="2" max="30" value="6"><button class="fbtn no" id="der">🧽 Eraser</button><button class="fbtn no" id="dun">↶ Undo</button><button class="fbtn no" id="dcl">🗑 Clear</button></div>
+    <button class="big" id="dgo">Send drawing</button><button class="big ghost" onclick="closeModal()">Cancel</button>`);
+  $('mcard').classList.add('wide');
+  const cv=$('dcv'),cx=cv.getContext('2d');let col='#111111',erase=false,drawing=false,last=null;const hist=[];
+  const bg=()=>{cx.fillStyle='#ffffff';cx.fillRect(0,0,cv.width,cv.height)};bg();
+  ['#111111','#ef4444','#f97316','#facc15','#22c55e','#3b82f6','#a855f7','#ec4899','#8b5a2b','#ffffff'].forEach(c=>{const b=el('button','dcol'+(c===col?' on':''));b.style.background=c;b.onclick=()=>{col=c;erase=false;$('der').classList.remove('on');$('dcols').querySelectorAll('.dcol').forEach(x=>x.classList.toggle('on',x===b))};$('dcols').appendChild(b)});
+  $('der').onclick=()=>{erase=!erase;$('der').classList.toggle('on',erase)};
+  $('dcl').onclick=()=>{hist.push(cx.getImageData(0,0,cv.width,cv.height));bg()};
+  $('dun').onclick=()=>{const h=hist.pop();if(h)cx.putImageData(h,0,0)};
+  const pos=e=>{const r=cv.getBoundingClientRect();return{x:(e.clientX-r.left)*cv.width/r.width,y:(e.clientY-r.top)*cv.height/r.height}};
+  cv.onpointerdown=e=>{e.preventDefault();cv.setPointerCapture(e.pointerId);hist.push(cx.getImageData(0,0,cv.width,cv.height));if(hist.length>30)hist.shift();drawing=true;last=pos(e);dot(last)};
+  cv.onpointermove=e=>{if(!drawing)return;const p=pos(e);cx.strokeStyle=erase?'#ffffff':col;cx.lineWidth=+$('dsz').value*(erase?2:1);cx.lineCap=cx.lineJoin='round';cx.beginPath();cx.moveTo(last.x,last.y);cx.lineTo(p.x,p.y);cx.stroke();last=p};
+  cv.onpointerup=cv.onpointercancel=()=>{drawing=false};
+  function dot(p){cx.fillStyle=erase?'#ffffff':col;cx.beginPath();cx.arc(p.x,p.y,+$('dsz').value*(erase?1:.5),0,7);cx.fill()}
+  $('dgo').onclick=async()=>{let q=.8,d='';for(;q>.2;q-=.15){d=cv.toDataURL('image/jpeg',q);if(d.length<300000)break}
+    closeModal();$('mcard').classList.remove('wide');try{await sendMsg(k,{img:d,text:'🎨'})}catch(e){toast(niceErr(e))}};
+}
+
+/* ---------- invite links ---------- */
+const INVITE_BASE=location.origin+location.pathname;
+function inviteLink(){return INVITE_BASE+'?add='+encodeURIComponent(ME.uname||ME.nick)}
+const PENDING_ADD=(()=>{const u=new URLSearchParams(location.search).get('add');if(u){try{sessionStorage.setItem('ranton-add',u)}catch(e){}history.replaceState(null,'',location.pathname)}try{return sessionStorage.getItem('ranton-add')}catch(e){return u}})();
+function handleInvite(){
+  if(!PENDING_ADD)return;try{sessionStorage.removeItem('ranton-add')}catch(e){}
+  const name=String(PENDING_ADD).toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,16);if(!name||name===ME.uname)return;
+  modal(`<h1>👋 Friend invite</h1><p><b id="invn"></b> invited you to be friends on Ranton!</p><button class="big" id="invy">Add friend</button><button class="big ghost" onclick="closeModal()">Not now</button>`);
+  $('invn').textContent=name;
+  $('invy').onclick=()=>{closeModal();ST.tab='add';openHome();setTimeout(()=>{if($('fcode')){$('fcode').value=name;addFriend(name)}},150)};
+}
+
+/* ---------- bans ---------- */
+function bannedScreen(on){
+  let ov=$('banov');
+  if(!on){if(ov)ov.remove();return}
+  if(ov)return;ov=el('div');ov.id='banov';ov.innerHTML='<div class="card"><h1>🚫 You’ve been banned</h1><p>The owner of Ranton banned this account, so you can’t send messages, add friends or make groups.</p><button class="big ghost" id="banout">Sign out</button></div>';
+  document.body.appendChild(ov);$('banout').onclick=()=>{ov.remove();signOut()};
+}
+
+/* ---------- admin panel ---------- */
+async function adminPanel(b){
+  b.innerHTML='<p class="hint">Only you can see this. Reports from users show up here, and you can ban accounts.</p><h3>Reports</h3><div id="arep"><div class="empty">Loading…</div></div><h3>Banned accounts</h3><div id="aban"><div class="empty">Loading…</div></div><h3>Ban someone by username</h3><div style="display:flex;gap:8px"><input type="text" id="abu" placeholder="username" maxlength="16"><button class="send" id="abgo" style="background:var(--acc2);color:#fff">Ban</button></div><div class="err" id="aerr3"></div>';
+  $('abgo').onclick=async()=>{const lc=$('abu').value.trim().toLowerCase();if(!lc)return;if(lc===ME.uname)return $('aerr3').textContent='You can’t ban yourself 😄';
+    const s=await F.getDoc(F.doc(db,'usernames',lc)).catch(()=>null);const uid=s&&s.exists()&&s.data().uid;if(!uid)return $('aerr3').textContent='No one has that username.';
+    banUser(uid,lc,'Banned by username')};
+  try{
+    const rs=await F.getDocs(F.query(F.collection(db,'reports'),F.orderBy('at','desc'),F.limit(50)));
+    const box=$('arep');box.innerHTML='';if(rs.empty)box.innerHTML='<div class="empty">No reports 🎉</div>';
+    rs.forEach(d=>{const r=d.data();watchProfile(r.about);watchProfile(r.by);const row=el('div','reprow');
+      row.innerHTML='<div class="rtop"><b class="rab"></b><small class="rwhen"></small></div><p class="rreason"></p><p class="rdet"></p><p class="rmsg"></p><div class="ract"><button class="fbtn no rban" style="color:var(--acc2)">🚫 Ban</button><button class="fbtn no rdis">✔ Dismiss</button></div>';
+      row.querySelector('.rab').textContent='About '+(r.aboutName||who(r.about).nick)+' · from '+who(r.by).nick;
+      row.querySelector('.rwhen').textContent=r.at?fmtTime(ms(r.at)):'';row.querySelector('.rreason').textContent='Reason: '+(r.reason||'');
+      row.querySelector('.rdet').textContent=r.details?'Details: '+r.details:'';row.querySelector('.rmsg').textContent=r.message?'Message: “'+String(r.message).slice(0,200)+'”':'';
+      row.querySelector('.rban').onclick=()=>banUser(r.about,r.aboutName||who(r.about).nick,r.reason);
+      row.querySelector('.rdis').onclick=()=>F.deleteDoc(F.doc(db,'reports',d.id)).then(()=>row.remove()).catch(e=>toast(niceErr(e)));
+      box.appendChild(row)});
+  }catch(e){$('arep').innerHTML='<div class="empty">'+esc(niceErr(e))+'</div>'}
+  try{
+    const bs=await F.getDocs(F.collection(db,'bans'));const box=$('aban');box.innerHTML='';if(bs.empty)box.innerHTML='<div class="empty">Nobody is banned.</div>';
+    bs.forEach(d=>{const v=d.data(),row=el('div','pinrow');row.innerHTML='<div><b></b><p></p></div><button class="fbtn no">Unban</button>';
+      row.querySelector('b').textContent=v.name||d.id;row.querySelector('p').textContent=v.reason||'';
+      row.querySelector('button').onclick=()=>F.deleteDoc(F.doc(db,'bans',d.id)).then(()=>{row.remove();toast('Unbanned '+(v.name||''))}).catch(e=>toast(niceErr(e)));box.appendChild(row)});
+  }catch(e){$('aban').innerHTML='<div class="empty">'+esc(niceErr(e))+'</div>'}
+}
+function banUser(uid,name,reason){
+  confirmModal('Ban '+name+'?','They won’t be able to send messages, add friends, make groups or call anyone. You can unban them later in Admin.','Ban',async()=>{
+    try{await F.setDoc(F.doc(db,'bans',uid),{by:ME.uid,name:String(name||'').slice(0,20),reason:String(reason||'').slice(0,80),at:Date.now()});toast('🚫 Banned '+name);setTimeout(()=>settingsModal('admin'),300)}
+    catch(e){toast(niceErr(e))}});
 }
 
 /* ---------- chrome ---------- */
