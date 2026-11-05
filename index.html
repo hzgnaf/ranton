@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ranton</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 54 54'%3E%3Crect width='54' height='54' rx='16' fill='%23a78bfa'/%3E%3Cpath d='M12 22c0-5 4-9 9-9h12c5 0 9 4 9 9v6c0 5-4 9-9 9h-7l-7 6v-6c-4-1-7-5-7-9z' fill='%2314121c'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --rail:#0f0e16; --side:#1b1926; --chat:#221f2e; --panel:#1b1926; --line:#2e2a3d;
+  --txt:#e9e6f5; --mut:#9a94b3; --acc:#a78bfa; --acc2:#ff7a90; --good:#7bd88f; --warn:#ffcf5c;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;background:var(--rail);color:var(--txt);font-family:Nunito,system-ui,sans-serif;overflow:hidden}
+button{font-family:inherit;cursor:pointer;border:none}
+#app{display:grid;grid-template-columns:72px 240px 1fr 280px;height:100vh;height:100dvh}
+/* rail */
+#rail{background:var(--rail);display:flex;flex-direction:column;align-items:center;gap:10px;padding:12px 0}
+.srv{width:48px;height:48px;border-radius:50%;display:grid;place-items:center;font-size:22px;background:#26233a;transition:.2s;position:relative}
+.srv.on{border-radius:16px;background:var(--acc)}
+.srv.on::before{content:"";position:absolute;left:-12px;width:4px;height:36px;border-radius:0 4px 4px 0;background:#fff}
+.sep{width:32px;height:2px;background:var(--line);border-radius:2px}
+/* sidebar */
+#side{background:var(--side);display:flex;flex-direction:column;min-height:0}
+#srvname{padding:14px 16px;font-weight:900;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:8px}
+#srvname small{color:var(--acc2);font-size:11px;font-weight:800;background:#ff7a9022;padding:2px 6px;border-radius:6px;white-space:nowrap}
+#chlist{overflow-y:auto;padding:8px;flex:1}
+.grp{color:var(--mut);font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;margin:14px 8px 6px}
+.ch{display:flex;align-items:center;gap:8px;width:100%;padding:7px 10px;border-radius:8px;background:none;color:var(--mut);font-size:15px;font-weight:700;text-align:left}
+.ch:hover{background:#ffffff0d;color:var(--txt)}
+.ch.on{background:#ffffff17;color:#fff}
+.ch.unread{color:#fff}
+.ch .ico{width:22px;text-align:center;flex:none}
+.ch .av{width:26px;height:26px;font-size:14px}
+.ch .lbl{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.badge{background:var(--acc2);color:#fff;font-size:11px;font-weight:900;border-radius:10px;padding:1px 7px}
+.ch.locked{opacity:.4;pointer-events:none}
+#me{display:flex;align-items:center;gap:10px;padding:10px 12px;background:#15131f}
+#me b{font-size:14px} #me span{display:block;font-size:11px;color:var(--good)}
+/* chat */
+#chat{background:var(--chat);display:flex;flex-direction:column;min-width:0;min-height:0}
+#chead{height:52px;flex:none;display:flex;align-items:center;gap:10px;padding:0 16px;border-bottom:1px solid var(--line);font-weight:900}
+#htitle{white-space:nowrap}
+#chead .sub{color:var(--mut);font-weight:600;font-size:13px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.mobbtn{display:none;background:#ffffff12;color:var(--txt);border-radius:8px;padding:6px 10px;font-size:16px}
+#msgs{flex:1;overflow-y:auto;padding:16px 0 8px}
+.msg{display:flex;gap:12px;padding:6px 16px;position:relative}
+.msg:hover{background:#00000018}
+.av{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;font-size:20px;flex:none}
+.mb{min-width:0;flex:1}
+.mh{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.mh b{font-weight:800}
+.role{font-size:10px;font-weight:900;padding:1px 6px;border-radius:5px;background:#ffffff14;color:var(--mut);text-transform:uppercase}
+.tm{font-size:11px;color:var(--mut)}
+.mt{line-height:1.45;font-size:15px;word-wrap:break-word;margin-top:2px}
+.link{color:#6cb6ff;text-decoration:underline;cursor:pointer}
+.sys .mt{color:var(--mut);font-style:italic}
+.sys .av{background:none;font-size:18px;width:40px;height:22px}
+.mag{position:absolute;right:12px;top:6px;background:#2f2a44;color:var(--txt);border-radius:8px;padding:4px 9px;font-size:13px;font-weight:800;opacity:0;transition:.15s}
+.msg:hover .mag{opacity:1}
+.mag:hover{background:var(--acc);color:#14121c}
+.msg.found{background:#a78bfa14;box-shadow:inset 3px 0 0 var(--acc)}
+.msg.found .mag{opacity:1;background:var(--acc);color:#14121c}
+.flash{animation:fl .8s}
+@keyframes fl{0%{background:#a78bfa55}100%{background:#a78bfa14}}
+.newmsg{animation:pop .25s ease-out}
+@keyframes pop{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+#typing{height:22px;padding:0 16px;font-size:12px;color:var(--mut);font-weight:700}
+.dots span{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--mut);margin-right:2px;animation:bl 1s infinite}
+.dots span:nth-child(2){animation-delay:.15s}.dots span:nth-child(3){animation-delay:.3s}
+@keyframes bl{0%,100%{opacity:.25}50%{opacity:1}}
+#composer{padding:0 16px 16px;flex:none}
+.cbox{background:#2c2840;border-radius:12px;padding:10px;display:flex;flex-wrap:wrap;gap:8px;min-height:48px;align-items:center}
+.cbox .ph{color:var(--mut);font-size:14px;padding:4px 6px}
+.opt{background:#3a3456;color:var(--txt);border-radius:10px;padding:9px 14px;font-weight:800;font-size:14px;text-align:left;transition:.15s}
+.opt:hover{background:var(--acc);color:#14121c;transform:translateY(-1px)}
+.opt.ask::before{content:"💬 "}
+/* notebook */
+#note{background:var(--panel);border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+#note h2{font-size:16px;font-weight:900;padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between}
+#goal{margin:12px;padding:12px;border-radius:12px;background:#ffcf5c14;border:1px solid #ffcf5c44;font-size:13px;line-height:1.45}
+#goal b{color:var(--warn)}
+#clues{flex:1;overflow-y:auto;padding:0 12px}
+.clue{background:#26233a;border-radius:10px;padding:10px 12px;margin-bottom:8px;font-size:13px;line-height:1.4;animation:pop .3s}
+.clue .tag{font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.tag.evidence{color:var(--acc2)} .tag.alibi{color:var(--good)} .tag.lead{color:var(--warn)}
+.empty{color:var(--mut);font-size:13px;padding:8px 4px;line-height:1.5}
+#accuse{margin:12px;padding:14px;border-radius:12px;background:var(--acc2);color:#fff;font-weight:900;font-size:16px}
+#accuse:disabled{background:#3a3456;color:var(--mut);cursor:not-allowed}
+/* toast + modal */
+#toast{position:fixed;left:50%;bottom:90px;transform:translateX(-50%) translateY(20px);background:#0f0e16;border:1px solid var(--line);padding:10px 16px;border-radius:12px;font-weight:800;font-size:14px;opacity:0;transition:.25s;pointer-events:none;z-index:60;max-width:90vw;text-align:center}
+#toast.show{opacity:1;transform:translateX(-50%)}
+.ov{position:fixed;inset:0;background:#07060bcc;display:none;place-items:center;z-index:50;padding:16px}
+.ov.show{display:grid}
+.card{background:var(--side);border:1px solid var(--line);border-radius:18px;padding:24px;width:min(520px,100%);max-height:92vh;overflow-y:auto}
+.card h1{font-size:26px;font-weight:900;margin-bottom:8px}
+.card h3{font-size:14px;color:var(--mut);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.05em}
+.card p{line-height:1.5;color:#cfc9e6;margin-bottom:10px}
+.big{display:block;width:100%;padding:14px;border-radius:12px;background:var(--acc);color:#14121c;font-weight:900;font-size:17px;margin-top:14px}
+.big:hover{filter:brightness(1.1)}
+.big.ghost{background:#3a3456;color:var(--txt)}
+input[type=text]{width:100%;padding:13px;border-radius:12px;border:2px solid var(--line);background:#14121c;color:var(--txt);font:inherit;font-size:16px;font-weight:700}
+input[type=text]:focus{outline:none;border-color:var(--acc)}
+.sus{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pick{background:#26233a;color:var(--txt);border:2px solid transparent;border-radius:12px;padding:10px 6px;font-weight:800;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:14px}
+.pick.sel{border-color:var(--acc2);background:#ff7a9022}
+.meth .pick{flex-direction:row;text-align:left;font-size:14px;padding:12px;width:100%;margin-bottom:6px}
+.logo{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.logo svg{flex:none}
+.logo b{font-size:15px;color:var(--acc);letter-spacing:.08em;text-transform:uppercase}
+.rank{font-size:64px;font-weight:900;text-align:center;line-height:1;margin:6px 0}
+.tip{background:#7bd88f14;border:1px solid #7bd88f44;border-radius:12px;padding:12px;font-size:14px;line-height:1.5;margin-top:12px}
+.fake{background:#fff;color:#222;border-radius:12px;padding:16px;margin:12px 0;font-family:system-ui}
+.fake .url{background:#eee;border-radius:6px;padding:6px 10px;font-size:13px;margin-bottom:12px;color:#b00}
+.fake .fld{border:1px solid #ccc;border-radius:6px;padding:8px;margin-bottom:8px;color:#999;font-size:14px}
+#mute{background:none;color:var(--mut);font-size:16px}
+
+#nbwrap,#memwrap{display:flex;flex-direction:column;min-height:0;flex:1}
+#members{overflow-y:auto;padding:8px 12px;flex:1}
+.mem{display:flex;align-items:center;gap:10px;padding:7px 8px;border-radius:8px}
+.mem.off{opacity:.45}
+.mem .av{width:34px;height:34px;font-size:17px;position:relative}
+.mem .av i{position:absolute;right:-2px;bottom:-2px;width:12px;height:12px;border-radius:50%;border:3px solid var(--panel);background:#6b6680}
+.mem.on .av i{background:var(--good)}
+.mem b{font-size:14px;display:block} .mem small{font-size:12px;color:var(--mut)}
+.mgrp{color:var(--mut);font-size:11px;font-weight:900;letter-spacing:.06em;text-transform:uppercase;margin:12px 8px 4px}
+.srv.add{background:#26233a;color:var(--good);font-size:26px}
+.srv.add:hover{background:var(--good);color:#14121c;border-radius:16px}
+.srv:hover{border-radius:16px}
+.srv .dot{position:absolute;right:-1px;top:-1px;width:14px;height:14px;border-radius:50%;background:var(--acc2);border:3px solid var(--rail)}
+.srv .tip2{position:absolute;left:60px;background:#0b0a10;color:#fff;font-size:13px;font-weight:800;padding:6px 10px;border-radius:8px;white-space:nowrap;opacity:0;pointer-events:none;z-index:30;transition:.1s}
+.srv:hover .tip2{opacity:1}
+.code{cursor:pointer;color:var(--good)!important;background:#7bd88f22!important}
+.leave{margin:16px 8px 8px;background:none;color:var(--mut);font-size:13px;font-weight:800}
+.leave:hover{color:var(--acc2)}
+.addch{color:var(--mut);background:none;font-size:13px;font-weight:800;padding:6px 10px}
+.addch:hover{color:var(--txt)}
+.real{flex-wrap:nowrap}
+.real input{flex:1;background:none;border:none;color:var(--txt);font:inherit;font-size:15px;padding:4px 6px;min-width:0}
+.real input:focus{outline:none}
+.send{background:var(--acc);color:#14121c;font-weight:900;border-radius:9px;padding:8px 14px}
+.send:disabled{opacity:.4}
+.msg.cont{padding-top:1px;padding-bottom:1px}
+.msg.cont .av{height:0;visibility:hidden}
+.del{position:absolute;right:12px;top:4px;background:#2f2a44;color:var(--mut);border-radius:8px;padding:3px 8px;font-size:12px;opacity:0}
+.msg:hover .del{opacity:1}
+.del:hover{background:var(--acc2);color:#fff}
+.emopick{display:flex;flex-wrap:wrap;gap:8px}
+.emopick button{width:46px;height:46px;border-radius:50%;font-size:22px;background:#26233a;border:3px solid transparent}
+.emopick button.sel{border-color:var(--acc)}
+.tabs{display:flex;gap:8px;margin:6px 0 12px}
+.tabs button{flex:1;padding:10px;border-radius:10px;background:#26233a;color:var(--mut);font-weight:900}
+.tabs button.on{background:var(--acc);color:#14121c}
+.slist{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.srow{display:flex;align-items:center;gap:12px;background:#26233a;padding:10px;border-radius:12px}
+.srow .srv{width:42px;height:42px;font-size:20px;flex:none}
+.srow div{flex:1;min-width:0} .srow b{display:block} .srow small{color:var(--mut)}
+.srow button{background:var(--good);color:#14121c;font-weight:900;border-radius:9px;padding:8px 14px}
+.srow button:disabled{background:#3a3456;color:var(--mut)}
+.err{color:var(--acc2);font-size:13px;font-weight:800;margin-top:8px;min-height:18px}
+.fpage{padding:4px 20px 20px}
+.ftabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px}
+.ftabs button{background:none;color:var(--mut);font-weight:800;font-size:14px;padding:6px 12px;border-radius:8px}
+.ftabs button:hover{background:#ffffff0d;color:var(--txt)}
+.ftabs button.on{background:#ffffff17;color:#fff}
+.ftabs .addt{background:var(--good);color:#14121c}.ftabs .addt.on{background:transparent;color:var(--good)}
+.fpage h3{font-size:13px;color:var(--mut);margin:16px 0 8px;text-transform:uppercase;letter-spacing:.05em}
+.mycode{display:flex;align-items:center;gap:12px;background:#14121c;border:2px dashed var(--acc);border-radius:12px;padding:12px 14px}
+.mycode span{flex:1;font-size:24px;font-weight:900;color:var(--acc);overflow:hidden;text-overflow:ellipsis}
+.linkbtn{display:block;margin:12px auto 0;background:none;color:var(--acc);font-weight:800;font-size:14px}
+.linkbtn:hover{text-decoration:underline}
+input[type=password]{width:100%;padding:13px;border-radius:12px;border:2px solid var(--line);background:#14121c;color:var(--txt);font:inherit;font-size:16px;font-weight:700}
+input[type=password]:focus{outline:none;border-color:var(--acc)}
+.keep{display:flex;align-items:center;gap:8px;margin-top:12px;color:#cfc9e6;font-weight:700;font-size:14px;cursor:pointer}
+.keep input{width:18px;height:18px;accent-color:var(--acc)}
+.acct{background:#26233a;border-radius:10px;padding:10px 12px;font-size:14px}
+#me{cursor:pointer}#me:hover{background:#1c1a28}
+.hint{color:var(--mut);font-size:13px;margin-top:6px}
+.frow{display:flex;align-items:center;gap:12px;padding:10px;border-top:1px solid var(--line)}
+.frow:hover{background:#ffffff08;border-radius:10px}
+.fi{flex:1;min-width:0}.fi b{display:block}.fi small{color:var(--mut);font-size:12px}
+.fb{display:flex;gap:6px}
+.fbtn{border-radius:9px;padding:8px 12px;font-weight:800;font-size:13px}
+.fbtn.go{background:var(--acc);color:#14121c}.fbtn.no{background:#3a3456;color:var(--txt)}
+.av{position:relative}
+.av i{position:absolute;right:-2px;bottom:-2px;width:12px;height:12px;border-radius:50%;border:3px solid var(--chat);background:#6b6680;display:none}
+.frow .av i,.dmrow .av i,.dmintro .av i,.mem .av i{display:block}
+.av i.on,.mem.on .av i{background:var(--good)}
+.dmrow{padding:6px 8px}.dmrow .lbl{display:flex;flex-direction:column}.dmrow .nm{overflow:hidden;text-overflow:ellipsis}
+.dmrow .pv{font-size:12px;color:var(--mut);font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dmrow .av i{border-color:var(--side);width:10px;height:10px}
+.dmintro{padding:16px 16px 10px}.dmintro h2{font-size:24px;font-weight:900;margin-top:8px}.dmintro p{color:var(--mut)}
+button.mem{width:100%;background:none;color:var(--txt);text-align:left}
+button.mem:hover{background:#ffffff0d}
+/* mobile */
+@media (max-width:900px){
+  #app{grid-template-columns:1fr}
+  #rail{position:fixed;top:0;bottom:0;left:0;width:64px;z-index:41;transform:translateX(-100%);transition:transform .25s;overflow-y:auto}
+  #rail.open{transform:none}
+  .srv{width:44px;height:44px;flex:none}
+  .srv .tip2{display:none}
+  #side,#note{position:fixed;top:0;bottom:0;width:min(300px,86vw);z-index:40;transition:transform .25s}
+  #side{left:64px;width:min(260px,calc(100vw - 110px));transform:translateX(calc(-100% - 64px))}
+  #note{right:0;transform:translateX(100%)}
+  #side.open,#note.open{transform:none;box-shadow:0 0 40px #000}
+  .mobbtn{display:inline-block}
+  .mag{opacity:.55}
+  #scrim{position:fixed;inset:0;background:#0008;z-index:35;display:none}
+  #scrim.show{display:block}
+}
+
+input[type=email]{width:100%;padding:13px;border-radius:12px;border:2px solid var(--line);background:#14121c;color:var(--txt);font:inherit;font-size:16px;font-weight:700}
+input[type=email]:focus{outline:none;border-color:var(--acc)}
+.big.google{background:#fff;color:#222;display:flex;align-items:center;justify-content:center;gap:10px;margin-top:0}
+.or{display:flex;align-items:center;gap:10px;color:var(--mut);font-size:13px;font-weight:800;margin:14px 0}
+.or::before,.or::after{content:"";flex:1;height:1px;background:var(--line)}
+#rail .srv{flex:none}
+/* presence dots */
+.av i.away{background:#f5c542!important;display:block}
+.av i.dnd{background:#ef4444!important;display:block}
+.av i.on{background:var(--good)}
+#meav{position:relative}#meav i{position:absolute;right:-2px;bottom:-2px;width:12px;height:12px;border-radius:50%;border:3px solid #15131f;display:block}
+#merole{color:var(--mut)!important;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+#me .gear{color:var(--mut);font-size:15px}
+.setb{background:transparent!important;font-size:22px}
+.grp.grow{display:flex;align-items:center;justify-content:space-between}
+.newg{background:none;color:var(--mut);font-size:18px;font-weight:900;padding:0 4px;line-height:1}
+.newg:hover{color:var(--txt)}
+.badge.live{background:var(--good);color:#14121c}
+.gav{background:#3a3456;border-radius:14px!important}
+/* messages */
+.msg .mtools{position:absolute;right:12px;top:-12px;display:none;gap:2px;background:#2f2a44;border:1px solid var(--line);border-radius:10px;padding:2px;z-index:3}
+.msg:hover .mtools{display:flex}
+.mtools button{background:none;color:var(--txt);font-size:15px;padding:4px 7px;border-radius:7px}
+.mtools button:hover{background:#ffffff1a}
+.rpick{position:absolute;top:-44px;right:0;display:flex;gap:2px;background:#1b1926;border:1px solid var(--line);border-radius:12px;padding:4px;box-shadow:0 6px 20px #0008}
+.rpick button{font-size:20px;padding:4px 6px}
+.reacts{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
+.reacts:empty{display:none}
+.rx{background:#2c2840;border:1px solid transparent;color:var(--txt);border-radius:9px;padding:2px 8px;font-size:13px;font-weight:800}
+.rx.mine{border-color:var(--acc);background:color-mix(in srgb,var(--acc) 22%,transparent)}
+.rq{font-size:12.5px;color:var(--mut);border-left:3px solid var(--acc);padding:2px 8px;margin:2px 0 4px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:520px}
+.mimg{display:block;max-width:min(360px,100%);max-height:320px;border-radius:12px;margin-top:6px;cursor:zoom-in}
+.seen{text-align:right;color:var(--mut);font-size:12px;font-weight:700;padding:2px 18px 6px}
+.msg.sys .mt{color:var(--mut);font-style:italic;font-size:13px}
+.msg.flash{animation:fl 1.2s}
+.replybar{display:flex;align-items:center;gap:8px;background:#2c2840;border-radius:12px 12px 0 0;padding:8px 12px;font-size:13px;color:var(--mut);margin-bottom:-6px}
+.replybar span{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.replybar button{background:none;color:var(--mut);font-size:14px}
+.att{background:none;font-size:20px;padding:0 4px}
+.gbanner{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 16px;padding:10px 14px;border-radius:12px;background:color-mix(in srgb,var(--good) 18%,transparent);border:1px solid color-mix(in srgb,var(--good) 45%,transparent);font-weight:800}
+.gbanner .send{background:var(--good)}
+/* menus + settings */
+.uhead{display:flex;align-items:center;gap:14px;margin-bottom:10px}
+.uhead h1{margin:0}.ust{color:var(--mut);margin:0}
+.umenu .big{margin-top:8px}
+.stabs{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 14px}
+.stabs button{background:#26233a;color:var(--mut);font-weight:800;border-radius:9px;padding:7px 10px;font-size:13px}
+.stabs button.on{background:var(--acc);color:#14121c}
+.modes{display:flex;gap:8px;flex-wrap:wrap}
+.modes button{flex:1;background:#26233a;color:var(--txt);border:2px solid transparent;border-radius:10px;padding:10px;font-weight:800;font-size:14px}
+.modes button.on{border-color:var(--acc)}
+.swatches{display:flex;gap:10px}
+.swatches button{width:38px;height:38px;border-radius:50%;border:3px solid transparent}
+.swatches button.on{border-color:#fff;box-shadow:0 0 0 2px var(--acc)}
+.keep.big2{font-size:15px;margin:10px 0}
+.pick{max-height:240px;overflow-y:auto;display:flex;flex-direction:column;gap:4px}
+.pickrow{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:10px;background:#26233a;cursor:pointer;font-weight:800}
+.pickrow input{width:18px;height:18px;accent-color:var(--acc)}
+.pickrow .av{width:30px;height:30px;font-size:15px}
+.gacts{display:flex;flex-direction:column;gap:6px;padding:12px 8px}
+.gacts .fbtn{width:100%}
+.mem .mx{background:none;color:var(--mut);font-size:13px;padding:4px 6px;border-radius:6px}
+.mem .mx:hover{background:var(--acc2);color:#fff}
+.mem .av{position:relative}
+.mem small{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.rreasons .keep{margin:6px 0}
+/* 1:1 call extras */
+#callov.sharing #rvid{object-fit:contain;opacity:1;width:100%;height:100%}
+#callov.sharing:not(.live) #rvid{opacity:0}
+#lvid.scr{transform:none}
+/* group call */
+#gcall{position:fixed;inset:0;z-index:70;background:#0b0a10;display:none;flex-direction:column}
+#gcall.show{display:flex}
+.gtop{display:flex;justify-content:space-between;padding:14px 18px;font-weight:900;color:#fff}
+.gtop span{color:var(--mut)}
+.ggrid{flex:1;display:grid;gap:10px;padding:0 14px 110px;grid-template-columns:1fr}
+.ggrid.n2{grid-template-columns:1fr 1fr}
+.ggrid.n3,.ggrid.n4{grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr}
+@media (max-width:700px){.ggrid.n2{grid-template-columns:1fr;grid-template-rows:1fr 1fr}}
+.tile{position:relative;background:#1b1926;border-radius:16px;overflow:hidden;display:grid;place-items:center;min-height:120px}
+.tile video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}
+.tile.vid video{opacity:1}
+.tile.mine video{transform:scaleX(-1)}
+.tile .tav{width:96px;height:96px;border-radius:50%;display:grid;place-items:center;font-size:48px}
+.tile.vid .tav{display:none}
+.tile .tname{position:absolute;left:10px;bottom:10px;background:#000a;color:#fff;font-weight:800;font-size:13px;padding:3px 9px;border-radius:8px}
+.cbtns2{position:absolute;bottom:28px;left:0;right:0;display:flex;justify-content:center;gap:18px}
+.cbtns2 button{width:62px;height:62px;border-radius:50%;font-size:26px;background:#ffffff26;color:#fff}
+.cbtns2 button.off{background:#fff;color:#000}
+.cbtns2 .end{background:#ef4444;transform:rotate(135deg)}
+#cbtns button{width:58px;height:58px}
+/* light theme */
+body.light{--rail:#e3e1ec;--side:#f2f1f7;--chat:#ffffff;--panel:#f2f1f7;--line:#dcd9e8;--txt:#1d1a2b;--mut:#6b6683}
+body.light #me{background:#e9e7f1}
+body.light #meav i{border-color:#e9e7f1}
+body.light .srv{background:#d6d3e3}
+body.light .cbox,body.light .replybar{background:#ecebf3}
+body.light .opt,body.light .fbtn.no,body.light .rx,body.light .stabs button,body.light .modes button,body.light .pickrow,body.light .tabs button,body.light .clue{background:#e6e4ef;color:var(--txt)}
+body.light input[type=text],body.light input[type=email],body.light input[type=password]{background:#fff;color:var(--txt)}
+body.light .mtools,body.light .rpick{background:#fff}
+body.light .card{background:#fff}
+body.light .ch:hover{background:#0000000a}
+body.light .ch.on{background:#0000001a;color:var(--txt)}
+body.light .ch.unread{color:var(--txt)}
+body.light .msg:hover{background:#0000000a}
+body.light .mycode{background:#f6f5fa}
+body.light .frow:hover{background:#00000008}
+body.light .av i{border-color:var(--chat)}
+body.light .dmrow .av i{border-color:var(--side)}
+body.light #toast{background:#1d1a2b;color:#fff}
+body.light .ftabs button.on{background:#0000001a;color:var(--txt)}
+
+.callbtn{background:#ffffff12;color:var(--txt);border-radius:10px;width:38px;height:34px;font-size:17px;margin-left:6px}
+.callbtn:hover{background:var(--good);color:#14121c}
+#callov{position:fixed;inset:0;z-index:70;background:radial-gradient(circle at 50% 30%,#2a2440,#0b0a10);display:none;flex-direction:column;align-items:center;justify-content:center}
+#callov.show{display:flex}
+#rvid{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;background:#000}
+#callov.live #rvid{opacity:1}
+#callov:not(.isvideo) #rvid{width:1px;height:1px}
+#cinfo{position:relative;text-align:center;z-index:1}
+#callov.live #cinfo{position:absolute;top:18px;left:18px;text-align:left;display:flex;align-items:center;gap:10px}
+#callov.live #cinfo .cav{width:40px;height:40px;font-size:20px;margin:0}
+#callov.live #cinfo h2{font-size:16px;margin:0}#callov.live #cinfo p{margin:0}
+.cav{width:120px;height:120px;border-radius:50%;display:grid;place-items:center;font-size:60px;margin:0 auto 14px}
+#cinfo h2{font-size:28px;font-weight:900}#cinfo p{color:var(--mut);font-weight:800;margin-top:4px;text-shadow:0 1px 4px #000}
+#lvid{position:absolute;right:16px;bottom:110px;width:min(28vw,220px);aspect-ratio:4/3;object-fit:cover;border-radius:14px;background:#000;border:2px solid #ffffff33;transform:scaleX(-1);z-index:2;display:none}
+#callov.isvideo #lvid{display:block}
+#cbtns{position:absolute;bottom:28px;display:flex;gap:18px;z-index:2}
+#cbtns button{width:62px;height:62px;border-radius:50%;font-size:26px;background:#ffffff26;color:#fff;backdrop-filter:blur(6px)}
+#cbtns button.off{background:#fff;color:#000}
+#cbtns .end{background:#ef4444;transform:rotate(135deg)}
+.incoming{text-align:center}
+.incoming h1{margin-top:4px}
+.cav.ring{animation:pulse 1.2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 #7bd88f88}100%{box-shadow:0 0 0 28px #7bd88f00}}
+.inbtns{display:flex;justify-content:center;gap:60px;margin-top:22px}
+.inbtns button{width:66px;height:66px;border-radius:50%;font-size:28px;color:#fff}
+.inbtns .accept{background:#22c55e;animation:wig 1s infinite}.inbtns .decline{background:#ef4444}
+@keyframes wig{0%,100%{transform:rotate(0)}25%{transform:rotate(-12deg)}75%{transform:rotate(12deg)}}
+.inlbl{display:flex;justify-content:center;gap:66px;color:var(--mut);font-size:13px;font-weight:800;margin-top:8px}
+
+</style>
+</head>
+<body>
+<div id="app">
+  <nav id="rail"><button class="srv on" id="homeBtn" title="Friends &amp; messages">💬</button><span style="flex:1"></span><button class="srv setb" id="setBtn" title="Settings">⚙️</button></nav>
+  <aside id="side">
+    <div id="srvname"><span>💬 Messages</span></div>
+    <div id="chlist"></div>
+    <div id="me" title="Settings"><div class="av" id="meav" style="background:#3a3456">⭐</div><div style="min-width:0;flex:1"><b id="mename">…</b><span id="merole">online</span></div><span class="gear">⚙️</span></div>
+  </aside>
+  <main id="chat">
+    <div id="chead">
+      <button class="mobbtn" id="obSide">☰</button>
+      <span id="htitle">👥 Friends</span><span class="sub" id="hsub"></span>
+      <span style="flex:1"></span>
+      <button class="callbtn" id="callA" title="Voice call" style="display:none">📞</button><button class="callbtn" id="callV" title="Video call" style="display:none">🎥</button>
+      <button id="mute" title="Sound">🔔</button>
+      <button class="mobbtn" id="obNote">👥 <span id="ncount">0</span></button>
+    </div>
+    <div id="msgs"></div>
+    <div id="typing"></div>
+    <div id="composer"></div>
+  </main>
+  <aside id="note">
+    <div id="memwrap">
+      <h2><span id="ptitle">🟢 Online friends</span><span id="oncount" style="color:var(--good)"></span></h2>
+      <div id="members"></div>
+    </div>
+  </aside>
+</div>
+<div id="scrim"></div>
+<div id="toast"></div>
+<div class="ov show" id="start"><div class="card">
+  <div class="logo">
+    <svg width="54" height="54" viewBox="0 0 54 54"><rect width="54" height="54" rx="16" fill="#a78bfa"/><path d="M12 22c0-5 4-9 9-9h12c5 0 9 4 9 9v6c0 5-4 9-9 9h-7l-7 6v-6c-4-1-7-5-7-9z" fill="#14121c"/><rect x="19" y="23" width="3" height="6" rx="1.5" fill="#ff7a90"/><rect x="25.5" y="20" width="3" height="12" rx="1.5" fill="#ff7a90"/><rect x="32" y="22" width="3" height="8" rx="1.5" fill="#ff7a90"/></svg>
+    <b>Ranton</b>
+  </div>
+  <div id="startBody"><p style="margin-top:8px">Loading…</p></div>
+</div></div>
+<div class="ov" id="modal"><div class="card" id="mcard"></div></div>
+
+<script type="module">
+/* =========================================================
+   RANTON SETTINGS: paste your Firebase settings here
+   (Firebase console > Project settings > Your apps > Config)
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyBpkQRbzK0b7LX1zJYQm_3JLYQ40s-Ge4A",
+  authDomain: "ranton-7c5e0.firebaseapp.com",
+  projectId: "ranton-7c5e0",
+  storageBucket: "ranton-7c5e0.firebasestorage.app",
+  messagingSenderId: "394984422346",
+  appId: "1:394984422346:web:3b8518ff0614c2dc73ad33"
+};
+/* ========================================================= */
+
+const V = '10.12.2';
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const EMOJIS = ['⭐','🐱','🐶','🦊','🐸','🐼','🐙','🦄','👾','🤖','🐲','🍕'];
+const GEMOJI = ['💬','🎮','🍕','⚽','🎨','🎵','🚀','🔥','🌈','🐸','📚','👑'];
+const COLORS = ['#ff8a5b','#7bd88f','#6cb6ff','#e6c84f','#d68cff','#ff7a90','#5ee6d0','#f5a3ff'];
+const ACCENTS = {purple:'#a78bfa',blue:'#60a5fa',green:'#34d399',pink:'#f472b6',orange:'#fb923c',red:'#f87171'};
+const REACTS = {l:'😂',h:'❤️',t:'👍',w:'😮',s:'😢',f:'🔥'};
+const ONLINE_MS = 100000, BEAT_MS = 45000, MAX_GROUP = 10, MAX_GCALL = 4;
+
+let A, F, auth, db;
+const ME = {uid:null, nick:'', uname:'', emoji:'⭐', color:COLORS[Math.floor(Math.random()*COLORS.length)], status:'', mode:'online'};
+const ST = {profiles:{}, profUnsub:{}, friends:{}, reqIn:[], reqOut:[], blocks:new Set(), dms:{}, groups:{}, calls:{},
+  conv:null, msgs:[], msgsLoaded:false, tab:'online', unsub:[], msgUnsub:null, typingAt:0, lastSend:0, seenT:null,
+  beat:null, sound:true, started:false, replyTo:null, hiddenSince:0, firstGroups:true};
+const PREF = (()=>{try{return JSON.parse(localStorage.getItem('ranton-prefs')||'{}')}catch(e){return{}}})();
+function savePref(){try{localStorage.setItem('ranton-prefs',JSON.stringify(PREF))}catch(e){}}
+
+/* ---------- small helpers ---------- */
+function toast(t){const e=$('toast');e.textContent=t;e.classList.add('show');clearTimeout(toast.h);toast.h=setTimeout(()=>e.classList.remove('show'),2600)}
+function modal(html){$('mcard').innerHTML=html;$('modal').classList.add('show')}
+function closeModal(){$('modal').classList.remove('show')}
+window.closeModal=closeModal;
+let AC=null;
+function ping(hi){if(!ST.sound||ME.mode==='dnd')return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();const o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=hi?880:620;g.gain.setValueAtTime(.0001,AC.currentTime);g.gain.exponentialRampToValueAtTime(.08,AC.currentTime+.01);g.gain.exponentialRampToValueAtTime(.0001,AC.currentTime+.18);o.connect(g);g.connect(AC.destination);o.start();o.stop(AC.currentTime+.2)}catch(e){}}
+const pairId=(a,b)=>[a,b].sort().join('_');
+const otherOf=id=>id.split('_').find(x=>x!==ME.uid)||ME.uid;
+const ms=t=>t&&t.toMillis?t.toMillis():(typeof t==='number'?t:0);
+const rid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,8);
+function who(id){const p=ST.profiles[id]||{};return{nick:String(p.nick||'…').slice(0,16),emoji:EMOJIS.includes(p.emoji)?p.emoji:'⭐',color:/^#[0-9a-f]{6}$/i.test(p.color||'')?p.color:'#a78bfa',status:String(p.status||'').slice(0,40)}}
+const isOnline=id=>{const p=ST.profiles[id];return !!(p&&p.online!==false&&Date.now()-ms(p.lastSeen)<ONLINE_MS)};
+function presence(id){if(!isOnline(id))return'offline';const p=ST.profiles[id]||{};if(p.mode==='dnd')return'dnd';if(p.mode==='away'||p.idle)return'away';return'online'}
+const PLABEL={online:'online',away:'away',dnd:'do not disturb',offline:'offline'};
+function statusOf(id){const w=who(id),pr=presence(id);return w.status&&pr!=='offline'?w.status:PLABEL[pr]}
+function niceErr(e){const c=(e&&e.code)||'';
+  return {'auth/invalid-email':'That email doesn’t look right.','auth/email-already-in-use':'There’s already an account with that email. Try signing in.',
+  'auth/weak-password':'Password must be at least 6 characters.','auth/invalid-credential':'Wrong email or password.','auth/wrong-password':'Wrong email or password.',
+  'auth/user-not-found':'Wrong email or password.','auth/too-many-requests':'Too many tries. Wait a minute and try again.',
+  'auth/popup-closed-by-user':'Google sign-in was closed.','auth/unauthorized-domain':'This website isn’t allowed yet. Add it in Firebase > Authentication > Settings > Authorized domains.',
+  'auth/network-request-failed':'No internet connection.','permission-denied':'Not allowed. (If you just updated Ranton, make sure the new Firestore rules are published.)',
+  'auth/operation-not-allowed':'This sign-in type is turned off. Turn it on in Firebase > Authentication > Sign-in method.',
+  'auth/requires-recent-login':'For safety, sign out and sign back in, then try again.',
+  'auth/api-key-not-valid.-please-pass-a-valid-api-key.':'The Firebase settings in this file are wrong (apiKey).','auth/invalid-api-key':'The Firebase settings in this file are wrong (apiKey).'}[c]||('Something went wrong. Try again. (error: '+(c||(e&&e.message)||'unknown')+')')}
+
+/* ---------- theme ---------- */
+function applyTheme(){
+  document.body.classList.toggle('light',PREF.theme==='light');
+  const a=ACCENTS[PREF.accent]||ACCENTS.purple;document.documentElement.style.setProperty('--acc',a);
+}
+applyTheme();
+
+/* ---------- boot ---------- */
+async function boot(){
+  if(Object.values(firebaseConfig).some(v=>!v||v==='PASTE_HERE')){
+    $('startBody').innerHTML=`<h1>Almost ready! 🛠️</h1><p>Ranton needs its Firebase settings. Open this file in a text editor and paste them where it says <b>PASTE_HERE</b> at the top of the script.</p>`;return}
+  try{
+    const base=`https://www.gstatic.com/firebasejs/${V}/`;
+    const [app,a,f]=await Promise.all([import(base+'firebase-app.js'),import(base+'firebase-auth.js'),import(base+'firebase-firestore.js')]);
+    A=a;F=f;const fa=app.initializeApp(firebaseConfig);auth=A.getAuth(fa);db=F.getFirestore(fa);
+  }catch(e){$('startBody').innerHTML=`<h1>Can’t load 😕</h1><p>Check your internet connection and reload.</p>`;return}
+  A.onAuthStateChanged(auth,async user=>{
+    if(!user){stopAll();showAuth('in');return}
+    ME.uid=user.uid;
+    let prof=null;try{const d=await F.getDoc(F.doc(db,'profiles',user.uid));if(d.exists())prof=d.data()}catch(e){}
+    if(prof&&prof.uname){Object.assign(ME,{nick:prof.nick||prof.uname,uname:prof.uname,emoji:EMOJIS.includes(prof.emoji)?prof.emoji:ME.emoji,color:prof.color||ME.color,status:prof.status||'',mode:['online','away','dnd'].includes(prof.mode)?prof.mode:'online'});enterApp()}
+    else showProfile(false,user.displayName);
+  });
+}
+
+/* ---------- sign in / sign up ---------- */
+function showAuth(mode){
+  $('start').classList.add('show');const b=$('startBody');
+  const up=mode==='up';
+  b.innerHTML=`<div class="tabs"><button id="tIn" class="${up?'':'on'}">Sign in</button><button id="tUp" class="${up?'on':''}">Sign up</button></div>
+    <h1>${up?'Make an account':'Welcome back!'}</h1>
+    <h3>Email</h3><input type="email" id="em" autocomplete="email" placeholder="you@gmail.com">
+    <h3>Password</h3><input type="password" id="pw" autocomplete="${up?'new-password':'current-password'}" placeholder="${up?'At least 6 characters':'Your password'}">
+    ${up?'<h3>Type it again</h3><input type="password" id="pw2" autocomplete="new-password" placeholder="Same password">':''}
+    <label class="keep"><input type="checkbox" id="keep" checked> Keep me signed in</label>
+    <div class="err" id="aerr"></div>
+    <button class="big" id="ago">${up?'Create account':'Sign in'}</button>
+    <div class="or"><span>or</span></div>
+    <button class="big google" id="gg"><svg width="20" height="20" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34.1 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg> Continue with Google</button>
+    ${up?'':'<button class="linkbtn" id="forgot">Forgot password?</button>'}`;
+  $('tIn').onclick=()=>showAuth('in');$('tUp').onclick=()=>showAuth('up');
+  const err=t=>{if($('aerr'))$('aerr').textContent=t};
+  const persist=async()=>A.setPersistence(auth,$('keep').checked?A.browserLocalPersistence:A.browserSessionPersistence);
+  const go=async()=>{
+    const em=$('em').value.trim(),pw=$('pw').value;
+    if(!em||!pw)return err('Type your email and password.');
+    if(up&&pw!==$('pw2').value)return err("The two passwords don't match.");
+    const btn=$('ago');btn.disabled=true;err('');
+    try{await persist();if(up)await A.createUserWithEmailAndPassword(auth,em,pw);else await A.signInWithEmailAndPassword(auth,em,pw)}
+    catch(e){if($('aerr'))err(niceErr(e))}
+    btn.disabled=false;
+  };
+  $('ago').onclick=go;
+  b.querySelectorAll('input').forEach(i=>i.onkeydown=e=>{if(e.key==='Enter')go()});
+  $('gg').onclick=async()=>{err('');try{await persist();const gp=new A.GoogleAuthProvider();gp.setCustomParameters({prompt:'select_account'});await A.signInWithPopup(auth,gp)}catch(e){err(niceErr(e))}};
+  if($('forgot'))$('forgot').onclick=async()=>{
+    const em=$('em').value.trim();if(!em)return err('Type your email first, then press Forgot password.');
+    try{await A.sendPasswordResetEmail(auth,em);$('aerr').style.color='var(--good)';err('📧 Check your email for a link to reset your password.')}catch(e){err(niceErr(e))}
+  };
+  setTimeout(()=>$('em')&&$('em').focus(),50);
+}
+
+/* ---------- username + avatar ---------- */
+function showProfile(edit,suggest){
+  $('start').classList.add('show');const b=$('startBody');
+  b.innerHTML=`<h1>${edit?'Edit your profile':'Pick your username'}</h1>
+    <h3>Username</h3><input type="text" id="un" maxlength="16" placeholder="e.g. cool_name" autocomplete="off">
+    <p class="hint">3–16 letters, numbers or _. Friends type this to add you.</p>
+    <h3>Avatar</h3><div id="emopick" class="emopick"></div>
+    <div class="err" id="uerr"></div>
+    <button class="big" id="ugo">${edit?'Save':'Start chatting'}</button>
+    ${edit?'<button class="big ghost" id="ucancel">Cancel</button><button class="big ghost" id="uout" style="color:var(--acc2)">Sign out</button>':'<button class="linkbtn" id="uout">Sign out</button>'}`;
+  $('un').value=edit?ME.nick:String(suggest||'').replace(/[^A-Za-z0-9_]/g,'').slice(0,16);
+  EMOJIS.forEach(e=>{const x=document.createElement('button');x.textContent=e;x.className=e===ME.emoji?'sel':'';x.onclick=()=>{ME.emoji=e;$('emopick').querySelectorAll('button').forEach(y=>y.classList.toggle('sel',y===x))};$('emopick').appendChild(x)});
+  $('ugo').onclick=()=>saveProfile(edit);$('un').onkeydown=e=>{if(e.key==='Enter')saveProfile(edit)};
+  $('uout').onclick=signOut;if(edit)$('ucancel').onclick=()=>$('start').classList.remove('show');
+  setTimeout(()=>$('un')&&$('un').focus(),50);
+}
+async function saveProfile(edit){
+  const raw=$('un').value.trim(),err=t=>{if($('uerr'))$('uerr').textContent=t};
+  if(!/^[A-Za-z0-9_]{3,16}$/.test(raw))return err('Use 3–16 letters, numbers or _ (no spaces).');
+  const lc=raw.toLowerCase(),old=ME.uname;$('ugo').disabled=true;err('');
+  try{
+    await F.runTransaction(db,async tx=>{
+      const nref=F.doc(db,'usernames',lc);
+      if(lc!==old){const n=await tx.get(nref);if(n.exists()&&n.data().uid!==ME.uid)throw{code:'taken'};tx.set(nref,{uid:ME.uid})}
+      tx.set(F.doc(db,'profiles',ME.uid),{nick:raw,uname:lc,emoji:ME.emoji,color:ME.color,lastSeen:F.serverTimestamp(),online:true},{merge:true});
+      if(old&&old!==lc)tx.delete(F.doc(db,'usernames',old));
+    });
+  }catch(e){if($('ugo'))$('ugo').disabled=false;return err(e&&e.code==='taken'?`"${raw}" is taken. Try another one!`:niceErr(e))}
+  Object.assign(ME,{nick:raw,uname:lc});
+  if(edit){$('start').classList.remove('show');updateMe();toast('✅ Profile saved');return}
+  enterApp();
+}
+async function signOut(){
+  try{await F.setDoc(F.doc(db,'profiles',ME.uid),{online:false},{merge:true})}catch(e){}
+  stopAll();await A.signOut(auth);
+}
+
+
+/* ---------- conversations (DMs + groups) ---------- */
+const isGroup=k=>k&&k[0]==='g';
+const cid=k=>k.slice(2);
+const convRef=k=>F.doc(db,isGroup(k)?'groups':'dms',cid(k));
+const msgsCol=k=>F.collection(db,isGroup(k)?'groups':'dms',cid(k),'msgs');
+const convData=k=>k?(isGroup(k)?ST.groups[cid(k)]:ST.dms[cid(k)]):null;
+const convUsers=k=>isGroup(k)?((convData(k)||{}).users||[]):cid(k).split('_');
+const dmKey=f=>'d:'+pairId(f,ME.uid);
+function convTitle(k){if(isGroup(k)){const g=convData(k)||{};return String(g.name||'Group').slice(0,24)}return who(otherOf(cid(k))).nick}
+function lastAt(k){const c=convData(k)||{};return c.last?ms(c.last.at):ms(c.t)}
+function isUnread(k){const c=convData(k);return !!(c&&c.last&&c.last.by!==ME.uid&&ms(c.last.at)>ms((c.seen||{})[ME.uid])&&!(ST.conv===k&&!document.hidden))}
+function isTypingIn(k,id){const c=convData(k);return !!(c&&c.typing&&Date.now()-ms(c.typing[id])<5000)}
+function canChat(k){if(!k)return false;if(isGroup(k))return convUsers(k).includes(ME.uid);const o=otherOf(cid(k));return !!ST.friends[o]&&!ST.blocks.has(o)}
+
+function markSeen(k){
+  const c=convData(k);if(!c||!c.last||document.hidden)return;
+  if(ms(c.last.at)<=ms((c.seen||{})[ME.uid]))return;
+  clearTimeout(ST.seenT);ST.seenT=setTimeout(()=>F.updateDoc(convRef(k),{['seen.'+ME.uid]:Date.now()}).catch(()=>{}),500);
+}
+function notify(k,c){
+  if(ME.mode==='dnd')return;
+  const open=ST.conv===k&&!document.hidden;
+  if(!open){ping(true);toast('💬 '+(isGroup(k)?convTitle(k)+' · ':'')+who(c.last.by).nick+': '+(c.last.text||'📷 Picture'))}
+  if(document.hidden&&PREF.notif&&'Notification' in window&&Notification.permission==='granted'){
+    try{const n=new Notification(isGroup(k)?convTitle(k):who(c.last.by).nick,{body:(isGroup(k)?who(c.last.by).nick+': ':'')+(c.last.text||'📷 Picture'),tag:k});n.onclick=()=>{window.focus();openConv(k);n.close()}}catch(e){}
+  }
+}
+
+/* ---------- profile + presence ---------- */
+async function signOutWrap(){await signOut()}
+function updateMe(){
+  $('mename').textContent=ME.nick;$('meav').innerHTML=esc(ME.emoji)+`<i class="${ME.mode==='dnd'?'dnd':ME.mode==='away'?'away':'on'}"></i>`;$('meav').style.background=ME.color+'33';
+  $('merole').textContent=ME.status||PLABEL[ME.mode==='away'?'away':ME.mode==='dnd'?'dnd':'online'];
+}
+function stopAll(){
+  if(typeof CALL!=='undefined'&&CALL.pc)hangUp('ended');
+  if(typeof GC!=='undefined'&&GC.gid)leaveGroupCall();
+  ST.unsub.forEach(u=>{try{u()}catch(e){}});ST.unsub=[];
+  Object.values(ST.profUnsub).forEach(u=>{try{u()}catch(e){}});ST.profUnsub={};
+  if(ST.msgUnsub)ST.msgUnsub();ST.msgUnsub=null;clearInterval(ST.beat);
+  Object.assign(ST,{profiles:{},friends:{},reqIn:[],reqOut:[],blocks:new Set(),dms:{},groups:{},calls:{},conv:null,msgs:[],started:false,firstGroups:true});
+}
+function watchProfile(id){
+  if(!id||ST.profUnsub[id])return;
+  ST.profUnsub[id]=F.onSnapshot(F.doc(db,'profiles',id),d=>{ST.profiles[id]=d.exists()?d.data({serverTimestamps:'estimate'}):{};redraw()},()=>{});
+}
+function beat(){F.setDoc(F.doc(db,'profiles',ME.uid),{lastSeen:F.serverTimestamp(),online:true,idle:document.hidden&&Date.now()-ST.hiddenSince>120000},{merge:true}).catch(()=>{})}
+document.addEventListener('visibilitychange',()=>{
+  if(document.hidden)ST.hiddenSince=Date.now();
+  if(ST.started){beat();if(!document.hidden&&ST.conv){markSeen(ST.conv);redraw()}}
+});
+window.addEventListener('pagehide',()=>{if(!ST.started)return;if(GC.gid)leaveGroupCall();F.setDoc(F.doc(db,'profiles',ME.uid),{online:false},{merge:true}).catch(()=>{})});
+
+function enterApp(){
+  $('start').classList.remove('show');updateMe();
+  if(ST.started)return;ST.started=true;
+  watchProfile(ME.uid);beat();ST.beat=setInterval(()=>{beat();redraw()},BEAT_MS);
+  const u=ME.uid,q=(...a)=>F.query(...a),c=n=>F.collection(db,n),W=e=>console.warn(e);
+  ST.unsub.push(F.onSnapshot(q(c('friends'),F.where('users','array-contains',u)),s=>{
+    ST.friends={};s.forEach(d=>{const o=(d.data().users||[]).find(x=>x!==u);if(o){ST.friends[o]=d.id;watchProfile(o)}});redraw();if(ST.conv)rComposer()},W));
+  let firstReq=true;
+  ST.unsub.push(F.onSnapshot(q(c('requests'),F.where('to','==',u)),s=>{
+    const before=ST.reqIn.length;ST.reqIn=[];s.forEach(d=>{const v=d.data();if(ST.blocks.has(v.from))return;ST.reqIn.push({id:d.id,...v});watchProfile(v.from)});
+    if(!firstReq&&ST.reqIn.length>before){ping(true);setTimeout(()=>toast('👋 '+who(ST.reqIn[ST.reqIn.length-1].from).nick+' sent you a friend request!'),400)}
+    firstReq=false;redraw()},W));
+  ST.unsub.push(F.onSnapshot(q(c('requests'),F.where('from','==',u)),s=>{ST.reqOut=[];s.forEach(d=>{ST.reqOut.push({id:d.id,...d.data()});watchProfile(d.data().to)});redraw()},W));
+  ST.unsub.push(F.onSnapshot(q(c('blocks'),F.where('blocker','==',u)),s=>{ST.blocks=new Set();s.forEach(d=>{ST.blocks.add(d.data().blocked);watchProfile(d.data().blocked)});redraw();if(ST.conv)rComposer()},W));
+  let firstDm=true;
+  ST.unsub.push(F.onSnapshot(q(c('dms'),F.where('users','array-contains',u)),s=>{
+    const old=ST.dms;ST.dms={};
+    s.forEach(d=>{const v=d.data({serverTimestamps:'estimate'});ST.dms[d.id]=v;const o=otherOf(d.id);watchProfile(o);
+      const p=old[d.id];if(!firstDm&&v.last&&v.last.by!==u&&!ST.blocks.has(o)&&(!p||!p.last||ms(p.last.at)<ms(v.last.at)))notify('d:'+d.id,v)});
+    firstDm=false;redraw();rTyping();if(ST.conv&&!isGroup(ST.conv))markSeen(ST.conv)},W));
+  ST.unsub.push(F.onSnapshot(q(c('groups'),F.where('users','array-contains',u)),s=>{
+    const old=ST.groups;ST.groups={};
+    s.forEach(d=>{const v=d.data({serverTimestamps:'estimate'});ST.groups[d.id]=v;(v.users||[]).forEach(watchProfile);
+      const p=old[d.id];if(!ST.firstGroups&&v.last&&v.last.by!==u&&(!p||!p.last||ms(p.last.at)<ms(v.last.at)))notify('g:'+d.id,v);
+      if(!ST.firstGroups&&!p)toast('👥 You were added to '+String(v.name||'a group'));
+      onGroupCallState(d.id,v,p)});
+    if(GC.gid&&!ST.groups[GC.gid])leaveGroupCall(true);
+    if(ST.conv&&isGroup(ST.conv)&&!ST.groups[cid(ST.conv)]){toast('You’re no longer in that group.');openHome()}
+    ST.firstGroups=false;redraw();rTyping();if(ST.conv&&isGroup(ST.conv))markSeen(ST.conv)},W));
+  ST.unsub.push(F.onSnapshot(q(c('calls'),F.where('users','array-contains',u)),onCallsSnap,W));
+  openHome();
+}
+
+/* ---------- views ---------- */
+function redraw(){if(!ST.started)return;rSide();rPanel();rHead();rMsgs(true);if(GC.gid)rGC()}
+function openHome(){if(ST.msgUnsub){ST.msgUnsub();ST.msgUnsub=null}ST.conv=null;ST.msgs=[];ST.replyTo=null;rSide();rHead();rMsgs();rTyping();rComposer();rPanel();closeDrawers()}
+function openConv(k){
+  if(ST.msgUnsub)ST.msgUnsub();ST.conv=k;ST.msgs=[];ST.msgsLoaded=false;ST.replyTo=null;
+  if(!isGroup(k))watchProfile(otherOf(cid(k)));
+  rSide();rHead();rMsgs();rComposer();rTyping();rPanel();closeDrawers();
+  let first=true;
+  ST.msgUnsub=F.onSnapshot(F.query(msgsCol(k),F.orderBy('at','desc'),F.limit(150)),s=>{
+    const arr=[];s.forEach(d=>arr.push({id:d.id,...d.data({serverTimestamps:'estimate'})}));ST.msgs=arr.reverse();ST.msgsLoaded=true;
+    first=false;if(ST.conv===k){rMsgs(true);markSeen(k)}
+  },e=>{ST.msgsLoaded=true;if(ST.conv===k)$('msgs').innerHTML=`<div class="empty" style="padding:20px 16px">${esc(niceErr(e))}</div>`});
+  markSeen(k);
+}
+const openDM=pid=>openConv('d:'+pid);
+function avHTML(id,size){const w=who(id);return `<div class="av" style="background:${w.color}33${size?`;width:${size}px;height:${size}px;font-size:${Math.round(size/2)}px`:''}">${w.emoji}<i class="${presence(id)==='offline'?'':presence(id)==='online'?'on':presence(id)}"></i></div>`}
+function gavHTML(g,size){return `<div class="av gav" style="${size?`width:${size}px;height:${size}px;font-size:${Math.round(size/2)}px`:''}">${GEMOJI.includes(g.emoji)?g.emoji:'💬'}</div>`}
+
+function rSide(){
+  const box=$('chlist');box.innerHTML='';
+  const fb=document.createElement('button');fb.className='ch'+(!ST.conv?' on':'');
+  fb.innerHTML=`<span class="ico">👥</span><span class="lbl">Friends</span>${ST.reqIn.length?`<span class="badge">${ST.reqIn.length}</span>`:''}`;
+  fb.onclick=openHome;box.appendChild(fb);
+  const hdr=document.createElement('div');hdr.className='grp grow';hdr.innerHTML='<span>Messages</span>';
+  const ng=document.createElement('button');ng.className='newg';ng.title='New group';ng.textContent='＋';ng.onclick=newGroupModal;hdr.appendChild(ng);box.appendChild(hdr);
+  const keys=[...Object.keys(ST.dms).filter(id=>ST.dms[id].last&&!ST.blocks.has(otherOf(id))).map(id=>'d:'+id),...Object.keys(ST.groups).map(id=>'g:'+id)].sort((a,b)=>lastAt(b)-lastAt(a));
+  if(!keys.length)box.insertAdjacentHTML('beforeend','<div class="empty" style="padding:6px 10px">No chats yet. Message a friend, or press ＋ to make a group.</div>');
+  for(const k of keys){const c=convData(k),un=isUnread(k),g=isGroup(k);
+    const b=document.createElement('button');b.className='ch dmrow'+(ST.conv===k?' on':'')+(un?' unread':'');
+    const live=g&&c.call&&c.call.session&&liveParts(c.call).length;
+    b.innerHTML=`${g?gavHTML(c,30):avHTML(otherOf(cid(k)),30)}<span class="lbl"><span class="nm"></span><small class="pv"></small></span>${live?'<span class="badge live">🔊</span>':un?'<span class="badge">new</span>':''}`;
+    b.querySelector('.nm').textContent=convTitle(k);
+    b.querySelector('.pv').textContent=c.last?(c.last.by===ME.uid?'You: ':g?who(c.last.by).nick+': ':'')+(c.last.text||'📷 Picture'):(g?(c.users||[]).length+' members':'');
+    b.onclick=()=>openConv(k);box.appendChild(b)}
+  const dot=keys.some(isUnread)||ST.reqIn.length;document.title=(dot?'(•) ':'')+'Ranton';
+}
+function rHead(){
+  const k=ST.conv,ok=canChat(k);
+  $('callA').style.display=$('callV').style.display=ok?'':'none';
+  if(!k){$('htitle').textContent='👥 Friends';$('hsub').textContent='';return}
+  if(isGroup(k)){const g=convData(k)||{};$('htitle').textContent=(GEMOJI.includes(g.emoji)?g.emoji:'💬')+' '+convTitle(k);
+    const typers=(g.users||[]).filter(x=>x!==ME.uid&&isTypingIn(k,x));
+    $('hsub').textContent='· '+(typers.length?typers.map(x=>who(x).nick).join(', ')+' typing…':(g.users||[]).length+' members');return}
+  const o=otherOf(cid(k));$('htitle').textContent='@ '+who(o).nick;$('hsub').textContent='· '+(isTypingIn(k,o)?'typing…':statusOf(o));
+}
+function fmtTime(t){const d=new Date(t),n=new Date(),tm=d.toLocaleTimeString([],{hour:'numeric',minute:'2-digit'});return d.toDateString()===n.toDateString()?'Today at '+tm:d.toLocaleDateString()+' '+tm}
+
+function rMsgs(keep){
+  const box=$('msgs');
+  if(!ST.conv)return friendsPage(box);
+  const k=ST.conv,g=isGroup(k);
+  const atBottom=box.scrollHeight-box.scrollTop-box.clientHeight<80;const prevTop=box.scrollTop;
+  box.innerHTML='';
+  if(!ST.msgsLoaded){box.innerHTML='<div class="empty" style="padding:20px 16px">Loading messages…</div>';return}
+  const c=convData(k)||{};
+  // group call banner
+  if(g&&c.call&&c.call.session&&liveParts(c.call).length&&GC.gid!==cid(k)){
+    const n=liveParts(c.call).length;const bn=document.createElement('div');bn.className='gbanner';
+    bn.innerHTML=`<span>🔊 ${c.call.type==='video'?'Video':'Voice'} call going on · ${n} in call</span><button class="send">Join</button>`;
+    bn.querySelector('button').onclick=()=>joinGroupCall(cid(k));box.appendChild(bn)}
+  const intro=document.createElement('div');intro.className='dmintro';
+  if(g){intro.innerHTML=`${gavHTML(c,72)}<h2></h2><p></p>`;intro.querySelector('p').textContent=`This is the start of ${convTitle(k)}. Be kind 💜`}
+  else{const o=otherOf(cid(k));intro.innerHTML=`${avHTML(o,72)}<h2></h2><p></p>`;intro.querySelector('p').textContent=`This is the start of your messages with ${who(o).nick}. Be kind 💜`}
+  intro.querySelector('h2').textContent=convTitle(k);box.appendChild(intro);
+  let prev=null;const byId={};ST.msgs.forEach(m=>byId[m.id]=m);
+  for(const m of ST.msgs){
+    const a=who(m.by),at=ms(m.at)||Date.now();
+    if(ST.blocks.has(m.by)){const d=document.createElement('div');d.className='msg sys';d.innerHTML='<div class="av">🚫</div><div class="mb"><div class="mt">Message from someone you blocked</div></div>';box.appendChild(d);prev=null;continue}
+    const cont=prev&&prev.by===m.by&&!m.reply&&at-(ms(prev.at)||Date.now())<5*60e3;
+    const d=document.createElement('div');d.className='msg'+(cont?' cont':'');d.id='m-'+m.id;
+    d.innerHTML=`<div class="av" style="background:${a.color}33">${a.emoji}</div><div class="mb">${m.reply?'<div class="rq"></div>':''}${cont?'':`<div class="mh"><b style="color:${a.color}"></b><span class="tm">${fmtTime(at)}</span></div>`}${m.text?'<div class="mt"></div>':''}${m.img?'<img class="mimg" alt="picture">':''}<div class="reacts"></div></div><div class="mtools"></div>`;
+    if(!cont)d.querySelector('.mh b').textContent=a.nick;
+    if(m.text)d.querySelector('.mt').textContent=String(m.text).slice(0,400);
+    if(m.reply){const rq=d.querySelector('.rq');rq.textContent='↩ '+who(m.reply.by).nick+': '+(m.reply.text||'📷 Picture');rq.onclick=()=>{const t=$('m-'+m.reply.id);if(t){t.scrollIntoView({block:'center'});t.classList.add('flash')}}}
+    if(m.img&&/^data:image\/(jpeg|png|webp);base64,/.test(m.img)){const im=d.querySelector('.mimg');im.src=m.img;im.onclick=()=>modal(`<img src="${m.img}" style="width:100%;border-radius:12px"><button class="big ghost" onclick="closeModal()">Close</button>`)}
+    // reactions
+    const rbox=d.querySelector('.reacts');
+    for(const [rk,emo] of Object.entries(REACTS)){const list=((m.react||{})[rk])||[];if(!list.length)continue;
+      const b=document.createElement('button');b.className='rx'+(list.includes(ME.uid)?' mine':'');b.textContent=emo+' '+list.length;b.title=list.map(x=>who(x).nick).join(', ');
+      b.onclick=()=>toggleReact(k,m,rk);rbox.appendChild(b)}
+    // tools
+    const tools=d.querySelector('.mtools');
+    if(canChat(k)){
+      const rb=document.createElement('button');rb.textContent='😀';rb.title='React';rb.onclick=e=>{e.stopPropagation();reactPicker(tools,k,m)};tools.appendChild(rb);
+      const rp=document.createElement('button');rp.textContent='↩';rp.title='Reply';rp.onclick=()=>{ST.replyTo={id:m.id,by:m.by,text:String(m.text||'').slice(0,60)};rComposer()};tools.appendChild(rp);
+    }
+    if(m.by===ME.uid){const x=document.createElement('button');x.textContent='🗑';x.title='Delete';x.onclick=()=>F.deleteDoc(F.doc(msgsCol(k),m.id)).catch(e=>toast(niceErr(e)));tools.appendChild(x)}
+    else{const x=document.createElement('button');x.textContent='🚩';x.title='Report';x.onclick=()=>reportModal(m.by,m.text||'(picture)');tools.appendChild(x)}
+    box.appendChild(d);prev=m;
+  }
+  // seen
+  const last=ST.msgs[ST.msgs.length-1];
+  if(last&&last.by===ME.uid){
+    const seenBy=convUsers(k).filter(x=>x!==ME.uid&&ms((c.seen||{})[x])>=(ms(last.at)||Date.now()));
+    if(seenBy.length){const s=document.createElement('div');s.className='seen';s.textContent=g?'Seen by '+seenBy.map(x=>who(x).nick).join(', '):'✓ Seen';box.appendChild(s)}
+  }
+  if(!keep||atBottom)box.scrollTop=box.scrollHeight;else box.scrollTop=prevTop;
+}
+function reactPicker(anchor,k,m){
+  document.querySelectorAll('.rpick').forEach(x=>x.remove());
+  const p=document.createElement('div');p.className='rpick';
+  for(const [rk,emo] of Object.entries(REACTS)){const b=document.createElement('button');b.textContent=emo;b.onclick=e=>{e.stopPropagation();p.remove();toggleReact(k,m,rk)};p.appendChild(b)}
+  anchor.appendChild(p);setTimeout(()=>document.addEventListener('click',()=>p.remove(),{once:true}),0);
+}
+function toggleReact(k,m,rk){
+  const has=(((m.react||{})[rk])||[]).includes(ME.uid);
+  F.updateDoc(F.doc(msgsCol(k),m.id),{['react.'+rk]:has?F.arrayRemove(ME.uid):F.arrayUnion(ME.uid)}).catch(e=>toast(niceErr(e)));
+}
+
+/* ---------- friends page ---------- */
+function friendsPage(box){
+  const active=document.activeElement&&document.activeElement.id==='fcode'?$('fcode').value:null;
+  box.innerHTML='';const wrap=document.createElement('div');wrap.className='fpage';
+  const tabs=[['online','Online'],['all','All'],['pending','Pending'+(ST.reqIn.length?` (${ST.reqIn.length})`:'')],['add','➕ Add friend']];
+  const t=document.createElement('div');t.className='ftabs';
+  tabs.forEach(([k,l])=>{const b=document.createElement('button');b.textContent=l;b.className=(ST.tab===k?'on':'')+(k==='add'?' addt':'');b.onclick=()=>{ST.tab=k;rMsgs()};t.appendChild(b)});
+  wrap.appendChild(t);const body=document.createElement('div');wrap.appendChild(body);
+  const fids=Object.keys(ST.friends).filter(f=>!ST.blocks.has(f));
+  if(ST.tab==='add'){
+    body.innerHTML=`<h3>Add a friend</h3><p class="hint" style="margin-bottom:8px">Type their exact username.</p><div style="display:flex;gap:8px"><input type="text" id="fcode" maxlength="16" placeholder="Their username" autocomplete="off"><button class="send" id="fgo">Send request</button></div><div class="err" id="ferr"></div>
+      <h3>Your username</h3><div class="mycode"><span></span><button class="send" id="cpy">Copy</button></div><p class="hint">Tell your friends this so they can add you.</p>`;
+    body.querySelector('.mycode span').textContent=ME.nick;
+    body.querySelector('#cpy').onclick=()=>{navigator.clipboard&&navigator.clipboard.writeText(ME.nick).then(()=>toast('📋 Copied your username!'),()=>toast('Your username: '+ME.nick))};
+    body.querySelector('#fgo').onclick=()=>addFriend(body.querySelector('#fcode').value);
+    body.querySelector('#fcode').onkeydown=e=>{if(e.key==='Enter')addFriend(e.target.value)};
+  }else if(ST.tab==='pending'){
+    if(!ST.reqIn.length&&!ST.reqOut.length)body.innerHTML='<div class="empty">No friend requests right now.</div>';
+    if(ST.reqIn.length)body.insertAdjacentHTML('beforeend','<div class="mgrp">Incoming</div>');
+    ST.reqIn.forEach(r=>body.appendChild(frow(r.from,'wants to be your friend',[['✅ Accept','go',()=>acceptReq(r)],['✖','no',()=>F.deleteDoc(F.doc(db,'requests',r.id)).catch(e=>toast(niceErr(e)))]])));
+    if(ST.reqOut.length)body.insertAdjacentHTML('beforeend','<div class="mgrp">Sent</div>');
+    ST.reqOut.forEach(r=>body.appendChild(frow(r.to,'waiting for them to accept',[['Cancel','no',()=>F.deleteDoc(F.doc(db,'requests',r.id)).catch(e=>toast(niceErr(e)))]])));
+  }else{
+    const list=ST.tab==='online'?fids.filter(f=>presence(f)!=='offline'):fids;
+    body.insertAdjacentHTML('beforeend',`<div class="mgrp">${ST.tab==='online'?'Online':'All friends'} — ${list.length}</div>`);
+    if(!list.length)body.insertAdjacentHTML('beforeend',`<div class="empty">${fids.length?'None of your friends are online right now.':'No friends yet! Press ➕ Add friend and type their username.'}</div>`);
+    const rank={online:0,away:1,dnd:2,offline:3};
+    list.sort((a,b)=>rank[presence(a)]-rank[presence(b)]).forEach(f=>body.appendChild(frow(f,statusOf(f),[['💬 Message','go',()=>openConv(dmKey(f))],['⋯','no',()=>userMenu(f)]])));
+  }
+  box.appendChild(wrap);
+  if(active!==null&&$('fcode')){$('fcode').value=active;$('fcode').focus()}
+}
+function frow(id,sub,btns){
+  const d=document.createElement('div');d.className='frow';
+  d.innerHTML=`${avHTML(id)}<div class="fi"><b></b><small></small></div><div class="fb"></div>`;
+  d.querySelector('b').textContent=who(id).nick;d.querySelector('small').textContent=sub;
+  btns.forEach(([l,c,fn])=>{const b=document.createElement('button');b.textContent=l;b.className='fbtn '+c;b.onclick=fn;d.querySelector('.fb').appendChild(b)});
+  return d;
+}
+async function addFriend(name){
+  const err=t=>{if($('ferr'))$('ferr').textContent=t};const lc=String(name||'').trim().replace(/^@/,'').toLowerCase();
+  if(!lc)return;if(lc===ME.uname)return err("That's you, silly 😄");
+  let fid=null;try{const s=await F.getDoc(F.doc(db,'usernames',lc));fid=s.exists()&&s.data().uid}catch(e){return err(niceErr(e))}
+  if(!fid)return err('No one has that username. Check the spelling!');
+  if(ST.blocks.has(fid))return err('You blocked this person. Unblock them in ⚙️ Settings first.');
+  watchProfile(fid);
+  if(ST.friends[fid])return err(`You're already friends with ${who(fid).nick||lc}!`);
+  const back=ST.reqIn.find(r=>r.from===fid);if(back)return acceptReq(back);
+  if(ST.reqOut.find(r=>r.to===fid))return err('Request already sent. Waiting for them!');
+  try{await F.setDoc(F.doc(db,'requests',fid+'_'+ME.uid),{to:fid,from:ME.uid,at:F.serverTimestamp()})}
+  catch(e){return err(e&&e.code==='permission-denied'?'You can’t add this person.':niceErr(e))}
+  toast('📨 Friend request sent to '+lc+'!');ST.tab='pending';rMsgs();
+}
+async function acceptReq(r){
+  try{await F.setDoc(F.doc(db,'friends',pairId(r.from,ME.uid)),{users:[r.from,ME.uid].sort(),at:F.serverTimestamp()});await F.deleteDoc(F.doc(db,'requests',r.id))}
+  catch(e){return toast(niceErr(e))}
+  toast('🎉 You and '+who(r.from).nick+' are now friends!');ST.tab='all';rMsgs();
+}
+function userMenu(f){
+  const w=who(f),fr=!!ST.friends[f];
+  modal(`<div class="umenu"><div class="uhead">${avHTML(f,64)}<div><h1></h1><p class="ust"></p></div></div>
+    ${fr?'<button class="big ghost" id="umMsg">💬 Message</button>':''}
+    ${fr?'<button class="big ghost" id="umRm">👋 Remove friend</button>':''}
+    <button class="big ghost" id="umBlock">🚫 ${ST.blocks.has(f)?'Unblock':'Block'}</button>
+    <button class="big ghost" id="umRep" style="color:var(--acc2)">🚩 Report</button>
+    <button class="big ghost" onclick="closeModal()">Close</button></div>`);
+  $('mcard').querySelector('h1').textContent=w.nick;$('mcard').querySelector('.ust').textContent=statusOf(f);
+  if($('umMsg'))$('umMsg').onclick=()=>{closeModal();openConv(dmKey(f))};
+  if($('umRm'))$('umRm').onclick=()=>confirmModal(`Remove ${w.nick}?`,'You won’t be able to message or call each other until one of you adds the other again.','Remove friend',async()=>{try{await F.deleteDoc(F.doc(db,'friends',ST.friends[f]));toast('Removed '+w.nick)}catch(e){toast(niceErr(e))}});
+  $('umBlock').onclick=()=>ST.blocks.has(f)?unblock(f):confirmModal(`Block ${w.nick}?`,'They’ll be removed from your friends and won’t be able to message you, call you, or send you friend requests. Their messages in groups will be hidden for you.','Block',()=>block(f));
+  $('umRep').onclick=()=>reportModal(f,'');
+}
+function confirmModal(title,text,btn,fn){
+  modal(`<h1></h1><p></p><button class="big" id="cfy" style="background:var(--acc2);color:#fff"></button><button class="big ghost" onclick="closeModal()">Cancel</button>`);
+  $('mcard').querySelector('h1').textContent=title;$('mcard').querySelector('p').textContent=text;$('cfy').textContent=btn;
+  $('cfy').onclick=()=>{closeModal();fn()};
+}
+
+/* ---------- block + report ---------- */
+async function block(f){
+  try{
+    await F.setDoc(F.doc(db,'blocks',ME.uid+'_'+f),{blocker:ME.uid,blocked:f,at:Date.now()});
+    if(ST.friends[f])await F.deleteDoc(F.doc(db,'friends',ST.friends[f])).catch(()=>{});
+    await F.deleteDoc(F.doc(db,'requests',f+'_'+ME.uid)).catch(()=>{});
+    await F.deleteDoc(F.doc(db,'requests',ME.uid+'_'+f)).catch(()=>{});
+    toast('🚫 Blocked '+who(f).nick);if(ST.conv===dmKey(f))openHome();
+  }catch(e){toast(niceErr(e))}
+}
+async function unblock(f){closeModal();try{await F.deleteDoc(F.doc(db,'blocks',ME.uid+'_'+f));toast('Unblocked '+who(f).nick+'. Add them again to chat.')}catch(e){toast(niceErr(e))}}
+function reportModal(f,text){
+  const w=who(f);
+  modal(`<h1>🚩 Report <span id="rpn"></span></h1><p>Reports go to the owner of Ranton. They won’t know you reported them.</p>
+    <h3>What happened?</h3><div class="rreasons">${['Being mean or bullying','Spam','Inappropriate stuff','Pretending to be someone','Something else'].map((r,i)=>`<label class="keep"><input type="radio" name="rr" value="${esc(r)}" ${i?'':'checked'}> ${r}</label>`).join('')}</div>
+    <h3>More details (optional)</h3><input type="text" id="rtx" maxlength="300" placeholder="Tell us more">
+    <div class="err" id="rerr"></div><button class="big" id="rgo" style="background:var(--acc2);color:#fff">Send report</button><button class="big ghost" onclick="closeModal()">Cancel</button>`);
+  $('rpn').textContent=w.nick;
+  $('rgo').onclick=async()=>{const reason=(document.querySelector('input[name=rr]:checked')||{}).value||'Other';
+    try{await F.addDoc(F.collection(db,'reports'),{by:ME.uid,about:f,aboutName:w.nick,reason,details:$('rtx').value.slice(0,300),message:String(text||'').slice(0,400),at:F.serverTimestamp()});closeModal();toast('✅ Report sent. Thanks for keeping Ranton safe.')}
+    catch(e){$('rerr').textContent=niceErr(e)}};
+}
+
+/* ---------- groups ---------- */
+function newGroupModal(){
+  const fids=Object.keys(ST.friends).filter(f=>!ST.blocks.has(f));
+  if(!fids.length)return toast('Add some friends first, then you can make a group!');
+  let emo='💬';
+  modal(`<h1>👥 New group</h1><h3>Group name</h3><input type="text" id="gname" maxlength="24" placeholder="e.g. Squad">
+    <h3>Icon</h3><div class="emopick" id="gemo"></div><h3>Add friends <span class="hint">(up to ${MAX_GROUP-1})</span></h3><div class="pick" id="gpick"></div>
+    <div class="err" id="gerr"></div><button class="big" id="ggo">Create group</button><button class="big ghost" onclick="closeModal()">Cancel</button>`);
+  GEMOJI.forEach(e=>{const b=document.createElement('button');b.textContent=e;b.className=e===emo?'sel':'';b.onclick=()=>{emo=e;$('gemo').querySelectorAll('button').forEach(x=>x.classList.toggle('sel',x===b))};$('gemo').appendChild(b)});
+  fids.forEach(f=>{const l=document.createElement('label');l.className='pickrow';l.innerHTML=`<input type="checkbox" value="${esc(f)}">${avHTML(f,30)}<span></span>`;l.querySelector('span').textContent=who(f).nick;$('gpick').appendChild(l)});
+  $('ggo').onclick=async()=>{
+    const name=$('gname').value.trim(),sel=[...$('gpick').querySelectorAll('input:checked')].map(x=>x.value);
+    if(!name)return $('gerr').textContent='Give your group a name!';
+    if(!sel.length)return $('gerr').textContent='Pick at least one friend.';
+    if(sel.length>MAX_GROUP-1)return $('gerr').textContent=`Groups can have up to ${MAX_GROUP} people.`;
+    try{const r=await F.addDoc(F.collection(db,'groups'),{name:name.slice(0,24),emoji:emo,owner:ME.uid,users:[ME.uid,...sel],t:Date.now(),seen:{},typing:{}});
+      closeModal();toast('🎉 Group created!');setTimeout(()=>openConv('g:'+r.id),300)}
+    catch(e){$('gerr').textContent=niceErr(e)}
+  };
+}
+function rPanel(){
+  const box=$('members');box.innerHTML='';
+  if(ST.conv&&isGroup(ST.conv)){
+    const k=ST.conv,g=convData(k)||{},mine=g.owner===ME.uid;
+    $('ptitle').textContent='👥 Members';$('oncount').textContent=(g.users||[]).length+'/'+MAX_GROUP;
+    (g.users||[]).forEach(id=>{const w=who(id),d=document.createElement('div');d.className='mem'+(presence(id)!=='offline'?' on':'');
+      d.innerHTML=`${avHTML(id,34)}<div style="flex:1;min-width:0"><b></b><small></small></div>`;
+      d.querySelector('b').textContent=w.nick+(id===g.owner?' 👑':'')+(id===ME.uid?' (you)':'');d.querySelector('small').textContent=statusOf(id);
+      if(mine&&id!==ME.uid){const x=document.createElement('button');x.className='mx';x.textContent='✖';x.title='Remove from group';
+        x.onclick=()=>confirmModal(`Remove ${w.nick}?`,'They’ll be taken out of this group.','Remove',()=>F.updateDoc(convRef(k),{users:F.arrayRemove(id)}).catch(e=>toast(niceErr(e))));d.appendChild(x)}
+      else if(id!==ME.uid){d.style.cursor='pointer';d.onclick=()=>userMenu(id)}
+      box.appendChild(d)});
+    const acts=document.createElement('div');acts.className='gacts';
+    if(mine){const a=document.createElement('button');a.className='fbtn go';a.textContent='➕ Add people';a.onclick=()=>addToGroupModal(k);acts.appendChild(a);
+      const r=document.createElement('button');r.className='fbtn no';r.textContent='✏️ Rename';r.onclick=()=>renameGroupModal(k);acts.appendChild(r)}
+    const l=document.createElement('button');l.className='fbtn no';l.style.color='var(--acc2)';l.textContent=mine&&(g.users||[]).length<=1?'🗑 Delete group':'🚪 Leave group';l.onclick=()=>leaveGroup(k);acts.appendChild(l);
+    box.appendChild(acts);
+    $('ncount').textContent=(g.users||[]).length;return;
+  }
+  const fids=Object.keys(ST.friends).filter(f=>!ST.blocks.has(f)),onl=fids.filter(f=>presence(f)!=='offline');
+  $('ptitle').textContent='🟢 Online friends';
+  box.insertAdjacentHTML('beforeend',`<div class="mgrp">Online — ${onl.length}</div>`);
+  if(!onl.length)box.insertAdjacentHTML('beforeend',`<div class="empty">${fids.length?'Nobody online right now.':'Add friends to see when they’re online!'}</div>`);
+  onl.forEach(f=>{const w=who(f),d=document.createElement('button');d.className='mem on';
+    d.innerHTML=`${avHTML(f,34)}<div><b></b><small></small></div>`;
+    d.querySelector('b').textContent=w.nick;d.querySelector('small').textContent=statusOf(f);d.onclick=()=>openConv(dmKey(f));box.appendChild(d)});
+  $('oncount').textContent=onl.length+' online';$('ncount').textContent=onl.length;
+}
+function addToGroupModal(k){
+  const g=convData(k)||{};const can=Object.keys(ST.friends).filter(f=>!ST.blocks.has(f)&&!(g.users||[]).includes(f));
+  if(!can.length)return toast('All your friends are already in this group.');
+  modal(`<h1>➕ Add people</h1><div class="pick" id="apick"></div><div class="err" id="aerr2"></div><button class="big" id="ago2">Add</button><button class="big ghost" onclick="closeModal()">Cancel</button>`);
+  can.forEach(f=>{const l=document.createElement('label');l.className='pickrow';l.innerHTML=`<input type="checkbox" value="${esc(f)}">${avHTML(f,30)}<span></span>`;l.querySelector('span').textContent=who(f).nick;$('apick').appendChild(l)});
+  $('ago2').onclick=async()=>{const sel=[...$('apick').querySelectorAll('input:checked')].map(x=>x.value);if(!sel.length)return;
+    if((g.users||[]).length+sel.length>MAX_GROUP)return $('aerr2').textContent=`Groups can have up to ${MAX_GROUP} people.`;
+    try{await F.updateDoc(convRef(k),{users:F.arrayUnion(...sel)});closeModal();toast('Added!')}catch(e){$('aerr2').textContent=niceErr(e)}};
+}
+function renameGroupModal(k){
+  const g=convData(k)||{};let emo=GEMOJI.includes(g.emoji)?g.emoji:'💬';
+  modal(`<h1>✏️ Rename group</h1><input type="text" id="rgn" maxlength="24"><h3>Icon</h3><div class="emopick" id="rge"></div><button class="big" id="rgo2">Save</button><button class="big ghost" onclick="closeModal()">Cancel</button>`);
+  $('rgn').value=g.name||'';
+  GEMOJI.forEach(e=>{const b=document.createElement('button');b.textContent=e;b.className=e===emo?'sel':'';b.onclick=()=>{emo=e;$('rge').querySelectorAll('button').forEach(x=>x.classList.toggle('sel',x===b))};$('rge').appendChild(b)});
+  $('rgo2').onclick=async()=>{const n=$('rgn').value.trim();if(!n)return;try{await F.updateDoc(convRef(k),{name:n.slice(0,24),emoji:emo});closeModal()}catch(e){toast(niceErr(e))}};
+}
+function leaveGroup(k){
+  const g=convData(k)||{},users=g.users||[],mine=g.owner===ME.uid;
+  if(mine&&users.length<=1)return confirmModal('Delete this group?','The group and its messages will be gone for good.','Delete group',async()=>{try{await F.deleteDoc(convRef(k));openHome()}catch(e){toast(niceErr(e))}});
+  confirmModal('Leave '+convTitle(k)+'?','You can only come back if someone adds you again.','Leave group',async()=>{
+    try{const rest=users.filter(x=>x!==ME.uid);await F.updateDoc(convRef(k),mine?{users:F.arrayRemove(ME.uid),owner:rest[0]}:{users:F.arrayRemove(ME.uid)});openHome();toast('👋 You left the group')}
+    catch(e){toast(niceErr(e))}});
+}
+
+/* ---------- composer ---------- */
+function rTyping(){
+  const el=$('typing');if(!ST.conv||isGroup(ST.conv)){el.innerHTML='';rHead();return}
+  const o=otherOf(cid(ST.conv));
+  if(isTypingIn(ST.conv,o)){if(!el.innerHTML){el.innerHTML='<span class="dots"><span></span><span></span><span></span></span> <b></b>';el.querySelector('b').textContent=who(o).nick+' is typing…'}}
+  else el.innerHTML='';
+  rHead();
+}
+setInterval(()=>{if(ST.started){rTyping()}},1500);
+function rComposer(){
+  const c=$('composer');c.innerHTML='';if(!ST.conv)return;
+  const k=ST.conv;
+  if(!canChat(k)){c.innerHTML=`<div class="cbox"><span class="ph">${isGroup(k)?'You’re not in this group anymore.':ST.blocks.has(otherOf(cid(k)))?'You blocked this person.':'You can only message friends. Add them again to keep chatting.'}</span></div>`;return}
+  if(ST.replyTo){const r=document.createElement('div');r.className='replybar';r.innerHTML='<span></span><button>✖</button>';
+    r.querySelector('span').textContent='↩ Replying to '+who(ST.replyTo.by).nick+': '+(ST.replyTo.text||'📷 Picture');r.querySelector('button').onclick=()=>{ST.replyTo=null;rComposer()};c.appendChild(r)}
+  const f=document.createElement('form');f.className='cbox real';
+  f.innerHTML='<button type="button" class="att" title="Send a picture">📎</button><input type="file" accept="image/*" hidden><input id="rin" maxlength="400" autocomplete="off"><button class="send">Send</button>';
+  const inp=f.querySelector('#rin'),file=f.querySelector('input[type=file]');
+  inp.placeholder='Message '+(isGroup(k)?convTitle(k):'@'+convTitle(k));
+  f.querySelector('.att').onclick=()=>file.click();
+  file.onchange=async()=>{const fl=file.files[0];file.value='';if(!fl)return;
+    toast('📷 Sending picture…');
+    try{const img=await shrinkImage(fl);await sendMsg(k,{text:inp.value.trim().slice(0,400),img});inp.value=''}catch(e){toast(e&&e.msg?e.msg:niceErr(e))}};
+  inp.oninput=()=>{if(inp.value&&Date.now()-ST.typingAt>2500){ST.typingAt=Date.now();F.updateDoc(convRef(k),{['typing.'+ME.uid]:Date.now()}).catch(()=>{})}};
+  inp.onpaste=async e=>{const it=[...(e.clipboardData||{}).items||[]].find(i=>i.type.startsWith('image/'));if(!it)return;e.preventDefault();
+    try{toast('📷 Sending picture…');await sendMsg(k,{text:inp.value.trim().slice(0,400),img:await shrinkImage(it.getAsFile())});inp.value=''}catch(er){toast(er&&er.msg?er.msg:niceErr(er))}};
+  f.onsubmit=async e=>{
+    e.preventDefault();const text=inp.value.trim().slice(0,400);if(!text)return;
+    if(Date.now()-ST.lastSend<700)return toast('Whoa, slow down a little 🐢');
+    ST.lastSend=Date.now();inp.value='';ST.typingAt=0;
+    try{await sendMsg(k,{text})}catch(err){inp.value=text;toast(niceErr(err))}
+  };
+  c.appendChild(f);if(window.innerWidth>900)inp.focus();
+}
+async function sendMsg(k,{text,img}){
+  const msg={by:ME.uid,text:text||'',at:F.serverTimestamp()};
+  if(img)msg.img=img;
+  if(ST.replyTo){msg.reply=ST.replyTo;ST.replyTo=null;rComposer()}
+  await F.addDoc(msgsCol(k),msg);
+  const last={by:ME.uid,text:(text||'').slice(0,60),at:F.serverTimestamp()};
+  if(isGroup(k))await F.updateDoc(convRef(k),{last,['typing.'+ME.uid]:0,['seen.'+ME.uid]:Date.now()});
+  else await F.setDoc(convRef(k),{users:cid(k).split('_'),last,typing:{[ME.uid]:0},seen:{[ME.uid]:Date.now()}},{merge:true});
+}
+function shrinkImage(file){
+  return new Promise((res,rej)=>{
+    if(!file.type.startsWith('image/'))return rej({msg:'That’s not a picture.'});
+    const url=URL.createObjectURL(file),im=new Image();
+    im.onload=()=>{URL.revokeObjectURL(url);let max=1000,q=.75,out='';
+      for(let i=0;i<8;i++){const s=Math.min(1,max/Math.max(im.width,im.height)),cv=document.createElement('canvas');cv.width=Math.round(im.width*s);cv.height=Math.round(im.height*s);
+        const cx=cv.getContext('2d');cx.fillStyle='#fff';cx.fillRect(0,0,cv.width,cv.height);cx.drawImage(im,0,0,cv.width,cv.height);out=cv.toDataURL('image/jpeg',q);
+        if(out.length<300000)return res(out);q-=.1;max=Math.round(max*.8)}
+      rej({msg:'That picture is too big.'})};
+    im.onerror=()=>{URL.revokeObjectURL(url);rej({msg:'Couldn’t open that picture.'})};im.src=url;
+  });
+}
+
+/* ---------- settings ---------- */
+function settingsModal(sec){
+  sec=sec||'profile';
+  const tabs=[['profile','🙂 Profile'],['look','🎨 Look'],['notif','🔔 Alerts'],['blocked','🚫 Blocked'],['account','🔐 Account']];
+  modal(`<h1>⚙️ Settings</h1><div class="stabs">${tabs.map(([k,l])=>`<button data-s="${k}" class="${k===sec?'on':''}">${l}</button>`).join('')}</div><div id="sbody"></div><button class="big ghost" onclick="closeModal()">Done</button>`);
+  $('mcard').querySelectorAll('.stabs button').forEach(b=>b.onclick=()=>settingsModal(b.dataset.s));
+  const b=$('sbody');
+  if(sec==='profile'){
+    b.innerHTML=`<div class="uhead"><div class="av" style="background:${ME.color}33;width:56px;height:56px;font-size:28px">${esc(ME.emoji)}</div><div><b id="snick"></b><p class="hint">Your username</p></div></div>
+      <button class="big ghost" id="sEdit">✏️ Change username or avatar</button>
+      <h3>Status</h3><div class="modes">${[['online','🟢 Online'],['away','🌙 Away'],['dnd','⛔ Do not disturb']].map(([m,l])=>`<button data-m="${m}" class="${ME.mode===m?'on':''}">${l}</button>`).join('')}</div>
+      <p class="hint">Do not disturb turns off sounds, pop-ups and call ringing.</p>
+      <h3>Custom status</h3><div style="display:flex;gap:8px"><input type="text" id="sst" maxlength="40" placeholder="e.g. 🎮 playing Minecraft"><button class="send" id="sss">Save</button></div>`;
+    $('snick').textContent=ME.nick;$('sst').value=ME.status||'';
+    $('sEdit').onclick=()=>{closeModal();showProfile(true)};
+    b.querySelectorAll('.modes button').forEach(x=>x.onclick=async()=>{ME.mode=x.dataset.m;updateMe();settingsModal('profile');F.setDoc(F.doc(db,'profiles',ME.uid),{mode:ME.mode},{merge:true}).catch(e=>toast(niceErr(e)))});
+    const save=async()=>{ME.status=$('sst').value.trim().slice(0,40);updateMe();try{await F.setDoc(F.doc(db,'profiles',ME.uid),{status:ME.status},{merge:true});toast('✅ Status saved')}catch(e){toast(niceErr(e))}};
+    $('sss').onclick=save;$('sst').onkeydown=e=>{if(e.key==='Enter')save()};
+  }else if(sec==='look'){
+    b.innerHTML=`<h3>Theme</h3><div class="modes"><button data-t="dark" class="${PREF.theme!=='light'?'on':''}">🌙 Dark</button><button data-t="light" class="${PREF.theme==='light'?'on':''}">☀️ Light</button></div>
+      <h3>Accent color</h3><div class="swatches">${Object.entries(ACCENTS).map(([n,c])=>`<button data-a="${n}" title="${n}" style="background:${c}" class="${(PREF.accent||'purple')===n?'on':''}"></button>`).join('')}</div>`;
+    b.querySelectorAll('[data-t]').forEach(x=>x.onclick=()=>{PREF.theme=x.dataset.t;savePref();applyTheme();settingsModal('look')});
+    b.querySelectorAll('[data-a]').forEach(x=>x.onclick=()=>{PREF.accent=x.dataset.a;savePref();applyTheme();settingsModal('look')});
+  }else if(sec==='notif'){
+    const sup='Notification' in window,perm=sup?Notification.permission:'denied';
+    b.innerHTML=`<label class="keep big2"><input type="checkbox" id="snd" ${ST.sound?'checked':''}> 🔔 Sounds</label>
+      <label class="keep big2"><input type="checkbox" id="ntf" ${PREF.notif&&perm==='granted'?'checked':''} ${sup?'':'disabled'}> 💬 Pop-up notifications when Ranton is in another tab</label>
+      <p class="hint">${!sup?'This browser doesn’t support pop-up notifications.':perm==='denied'?'Notifications are blocked. Click the 🔒 next to the address bar and allow Notifications.':'Your browser will ask you to allow them.'}</p>`;
+    $('snd').onchange=e=>{ST.sound=e.target.checked;$('mute').textContent=ST.sound?'🔔':'🔕'};
+    $('ntf').onchange=async e=>{if(e.target.checked){const p=await Notification.requestPermission();PREF.notif=p==='granted';if(!PREF.notif)toast('Notifications weren’t allowed.')}else PREF.notif=false;savePref();settingsModal('notif')};
+  }else if(sec==='blocked'){
+    const list=[...ST.blocks];
+    b.innerHTML=list.length?'':'<div class="empty">You haven’t blocked anyone.</div>';
+    list.forEach(f=>b.appendChild(frow(f,'blocked',[['Unblock','no',()=>unblock(f)]])));
+  }else{
+    b.innerHTML=`<button class="big ghost" id="sOut">🚪 Sign out</button>
+      <h3>Danger zone</h3><p class="hint">Deleting your account removes your username, friends and profile. Messages you sent stay, but show as “…”.</p>
+      <button class="big" id="sDel" style="background:var(--acc2);color:#fff">Delete my account</button>`;
+    $('sOut').onclick=()=>{closeModal();signOut()};
+    $('sDel').onclick=deleteAccountModal;
+  }
+}
+function deleteAccountModal(){
+  modal(`<h1>Delete your account?</h1><p>This can’t be undone. Type <b>DELETE</b> to confirm.</p><input type="text" id="dconf" placeholder="DELETE"><div class="err" id="derr"></div>
+    <button class="big" id="dgo" style="background:var(--acc2);color:#fff">Delete forever</button><button class="big ghost" onclick="closeModal()">Cancel</button>`);
+  $('dgo').onclick=async()=>{
+    if($('dconf').value.trim()!=='DELETE')return $('derr').textContent='Type DELETE in capital letters.';
+    $('dgo').disabled=true;$('derr').textContent='Deleting…';
+    try{
+      const u=ME.uid,quiet=p=>p.catch(()=>{});
+      await Promise.all(Object.values(ST.friends).map(id=>quiet(F.deleteDoc(F.doc(db,'friends',id)))));
+      await Promise.all([...ST.reqIn,...ST.reqOut].map(r=>quiet(F.deleteDoc(F.doc(db,'requests',r.id)))));
+      await Promise.all([...ST.blocks].map(b=>quiet(F.deleteDoc(F.doc(db,'blocks',u+'_'+b)))));
+      await Promise.all(Object.entries(ST.groups).map(([id,g])=>{const rest=(g.users||[]).filter(x=>x!==u);
+        return quiet(rest.length?F.updateDoc(F.doc(db,'groups',id),g.owner===u?{users:F.arrayRemove(u),owner:rest[0]}:{users:F.arrayRemove(u)}):F.deleteDoc(F.doc(db,'groups',id)))}));
+      if(ME.uname)await quiet(F.deleteDoc(F.doc(db,'usernames',ME.uname)));
+      await quiet(F.deleteDoc(F.doc(db,'profiles',u)));
+      stopAll();await A.deleteUser(auth.currentUser);closeModal();toast('Your account was deleted. Bye 👋');
+    }catch(e){$('dgo').disabled=false;$('derr').textContent=niceErr(e)}
+  };
+}
+
+/* ---------- calls: shared bits ---------- */
+const ICE={iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302','stun:stun2.l.google.com:19302']}]};
+let ringNode=null;
+function ringStart(incoming){ringStop();if(ME.mode==='dnd')return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume&&AC.resume()}catch(e){return}
+  const beepOnce=()=>{if(!ST.sound)return;try{[0,0.25].forEach((d,i)=>{const o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=incoming?(i?660:880):440;
+    const t=AC.currentTime+d;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(incoming?.12:.05,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.22);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+.25)})}catch(e){}};
+  beepOnce();ringNode=setInterval(beepOnce,incoming?1500:3000)}
+function ringStop(){clearInterval(ringNode);ringNode=null}
+async function getMedia(type){
+  try{return await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true},video:type==='video'?{width:{ideal:1280},height:{ideal:720},facingMode:'user'}:false})}
+  catch(e){toast(e&&e.name==='NotAllowedError'?'🎙️ Allow the microphone'+(type==='video'?' and camera':'')+' to call. Click the 🔒 next to the address bar.':e&&e.name==='NotFoundError'?'No '+(type==='video'?'camera or ':'')+'microphone found.':'Couldn’t start your '+(type==='video'?'camera':'microphone')+'.');return null}
+}
+const videoTx=pc=>pc.getTransceivers().find(t=>(t.sender.track&&t.sender.track.kind==='video')||(t.receiver&&t.receiver.track&&t.receiver.track.kind==='video'));
+function ensureVideoSendable(pc){const t=videoTx(pc);if(t&&(t.direction==='recvonly'||t.direction==='inactive'))t.direction='sendrecv'}
+async function pickScreen(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getDisplayMedia){toast('Screen sharing doesn’t work on this device (it needs a computer).');return null}
+  try{const s=await navigator.mediaDevices.getDisplayMedia({video:{frameRate:{ideal:15}},audio:false});return s.getVideoTracks()[0]}
+  catch(e){return null}
+}
+
+/* ---------- 1-on-1 calls ---------- */
+const CALL={pc:null,cid:null,session:null,role:null,type:null,local:null,remote:null,status:null,candUnsub:null,ringT:null,startAt:0,clock:null,seenCands:new Set(),handled:new Set(),pendingCands:[],muted:false,camOff:false,screen:null};
+function callUI(){
+  let ov=$('callov');
+  if(!ov){ov=document.createElement('div');ov.id='callov';ov.innerHTML=`
+    <video id="rvid" autoplay playsinline></video>
+    <div id="cinfo"><div class="cav" id="cav"></div><h2 id="cname"></h2><p id="cstat"></p></div>
+    <video id="lvid" autoplay playsinline muted></video>
+    <div id="cbtns"><button id="cmute" title="Mute">🎙️</button><button id="ccam" title="Camera">📷</button><button id="cshare" title="Share screen">🖥️</button><button id="cend" class="end" title="Hang up">📞</button></div>`;
+    document.body.appendChild(ov);
+    $('cmute').onclick=()=>{CALL.muted=!CALL.muted;CALL.local&&CALL.local.getAudioTracks().forEach(t=>t.enabled=!CALL.muted);callUI()};
+    $('ccam').onclick=()=>{CALL.camOff=!CALL.camOff;CALL.local&&CALL.local.getVideoTracks().forEach(t=>t.enabled=!CALL.camOff);callUI()};
+    $('cshare').onclick=()=>CALL.screen?stopShare1():share1();
+    $('cend').onclick=()=>hangUp('ended');
+  }
+  const o=otherOf(CALL.cid),w=who(o),c=ST.calls[CALL.cid]||{};
+  const remoteShares=c.screen===o;
+  ov.className='show'+(CALL.type==='video'||remoteShares?' isvideo':'')+(CALL.status==='live'?' live':'')+(remoteShares?' sharing':'');
+  $('cav').textContent=w.emoji;$('cav').style.background=w.color+'33';$('cname').textContent=w.nick;
+  $('ccam').style.display=CALL.type==='video'?'':'none';
+  $('cmute').textContent=CALL.muted?'🔇':'🎙️';$('cmute').classList.toggle('off',CALL.muted);$('ccam').classList.toggle('off',CALL.camOff);$('cshare').classList.toggle('off',!!CALL.screen);
+  $('lvid').style.display=(CALL.type==='video'||CALL.screen)?'block':'none';
+  $('lvid').style.visibility=CALL.camOff&&!CALL.screen?'hidden':'';$('lvid').classList.toggle('scr',!!CALL.screen);
+  callStatus();
+}
+function callStatus(){
+  const el=$('cstat');if(!el)return;const c=ST.calls[CALL.cid]||{},o=CALL.cid&&otherOf(CALL.cid);
+  if(CALL.status==='live'){const sec=Math.floor((Date.now()-CALL.startAt)/1000);el.textContent=`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`+(c.screen===o?' · 🖥️ sharing screen':'')}
+  else el.textContent=CALL.status==='connecting'?'Connecting…':CALL.role==='caller'?'Calling…':'…';
+}
+function makePC(){
+  const pc=new RTCPeerConnection(ICE);
+  CALL.remote=new MediaStream();$('rvid').srcObject=CALL.remote;
+  pc.ontrack=e=>{if(!CALL.remote.getTracks().includes(e.track))CALL.remote.addTrack(e.track);$('rvid').play().catch(()=>{})};
+  pc.onicecandidate=e=>{if(e.candidate)F.addDoc(F.collection(db,'calls',CALL.cid,'cands'),{session:CALL.session,side:CALL.role,c:JSON.stringify(e.candidate.toJSON())}).catch(()=>{})};
+  pc.onconnectionstatechange=()=>{
+    const s=pc.connectionState;
+    if(s==='connected'&&CALL.status!=='live'){CALL.status='live';CALL.startAt=Date.now();clearInterval(CALL.clock);CALL.clock=setInterval(callStatus,1000);callUI()}
+    if(s==='failed'){toast('😕 The call couldn’t connect. Some Wi-Fi (like school Wi-Fi) blocks calls.');hangUp('ended')}
+    if(s==='disconnected'){clearTimeout(CALL.dcT);CALL.dcT=setTimeout(()=>{if(CALL.pc===pc&&pc.connectionState==='disconnected'){toast('📴 Call dropped');hangUp('ended')}},8000)}
+  };
+  CALL.local.getTracks().forEach(t=>pc.addTrack(t,CALL.local));
+  if(CALL.type!=='video'&&CALL.role==='caller')pc.addTransceiver('video',{direction:'sendrecv'});
+  $('lvid').srcObject=CALL.type==='video'?CALL.local:null;
+  return pc;
+}
+function listenCands(){
+  const other=CALL.role==='caller'?'callee':'caller';
+  CALL.candUnsub=F.onSnapshot(F.query(F.collection(db,'calls',CALL.cid,'cands'),F.where('session','==',CALL.session)),s=>{
+    s.forEach(d=>{const v=d.data();if(v.side!==other||CALL.seenCands.has(d.id))return;CALL.seenCands.add(d.id);
+      let c;try{c=new RTCIceCandidate(JSON.parse(v.c))}catch(e){return}
+      if(CALL.pc&&CALL.pc.remoteDescription)CALL.pc.addIceCandidate(c).catch(()=>{});else CALL.pendingCands.push(c)})
+  },()=>{});
+}
+function flushCands(){const p=CALL.pendingCands;CALL.pendingCands=[];p.forEach(c=>CALL.pc.addIceCandidate(c).catch(()=>{}))}
+async function startCall(type){
+  if(ST.conv&&isGroup(ST.conv))return startGroupCall(cid(ST.conv),type);
+  if(CALL.pc||GC.gid)return toast('You’re already in a call.');
+  const pid=cid(ST.conv),o=otherOf(pid);if(!canChat(ST.conv))return;
+  const cur=ST.calls[pid];
+  if(cur&&cur.status==='ringing'&&cur.from===o&&Date.now()-cur.t<45000)return toast(who(o).nick+' is already calling you!');
+  const local=await getMedia(type);if(!local)return;
+  Object.assign(CALL,{cid:pid,session:rid(),role:'caller',type,local,status:'ringing',muted:false,camOff:false,screen:null,seenCands:new Set(),pendingCands:[]});
+  CALL.handled.add(CALL.session);
+  CALL.pc=makePC();callUI();listenCands();ringStart(false);
+  try{
+    const offer=await CALL.pc.createOffer();await CALL.pc.setLocalDescription(offer);
+    await F.setDoc(F.doc(db,'calls',pid),{users:pid.split('_'),from:ME.uid,to:o,type,status:'ringing',session:CALL.session,offer:{type:offer.type,sdp:offer.sdp},answer:null,screen:null,t:Date.now()});
+  }catch(e){toast(niceErr(e));return hangUp(null)}
+  CALL.ringT=setTimeout(()=>{if(CALL.session&&CALL.status==='ringing'){toast(who(o).nick+' didn’t answer.');hangUp('missed')}},35000);
+}
+async function acceptCall(pid,data){
+  closeModal();ringStop();
+  if(GC.gid)leaveGroupCall();
+  const local=await getMedia(data.type);
+  if(!local){F.updateDoc(F.doc(db,'calls',pid),{status:'declined'}).catch(()=>{});return}
+  Object.assign(CALL,{cid:pid,session:data.session,role:'callee',type:data.type,local,status:'connecting',muted:false,camOff:false,screen:null,seenCands:new Set(),pendingCands:[]});
+  if(ST.conv!=='d:'+pid)openConv('d:'+pid);
+  CALL.pc=makePC();callUI();listenCands();
+  try{
+    await CALL.pc.setRemoteDescription(data.offer);ensureVideoSendable(CALL.pc);flushCands();
+    const ans=await CALL.pc.createAnswer();await CALL.pc.setLocalDescription(ans);
+    await F.updateDoc(F.doc(db,'calls',pid),{answer:{type:ans.type,sdp:ans.sdp},status:'accepted'});
+  }catch(e){toast('Couldn’t join the call.');hangUp('ended')}
+}
+async function share1(){
+  const tr=await pickScreen();if(!tr||!CALL.pc)return;
+  const t=videoTx(CALL.pc);if(!t){tr.stop();return toast('Couldn’t share your screen in this call.')}
+  await t.sender.replaceTrack(tr);CALL.screen=tr;$('lvid').srcObject=new MediaStream([tr]);
+  tr.onended=()=>stopShare1();
+  F.updateDoc(F.doc(db,'calls',CALL.cid),{screen:ME.uid}).catch(()=>{});callUI();
+}
+async function stopShare1(){
+  if(!CALL.screen)return;const tr=CALL.screen;CALL.screen=null;tr.stop();
+  if(CALL.pc){const t=videoTx(CALL.pc);const cam=CALL.local&&CALL.local.getVideoTracks()[0]||null;if(t)await t.sender.replaceTrack(cam).catch(()=>{})}
+  $('lvid').srcObject=CALL.type==='video'?CALL.local:null;
+  if(CALL.cid)F.updateDoc(F.doc(db,'calls',CALL.cid),{screen:null}).catch(()=>{});callUI();
+}
+function hangUp(status){
+  ringStop();clearTimeout(CALL.ringT);clearTimeout(CALL.dcT);clearInterval(CALL.clock);
+  if(CALL.screen){CALL.screen.stop();CALL.screen=null}
+  if(CALL.candUnsub)CALL.candUnsub();
+  if(CALL.pc){try{CALL.pc.close()}catch(e){}}
+  if(CALL.local)CALL.local.getTracks().forEach(t=>t.stop());
+  if(status&&CALL.cid){const cur=ST.calls[CALL.cid];if(!cur||cur.session===CALL.session)F.updateDoc(F.doc(db,'calls',CALL.cid),{status,screen:null}).catch(()=>{})}
+  const wasLive=CALL.status==='live';
+  Object.assign(CALL,{pc:null,cid:null,session:null,role:null,type:null,local:null,remote:null,status:null,candUnsub:null});
+  const ov=$('callov');if(ov){ov.className='';$('rvid').srcObject=null;$('lvid').srcObject=null}
+  if(wasLive)toast('📴 Call ended');
+}
+function onCallsSnap(s){
+  ST.calls={};s.forEach(d=>ST.calls[d.id]=d.data());
+  for(const [pid,c] of Object.entries(ST.calls)){
+    if(CALL.cid===pid&&CALL.session===c.session){
+      if(CALL.role==='caller'&&c.answer&&CALL.pc&&!CALL.pc.currentRemoteDescription){clearTimeout(CALL.ringT);ringStop();CALL.status='connecting';callStatus();
+        CALL.pc.setRemoteDescription(c.answer).then(flushCands).catch(()=>{})}
+      if(c.status==='declined'&&CALL.role==='caller'){toast(who(c.to).nick+' declined the call.');hangUp(null)}
+      else if(c.status==='busy'&&CALL.role==='caller'){toast(who(c.to).nick+' is busy right now.');hangUp(null)}
+      else if(['ended','missed'].includes(c.status)&&CALL.status){hangUp(null)}
+      else callUI();
+      continue;
+    }
+    if(c.to===ME.uid&&c.status==='ringing'&&Date.now()-c.t<40000&&!CALL.handled.has(c.session)){
+      CALL.handled.add(c.session);
+      if(CALL.pc||GC.gid||ST.blocks.has(c.from)){F.updateDoc(F.doc(db,'calls',pid),{status:'busy'}).catch(()=>{});continue}
+      showIncoming(pid,c);
+    }
+    if($('incoming')&&$('incoming').dataset.session===c.session&&c.status!=='ringing'){closeModal();ringStop();if(c.status==='missed'||c.status==='ended')toast('📵 Missed call from '+who(c.from).nick)}
+  }
+}
+function showIncoming(pid,c){
+  const w=who(c.from);
+  modal(`<div id="incoming" class="incoming"><div class="cav ring" style="background:${w.color}33">${w.emoji}</div><h1></h1><p>${c.type==='video'?'🎥 Video call':'📞 Voice call'}…</p>
+    <div class="inbtns"><button class="decline" id="idec">✖</button><button class="accept" id="iacc">${c.type==='video'?'🎥':'📞'}</button></div>
+    <div class="inlbl"><span>Decline</span><span>Accept</span></div></div>`);
+  $('incoming').dataset.session=c.session;$('mcard').querySelector('h1').textContent=w.nick;
+  ringStart(true);
+  if(document.hidden&&PREF.notif&&ME.mode!=='dnd'&&'Notification' in window&&Notification.permission==='granted'){try{const n=new Notification('📞 '+w.nick+' is calling',{body:'Open Ranton to answer',tag:'call'});n.onclick=()=>{window.focus();n.close()}}catch(e){}}
+  $('iacc').onclick=()=>acceptCall(pid,c);
+  $('idec').onclick=()=>{closeModal();ringStop();F.updateDoc(F.doc(db,'calls',pid),{status:'declined'}).catch(()=>{})};
+  setTimeout(()=>{if($('incoming')&&$('incoming').dataset.session===c.session){closeModal();ringStop();toast('📵 Missed call from '+w.nick)}},Math.max(1000,40000-(Date.now()-c.t)));
+}
+
+/* ---------- group calls (up to 4 people) ---------- */
+const GC={gid:null,session:null,type:null,local:null,screen:null,peers:{},unsubLinks:null,muted:false,camOff:false,startAt:0,clock:null,handled:new Set()};
+const gref=gid=>F.doc(db,'groups',gid);
+function liveParts(c){return Object.keys((c&&c.parts)||{}).filter(u=>u===ME.uid||isOnline(u)||GC.peers[u])}
+async function startGroupCall(gid,type){
+  if(CALL.pc)return toast('You’re already in a call.');
+  if(GC.gid===gid)return;if(GC.gid)leaveGroupCall();
+  const g=ST.groups[gid];if(!g)return;
+  if(g.call&&g.call.session&&liveParts(g.call).length)return joinGroupCall(gid);
+  const local=await getMedia(type);if(!local)return;
+  const session=rid();
+  try{await F.updateDoc(gref(gid),{call:{session,type,by:ME.uid,t:Date.now(),parts:{[ME.uid]:Date.now()},share:null}})}
+  catch(e){local.getTracks().forEach(t=>t.stop());return toast(niceErr(e))}
+  GC.handled.add(session);setupGC(gid,session,type,local,[]);
+}
+async function joinGroupCall(gid){
+  if(CALL.pc)return toast('You’re already in a call.');
+  if(GC.gid===gid)return;if(GC.gid)leaveGroupCall();
+  closeModal();ringStop();
+  const g=ST.groups[gid];const c=g&&g.call;
+  if(!c||!c.session||!liveParts(c).length)return toast('That call already ended.');
+  const others=liveParts(c).filter(x=>x!==ME.uid);
+  if(others.length>=MAX_GCALL)return toast(`This call is full (${MAX_GCALL} people max).`);
+  const local=await getMedia(c.type);if(!local)return;
+  GC.handled.add(c.session);
+  try{await F.updateDoc(gref(gid),{['call.parts.'+ME.uid]:Date.now()})}catch(e){local.getTracks().forEach(t=>t.stop());return toast(niceErr(e))}
+  setupGC(gid,c.session,c.type,local,others);
+}
+function setupGC(gid,session,type,local,callTo){
+  Object.assign(GC,{gid,session,type,local,screen:null,peers:{},muted:false,camOff:false,startAt:Date.now()});
+  clearInterval(GC.clock);GC.clock=setInterval(()=>rGC(),1000);
+  if(ST.conv!=='g:'+gid)openConv('g:'+gid);
+  GC.unsubLinks=F.onSnapshot(F.query(F.collection(db,'groups',gid,'links'),F.where('session','==',session)),s=>{
+    s.forEach(d=>{const v=d.data();
+      if(v.to===ME.uid&&v.offer&&!GC.peers[v.from])answerPeer(d.id,v);
+      if(v.from===ME.uid&&v.answer){const p=GC.peers[v.to];if(p&&p.pc&&!p.pc.currentRemoteDescription)p.pc.setRemoteDescription(v.answer).then(()=>flushPeer(p)).catch(()=>{})}
+    })},()=>{});
+  callTo.forEach(uid=>offerPeer(uid));
+  rGC();
+}
+function newPeer(uid,lid,side){
+  const pc=new RTCPeerConnection(ICE),p={uid,lid,side,pc,stream:new MediaStream(),seen:new Set(),pending:[],unsub:null,state:'connecting'};
+  pc.ontrack=e=>{if(!p.stream.getTracks().includes(e.track))p.stream.addTrack(e.track);rGC()};
+  pc.onicecandidate=e=>{if(e.candidate)F.addDoc(F.collection(db,'groups',GC.gid,'links',lid,'cands'),{side,c:JSON.stringify(e.candidate.toJSON())}).catch(()=>{})};
+  pc.onconnectionstatechange=()=>{p.state=pc.connectionState;if(p.state==='failed')closePeer(uid);rGC()};
+  GC.local.getAudioTracks().forEach(t=>pc.addTrack(t,GC.local));
+  const vt=GC.screen||GC.local.getVideoTracks()[0];
+  if(vt)pc.addTrack(vt,GC.local);else if(side==='from')pc.addTransceiver('video',{direction:'sendrecv'});
+  p.unsub=F.onSnapshot(F.collection(db,'groups',GC.gid,'links',lid,'cands'),s=>{
+    s.forEach(d=>{const v=d.data();if(v.side===side||p.seen.has(d.id))return;p.seen.add(d.id);
+      let c;try{c=new RTCIceCandidate(JSON.parse(v.c))}catch(e){return}
+      if(pc.remoteDescription)pc.addIceCandidate(c).catch(()=>{});else p.pending.push(c)})},()=>{});
+  GC.peers[uid]=p;return p;
+}
+function flushPeer(p){const l=p.pending;p.pending=[];l.forEach(c=>p.pc.addIceCandidate(c).catch(()=>{}))}
+async function offerPeer(uid){
+  const lid=GC.session+'-'+ME.uid+'-'+uid,p=newPeer(uid,lid,'from');
+  setTimeout(()=>{if(GC.peers[uid]===p&&p.pc.connectionState!=='connected')closePeer(uid)},25000);
+  try{const o=await p.pc.createOffer();await p.pc.setLocalDescription(o);
+    await F.setDoc(F.doc(db,'groups',GC.gid,'links',lid),{session:GC.session,from:ME.uid,to:uid,offer:{type:o.type,sdp:o.sdp},answer:null})}
+  catch(e){closePeer(uid)}
+}
+async function answerPeer(lid,v){
+  const p=newPeer(v.from,lid,'to');
+  try{await p.pc.setRemoteDescription(v.offer);ensureVideoSendable(p.pc);flushPeer(p);
+    if(GC.screen){const t=videoTx(p.pc);if(t&&!t.sender.track)await t.sender.replaceTrack(GC.screen)}
+    const a=await p.pc.createAnswer();await p.pc.setLocalDescription(a);
+    await F.updateDoc(F.doc(db,'groups',GC.gid,'links',lid),{answer:{type:a.type,sdp:a.sdp}})}
+  catch(e){closePeer(v.from)}
+}
+function closePeer(uid){const p=GC.peers[uid];if(!p)return;try{p.unsub&&p.unsub()}catch(e){}try{p.pc.close()}catch(e){}delete GC.peers[uid];rGC()}
+function onGroupCallState(gid,g,prev){
+  const c=g.call;
+  if(GC.gid===gid){
+    if(!c||c.session!==GC.session){leaveGroupCall(true);return}
+    Object.keys(GC.peers).forEach(uid=>{if(!(c.parts||{})[uid])closePeer(uid)});
+    if(!(c.parts||{})[ME.uid]){leaveGroupCall(true);return}
+    return;
+  }
+  if(c&&c.session&&!GC.handled.has(c.session)&&liveParts(c).length&&!(c.parts||{})[ME.uid]&&c.by!==ME.uid&&Date.now()-c.t<60000&&!ST.firstGroups){
+    GC.handled.add(c.session);
+    if(CALL.pc||GC.gid)return;
+    const w=who(c.by);
+    modal(`<div id="gincoming" class="incoming">${gavHTML(g,120).replace('class="av gav"','class="cav ring gav"')}<h1></h1><p></p>
+      <div class="inbtns"><button class="decline" id="gdec">✖</button><button class="accept" id="gacc">${c.type==='video'?'🎥':'📞'}</button></div>
+      <div class="inlbl"><span>Ignore</span><span>Join</span></div></div>`);
+    $('mcard').querySelector('h1').textContent=String(g.name||'Group');$('mcard').querySelector('#gincoming p').textContent=w.nick+' started a '+(c.type==='video'?'video':'voice')+' call';
+    ringStart(true);
+    $('gacc').onclick=()=>joinGroupCall(gid);
+    $('gdec').onclick=()=>{closeModal();ringStop()};
+    setTimeout(()=>{if($('gincoming')){closeModal();ringStop()}},30000);
+  }
+  if($('gincoming')&&(!c||!liveParts(c).length)){closeModal();ringStop()}
+}
+async function shareG(){
+  const tr=await pickScreen();if(!tr||!GC.gid)return;
+  GC.screen=tr;tr.onended=()=>stopShareG();
+  for(const p of Object.values(GC.peers)){const t=videoTx(p.pc);if(t)await t.sender.replaceTrack(tr).catch(()=>{})}
+  F.updateDoc(gref(GC.gid),{'call.share':ME.uid}).catch(()=>{});rGC();
+}
+async function stopShareG(){
+  if(!GC.screen)return;const tr=GC.screen;GC.screen=null;tr.stop();
+  const cam=GC.local&&GC.local.getVideoTracks()[0]||null;
+  for(const p of Object.values(GC.peers)){const t=videoTx(p.pc);if(t)await t.sender.replaceTrack(cam).catch(()=>{})}
+  if(GC.gid)F.updateDoc(gref(GC.gid),{'call.share':null}).catch(()=>{});rGC();
+}
+function leaveGroupCall(remoteEnded){
+  if(!GC.gid)return;const gid=GC.gid;
+  if(GC.screen){GC.screen.stop();GC.screen=null}
+  Object.keys(GC.peers).forEach(closePeer);
+  if(GC.unsubLinks)GC.unsubLinks();clearInterval(GC.clock);
+  if(GC.local)GC.local.getTracks().forEach(t=>t.stop());
+  const g=ST.groups[gid],c=g&&g.call;
+  if(!remoteEnded&&c&&c.session===GC.session){
+    const rest=liveParts(c).filter(x=>x!==ME.uid);
+    F.updateDoc(gref(gid),rest.length?{['call.parts.'+ME.uid]:F.deleteField(),...(c.share===ME.uid?{'call.share':null}:{})}:{call:null}).catch(()=>{});
+  }
+  Object.assign(GC,{gid:null,session:null,type:null,local:null,peers:{},unsubLinks:null});
+  const ov=$('gcall');if(ov){ov.classList.remove('show');ov.querySelector('.ggrid').innerHTML=''}
+  toast('📴 You left the call');rMsgs(true);rSide();
+}
+function rGC(){
+  let ov=$('gcall');
+  if(!GC.gid){if(ov)ov.classList.remove('show');return}
+  if(!ov){ov=document.createElement('div');ov.id='gcall';ov.innerHTML=`<div class="gtop"><b id="gctitle"></b><span id="gctime"></span></div><div class="ggrid"></div>
+    <div id="gbtns" class="cbtns2"><button id="gmute" title="Mute">🎙️</button><button id="gcam" title="Camera">📷</button><button id="gshare" title="Share screen">🖥️</button><button id="gend" class="end" title="Leave call">📞</button></div>`;
+    document.body.appendChild(ov);
+    $('gmute').onclick=()=>{GC.muted=!GC.muted;GC.local&&GC.local.getAudioTracks().forEach(t=>t.enabled=!GC.muted);rGC()};
+    $('gcam').onclick=()=>{GC.camOff=!GC.camOff;GC.local&&GC.local.getVideoTracks().forEach(t=>t.enabled=!GC.camOff);rGC()};
+    $('gshare').onclick=()=>GC.screen?stopShareG():shareG();
+    $('gend').onclick=()=>leaveGroupCall();
+  }
+  ov.classList.add('show');
+  const g=ST.groups[GC.gid]||{},c=g.call||{};
+  $('gctitle').textContent=(GEMOJI.includes(g.emoji)?g.emoji:'💬')+' '+String(g.name||'Group');
+  const sec=Math.floor((Date.now()-GC.startAt)/1000);$('gctime').textContent=`${Math.floor(sec/60)}:${String(sec%60).padStart(2,'0')}`;
+  $('gcam').style.display=GC.type==='video'?'':'none';
+  $('gmute').textContent=GC.muted?'🔇':'🎙️';$('gmute').classList.toggle('off',GC.muted);$('gcam').classList.toggle('off',GC.camOff);$('gshare').classList.toggle('off',!!GC.screen);
+  const grid=ov.querySelector('.ggrid');
+  const ids=[ME.uid,...Object.keys(GC.peers)];
+  grid.className='ggrid n'+ids.length;
+  [...grid.children].forEach(t=>{if(!ids.includes(t.dataset.uid))t.remove()});
+  ids.forEach(uid=>{
+    let t=grid.querySelector(`[data-uid="${CSS.escape(uid)}"]`);
+    if(!t){t=document.createElement('div');t.className='tile';t.dataset.uid=uid;t.innerHTML=`<video autoplay playsinline ${uid===ME.uid?'muted':''}></video><div class="tav"></div><div class="tname"></div>`;grid.appendChild(t)}
+    const w=who(uid),v=t.querySelector('video'),me=uid===ME.uid,p=GC.peers[uid];
+    const src=me?(GC.screen?new MediaStream([GC.screen]):GC.local):p&&p.stream;
+    if(me){if(v._src!==(GC.screen||GC.local)){v.srcObject=src;v._src=GC.screen||GC.local}}
+    else if(v.srcObject!==src)v.srcObject=src||null;
+    v.play&&v.play().catch(()=>{});
+    const showVid=me?((GC.type==='video'&&!GC.camOff)||!!GC.screen):(GC.type==='video'||c.share===uid);
+    t.classList.toggle('vid',showVid);t.classList.toggle('mine',me&&!GC.screen);
+    const av=t.querySelector('.tav');av.textContent=w.emoji;av.style.background=w.color+'33';
+    t.querySelector('.tname').textContent=(me?'You':w.nick)+(c.share===uid?' · 🖥️':'')+(!me&&p&&p.state!=='connected'?' · connecting…':'');
+  });
+}
+
+/* ---------- chrome ---------- */
+function closeDrawers(){['rail','side','note'].forEach(i=>$(i).classList.remove('open'));$('scrim').classList.remove('show')}
+$('obSide').onclick=()=>{$('rail').classList.add('open');$('side').classList.add('open');$('scrim').classList.add('show')};
+$('obNote').onclick=()=>{$('note').classList.add('open');$('scrim').classList.add('show')};
+$('scrim').onclick=closeDrawers;
+$('homeBtn').onclick=openHome;
+$('setBtn').onclick=()=>{if(ST.started)settingsModal()};
+$('me').onclick=()=>{if(ST.started)settingsModal('profile')};
+$('callA').onclick=()=>startCall('audio');
+$('callV').onclick=()=>startCall('video');
+$('mute').onclick=()=>{ST.sound=!ST.sound;$('mute').textContent=ST.sound?'🔔':'🔕'};
+boot();
+
+</script>
+</body>
+</html>
