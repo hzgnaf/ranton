@@ -620,6 +620,59 @@ body.pop #callov,body.pop #gcall{font-family:Fredoka,Nunito,sans-serif}
 #chlist{padding-top:14px}
 #mute{width:38px;height:34px;border-radius:10px;margin-left:6px}
 body.pop #topbar .brand span{text-shadow:3px 3px 0 #ffd23f}
+/* ===== STORIES ===== */
+#storybar{display:flex;gap:12px;overflow-x:auto;padding:10px 10px 8px;scrollbar-width:none;flex-shrink:0}
+#storybar::-webkit-scrollbar{display:none}
+#storybar .story{background:none;border:0;padding:0;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer;width:62px;flex-shrink:0;position:relative;color:inherit;font:inherit}
+#storybar .ring{padding:3px;border-radius:50%;background:#bbb;display:block;line-height:0}
+#storybar .ring>*{border:2px solid var(--bg,#fff);border-radius:50%}
+#storybar .story.new .ring{background:conic-gradient(#ff006e,#ffbe0b,#3a86ff,#8338ec,#ff006e);animation:spinring 4s linear infinite}
+#storybar .story.me.has .ring{background:linear-gradient(135deg,#06d6a0,#3a86ff)}
+@keyframes spinring{to{filter:hue-rotate(360deg)}}
+#storybar .plus{position:absolute;right:2px;top:40px;width:20px;height:20px;border-radius:50%;background:#3a86ff;color:#fff;font-size:14px;line-height:20px;text-align:center;border:2px solid #fff}
+#storybar small{font-size:11px;font-weight:800;max-width:62px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#storybar .shint{font-size:12px;opacity:.7;align-self:center;font-weight:700;line-height:1.3}
+.sprev{height:300px;border-radius:16px;display:flex;align-items:center;justify-content:center;margin:10px 0;overflow:hidden}
+.sprev .stext{color:#fff;font:700 26px Fredoka,Poppins,sans-serif;text-align:center;padding:20px;outline:none;min-width:60%;text-shadow:0 2px 8px #0005;word-break:break-word}
+.sprev .stext:empty:before{content:attr(data-ph);opacity:.7}
+.swatches{display:flex;gap:8px;flex-wrap:wrap}.swatches button{width:34px;height:34px;border-radius:50%;border:3px solid transparent;cursor:pointer}.swatches button.on{border-color:#111;transform:scale(1.1)}
+#storyov{position:fixed;inset:0;background:#000e;z-index:9999;display:flex;align-items:center;justify-content:center}
+#storyov .sframe{position:relative;width:min(420px,100vw);height:min(760px,100vh);border-radius:18px;overflow:hidden;background:#111;display:flex;flex-direction:column}
+@media(max-width:500px){#storyov .sframe{border-radius:0}}
+#storyov .sbars{position:absolute;top:8px;left:8px;right:8px;display:flex;gap:4px;z-index:3}
+#storyov .sbars i{flex:1;height:3px;background:#fff5;border-radius:3px;overflow:hidden}#storyov .sbars b{display:block;height:100%;background:#fff}
+#storyov .shead{position:absolute;top:18px;left:10px;right:10px;display:flex;align-items:center;gap:10px;color:#fff;z-index:3;text-shadow:0 1px 4px #000a}
+#storyov .shead div{display:flex;flex-direction:column}#storyov .shead small{opacity:.8;font-size:12px}
+#storyov .shead button{background:#0005;border:0;color:#fff;width:36px;height:36px;border-radius:50%;font-size:16px;cursor:pointer}
+#storyov .sbody{flex:1;display:flex;align-items:center;justify-content:center;position:relative}
+#storyov .sbody img{max-width:100%;max-height:100%;object-fit:contain}
+#storyov .stxt{color:#fff;font:700 30px Fredoka,Poppins,sans-serif;text-align:center;padding:30px;word-break:break-word;text-shadow:0 2px 10px #0006}
+#storyov .scap{position:absolute;bottom:20px;left:16px;right:16px;text-align:center;color:#fff;background:#0007;padding:8px 12px;border-radius:12px;font-weight:700}
+#storyov .snav{position:absolute;top:70px;bottom:80px;width:35%;background:none;border:0;z-index:2;cursor:pointer}#storyov .snav.prev{left:0}#storyov .snav.next{right:0}
+#storyov .sfoot{position:absolute;bottom:0;left:0;right:0;padding:12px;display:flex;gap:8px;z-index:3;background:linear-gradient(transparent,#0009)}
+#storyov .sreply{flex:1;background:#0006;border:2px solid #fff8;color:#fff;border-radius:999px;padding:10px 14px;font:inherit}
+#storyov .sreply::placeholder{color:#fffb}
+#storyov .sfoot button{background:none;border:0;font-size:24px;cursor:pointer;transition:transform .15s}#storyov .sfoot button:active{transform:scale(1.4)}
+#storyov .sviews{font-size:15px!important;color:#fff;font-weight:800;background:#0006!important;border-radius:999px;padding:8px 14px}
+.alist{max-height:50vh;overflow:auto;margin:10px 0}
+/* ===== QUESTION OF THE DAY ===== */
+.qotd{margin:12px 0 14px;padding:16px;border-radius:18px;background:linear-gradient(135deg,#8338ec,#ff006e);color:#fff;display:flex;flex-direction:column;gap:6px;align-items:flex-start}
+.qotd small{font-weight:900;letter-spacing:.08em;opacity:.85;font-size:11px}.qotd b{font-size:19px;font-family:Fredoka,Poppins,sans-serif}
+.qotd .send{background:#fff!important;color:#8338ec!important;margin-top:6px}
+.pick{max-height:50vh;overflow:auto}.pickrow{display:flex;align-items:center;gap:10px;padding:8px;border-radius:10px;cursor:pointer;font-weight:700}.pickrow:hover{background:#0001}
+/* ===== WALLPAPERS ===== */
+.walls{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin:10px 0}
+.wall{aspect-ratio:3/4;border-radius:12px;border:3px solid #0002;cursor:pointer;font-weight:800;font-size:12px}.wall.on{border-color:#3a86ff;box-shadow:0 0 0 3px #3a86ff55}
+#msgs.darkwall .mh .tm,#msgs.darkwall .empty,#msgs.darkwall .daysep{color:#fffc}
+/* ===== NUDGE SHAKE ===== */
+@keyframes nudge{0%,100%{transform:none}10%,50%,90%{transform:translate(-10px,3px) rotate(-1deg)}30%,70%{transform:translate(10px,-3px) rotate(1deg)}}
+#app.shake{animation:nudge .6s}
+/* pop theme touches */
+body.pop .qotd{border:3px solid #111;box-shadow:4px 4px 0 #111}
+body.pop .sprev,body.pop .wall{border:3px solid #111}
+body.pop #storybar .ring>*{border-color:#fff3d6}
+body .qotd button.send,body.pop .qotd button.send{background:#fff!important;color:#8338ec!important;-webkit-text-fill-color:#8338ec;font-weight:900;padding:8px 16px}
+body #storyov input.sreply,body.pop #storyov input.sreply{background:#0006!important;color:#fff!important;border:2px solid #fff8!important;box-shadow:none!important}
 
 .callbtn{background:#ffffff12;color:var(--txt);border-radius:10px;width:38px;height:34px;font-size:17px;margin-left:6px}
 .callbtn:hover{background:var(--good);color:#14121c}
@@ -2201,6 +2254,164 @@ function banUser(uid,name,reason){
     try{await F.setDoc(F.doc(db,'bans',uid),{by:ME.uid,name:String(name||'').slice(0,20),reason:String(reason||'').slice(0,80),at:Date.now()});toast('🚫 Banned '+name);setTimeout(()=>settingsModal('admin'),300)}
     catch(e){toast(niceErr(e))}});
 }
+
+/* =================== STORIES + WALLPAPERS + NUDGES + DAILY QUESTION =================== */
+const STORY_MS=24*3600e3;
+const SBG=['linear-gradient(135deg,#ff5d8f,#ffb703)','linear-gradient(135deg,#3a86ff,#8338ec)','linear-gradient(135deg,#06d6a0,#118ab2)','linear-gradient(135deg,#1a1a1a,#444)','linear-gradient(135deg,#ff006e,#8338ec)','linear-gradient(135deg,#ffd23f,#ff7a59)'];
+const STO={by:{},unsub:{},seen:(()=>{try{return new Set(JSON.parse(localStorage.getItem('ranton-seen-stories')||'[]'))}catch(e){return new Set()}})(),view:null};
+function saveSeen(){try{localStorage.setItem('ranton-seen-stories',JSON.stringify([...STO.seen].slice(-400)))}catch(e){}}
+function liveStories(uid){return (STO.by[uid]||[]).filter(s=>s.exp>Date.now()).sort((a,b)=>a.at-b.at)}
+function watchStories(uid){
+  if(!uid||STO.unsub[uid])return;
+  STO.unsub[uid]=F.onSnapshot(F.query(F.collection(db,'stories',uid,'items'),F.where('exp','>',Date.now())),s=>{
+    const arr=[];s.forEach(d=>arr.push({id:d.id,...d.data()}));STO.by[uid]=arr;rStoryBar();
+    if(uid===ME.uid)arr.filter(x=>x.exp<=Date.now()).forEach(x=>F.deleteDoc(F.doc(db,'stories',uid,'items',x.id)).catch(()=>{}));
+  },()=>{});
+}
+function syncStoryWatchers(){
+  if(!ST.started)return;
+  const want=new Set([ME.uid,...Object.keys(ST.friends).filter(f=>!ST.blocks.has(f))]);
+  want.forEach(watchStories);
+  Object.keys(STO.unsub).forEach(u=>{if(!want.has(u)){try{STO.unsub[u]()}catch(e){}delete STO.unsub[u];delete STO.by[u]}});
+}
+function stopStories(){Object.values(STO.unsub).forEach(u=>{try{u()}catch(e){}});STO.unsub={};STO.by={}}
+function rStoryBar(){
+  let bar=$('storybar');
+  if(!bar){bar=el('div');bar.id='storybar';const cl=$('chlist');cl.parentNode.insertBefore(bar,cl)}
+  if(!ST.started){bar.innerHTML='';return}
+  bar.innerHTML='';
+  const mine=liveStories(ME.uid);
+  const add=el('button','story me'+(mine.length?' has':''));
+  add.innerHTML=`<span class="ring">${avHTML(ME.uid,52)}</span><b class="plus">＋</b><small>${mine.length?'Your story':'Add story'}</small>`;
+  add.onclick=()=>mine.length?storyChoice():newStoryModal();bar.appendChild(add);
+  const others=Object.keys(ST.friends).filter(f=>!ST.blocks.has(f)&&liveStories(f).length);
+  others.sort((a,b)=>{const ua=liveStories(a).some(s=>!STO.seen.has(s.id)),ub=liveStories(b).some(s=>!STO.seen.has(s.id));return ub-ua||liveStories(b).slice(-1)[0].at-liveStories(a).slice(-1)[0].at});
+  others.forEach(f=>{const unseen=liveStories(f).some(s=>!STO.seen.has(s.id));
+    const b=el('button','story'+(unseen?' new':''));b.innerHTML=`<span class="ring">${avHTML(f,52)}</span><small></small>`;b.querySelector('small').textContent=who(f).nick;
+    b.onclick=()=>openStories(f);bar.appendChild(b)});
+  if(!others.length&&!mine.length){const t=el('div','shint','Post a story! Your friends will see it for 24 hours.');bar.appendChild(t)}
+}
+function storyChoice(){
+  modal(`<h1>📸 Your story</h1><button class="big" id="scv">👀 View my story</button><button class="big ghost" id="scn">＋ Add to my story</button><button class="big ghost" onclick="closeModal()">Cancel</button>`);
+  $('scv').onclick=()=>{closeModal();openStories(ME.uid)};$('scn').onclick=newStoryModal;
+}
+function newStoryModal(pre){
+  if(ST.banned)return toast('You can’t post stories.');
+  let mode=pre?'img':'text',bg=0,img=pre||null;
+  modal(`<h1>📸 New story</h1><div class="tabs"><button id="stT" class="on">✏️ Text</button><button id="stP">📷 Photo</button><button id="stD">🎨 Draw</button></div>
+    <div id="sprev" class="sprev"><div class="stext" contenteditable="true" data-ph="Type something…"></div></div>
+    <div id="sbgs" class="swatches"></div><input type="text" id="scap" maxlength="80" placeholder="Add a caption (optional)" style="display:none;margin-top:8px">
+    <p class="hint">Only your friends can see it. It disappears after 24 hours.</p><div class="err" id="serr"></div>
+    <button class="big" id="sgo">Post story</button><button class="big ghost" onclick="closeModal()">Cancel</button>`);
+  const prev=$('sprev'),txt=prev.querySelector('.stext');
+  const paint=()=>{prev.style.background=img?`#000 url(${img}) center/contain no-repeat`:SBG[bg];txt.style.display=img?'none':'';$('sbgs').style.display=img?'none':'flex';$('scap').style.display=img?'':'none'};
+  SBG.forEach((g,i)=>{const b=el('button',i===bg?'on':'');b.style.background=g;b.onclick=()=>{bg=i;$('sbgs').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));paint()};$('sbgs').appendChild(b)});
+  const tab=t=>{['stT','stP','stD'].forEach(id=>$(id).classList.toggle('on',id===t))};
+  $('stT').onclick=()=>{mode='text';img=null;tab('stT');paint();txt.focus()};
+  $('stP').onclick=()=>{const i=document.createElement('input');i.type='file';i.accept='image/*';i.onchange=async()=>{const f=i.files[0];if(!f)return;
+    try{img=await shrinkImage(f);mode='img';tab('stP');paint()}catch(e){$('serr').textContent=e&&e.msg?e.msg:'Couldn’t open that picture.'}};i.click()};
+  $('stD').onclick=drawForStory;
+  if(pre)tab('stD');paint();setTimeout(()=>txt.focus(),50);
+  $('sgo').onclick=async()=>{
+    const text=(img?$('scap').value:txt.innerText).trim().slice(0,150);
+    if(!img&&!text)return $('serr').textContent='Type something or add a photo.';
+    $('sgo').disabled=true;
+    try{const now=Date.now();await F.addDoc(F.collection(db,'stories',ME.uid,'items'),{by:ME.uid,at:now,exp:now+STORY_MS,text,bg:img?null:bg,img:img||null});
+      closeModal();toast('📸 Story posted! Your friends can see it for 24 hours.');confetti()}
+    catch(e){$('sgo').disabled=false;$('serr').textContent=niceErr(e)}
+  };
+}
+function drawForStory(){
+  // reuse the drawing board, but put the picture in the story instead of sending it
+  drawModal(null);$('dgo').textContent='Use this drawing';
+  $('dgo').onclick=()=>{const cv=$('dcv');let d='';for(let q=.8;q>.2;q-=.15){d=cv.toDataURL('image/jpeg',q);if(d.length<300000)break}
+    $('mcard').classList.remove('wide');newStoryModal(d)};
+}
+/* ---------- viewer ---------- */
+function openStories(uid,startIdx){
+  const list=liveStories(uid);if(!list.length)return;
+  let i=startIdx!=null?startIdx:Math.max(0,list.findIndex(s=>!STO.seen.has(s.id)));if(i<0)i=0;
+  closeModal();
+  let ov=$('storyov');if(ov)ov.remove();
+  ov=el('div');ov.id='storyov';document.body.appendChild(ov);
+  const me=uid===ME.uid,w=who(uid);let timer=null,paused=false,t0=0,elapsed=0;const DUR=6000;
+  const close=()=>{clearInterval(timer);ov.remove();rStoryBar()};
+  function show(){
+    const s=list[i];if(!s)return close();
+    STO.seen.add(s.id);saveSeen();
+    if(!me)F.setDoc(F.doc(db,'stories',uid,'items',s.id,'views',ME.uid),{at:Date.now()}).catch(()=>{});
+    ov.innerHTML=`<div class="sframe"><div class="sbars">${list.map((_,j)=>`<i><b style="width:${j<i?100:0}%"></b></i>`).join('')}</div>
+      <div class="shead">${avHTML(uid,38)}<div><b></b><small></small></div><span style="flex:1"></span>${me?'<button class="sdel" title="Delete">🗑</button>':'<button class="srep" title="Report">🚩</button>'}<button class="sx">✕</button></div>
+      <div class="sbody"></div><button class="snav prev"></button><button class="snav next"></button>
+      <div class="sfoot"></div></div>`;
+    ov.querySelector('.shead b').textContent=me?'Your story':w.nick;ov.querySelector('.shead small').textContent=agoText(s.at);
+    const body=ov.querySelector('.sbody');
+    if(s.img&&goodPic(s.img)){body.style.background='#000';const im=el('img');im.src=s.img;body.appendChild(im);if(s.text){const c=el('div','scap',s.text);body.appendChild(c)}}
+    else{body.style.background=SBG[s.bg]||SBG[0];body.appendChild(el('div','stxt',s.text||''))}
+    ov.querySelector('.sx').onclick=close;
+    ov.querySelector('.prev').onclick=()=>{if(i>0){i--;start()}};
+    ov.querySelector('.next').onclick=()=>{i++;i<list.length?start():close()};
+    const foot=ov.querySelector('.sfoot');
+    if(me){
+      const vb=el('button','sviews','👀 Seen by …');foot.appendChild(vb);
+      F.getDocs(F.collection(db,'stories',uid,'items',s.id,'views')).then(v=>{const ids=[];v.forEach(d=>ids.push(d.id));ids.forEach(watchProfile);vb.textContent='👀 Seen by '+ids.length;
+        vb.onclick=()=>{paused=true;alertList('👀 Seen by',ids.length?ids.map(x=>who(x).nick):['Nobody yet'])}}).catch(()=>{vb.textContent='👀 Views'});
+      ov.querySelector('.sdel').onclick=()=>{F.deleteDoc(F.doc(db,'stories',uid,'items',s.id)).then(()=>{toast('Story deleted');close()}).catch(e=>toast(niceErr(e)))};
+    }else{
+      foot.innerHTML='<input type="text" class="sreply" maxlength="200" placeholder="Reply…"><button class="sheart">❤️</button><button class="sfire">🔥</button><button class="slol">😂</button>';
+      const inp=foot.querySelector('.sreply');inp.onfocus=()=>paused=true;inp.onblur=()=>paused=false;
+      const send=async txt=>{const k=dmKey(uid);try{await sendMsg(k,{text:('📸 Replied to your story: '+txt).slice(0,400)});toast('Sent to '+w.nick+'!')}catch(e){toast(niceErr(e))}};
+      inp.onkeydown=e=>{if(e.key==='Enter'&&inp.value.trim()){send(inp.value.trim());inp.value='';inp.blur()}};
+      foot.querySelector('.sheart').onclick=()=>send('❤️ loved your story');foot.querySelector('.sfire').onclick=()=>send('🔥 your story is fire');foot.querySelector('.slol').onclick=()=>send('😂 your story');
+      ov.querySelector('.srep').onclick=()=>{close();reportModal(uid,'Story: '+(s.text||'photo'))};
+    }
+  }
+  function start(){clearInterval(timer);elapsed=0;t0=Date.now();show();
+    timer=setInterval(()=>{if(paused||document.hidden){t0=Date.now()-elapsed;return}elapsed=Date.now()-t0;const bar=ov.querySelectorAll('.sbars b')[i];if(bar)bar.style.width=Math.min(100,elapsed/DUR*100)+'%';
+      if(elapsed>=DUR){i++;i<list.length?start():close()}},50)}
+  start();
+}
+function agoText(t){const m=Math.floor((Date.now()-t)/60000);if(m<1)return'just now';if(m<60)return m+'m ago';return Math.floor(m/60)+'h ago'}
+function alertList(title,items){modal(`<h1></h1><div class="alist"></div><button class="big ghost" onclick="closeModal()">OK</button>`);$('mcard').querySelector('h1').textContent=title;items.forEach(t=>$('mcard').querySelector('.alist').appendChild(el('div','pinrow',t)))}
+
+/* ---------- chat wallpapers ---------- */
+const WALLS={none:'',sunset:'linear-gradient(160deg,#ffecd2,#fcb69f)',ocean:'linear-gradient(160deg,#a1c4fd,#c2e9fb)',mint:'linear-gradient(160deg,#d4fc79,#96e6a1)',grape:'linear-gradient(160deg,#e0c3fc,#8ec5fc)',night:'linear-gradient(160deg,#0f2027,#203a43,#2c5364)',candy:'linear-gradient(160deg,#ff9a9e,#fecfef)',
+  dots:'radial-gradient(#00000022 2px,transparent 2px) 0 0/18px 18px,#fff6e0',stars:'radial-gradient(#ffffff 1px,transparent 1.5px) 0 0/26px 26px,radial-gradient(#ffffff99 1px,transparent 1.5px) 13px 13px/26px 26px,#1b1f3b',grid:'linear-gradient(#00000012 1px,transparent 1px) 0 0/24px 24px,linear-gradient(90deg,#00000012 1px,transparent 1px) 0 0/24px 24px,#f4f7ff'};
+function applyWall(){const c=ST.conv&&convData(ST.conv),w=c&&WALLS[c.wall];const box=$('msgs');box.style.background=w||'';box.classList.toggle('walled',!!w);box.classList.toggle('darkwall',c&&['night','stars'].includes(c.wall))}
+function wallModal(k){
+  const cur=(convData(k)||{}).wall||'none';
+  modal(`<h1>🖼️ Chat wallpaper</h1><p class="hint">Everyone in this chat will see it.</p><div class="walls"></div><button class="big ghost" onclick="closeModal()">Close</button>`);
+  Object.entries(WALLS).forEach(([id,bgc])=>{const b=el('button','wall'+(id===cur?' on':''));b.style.background=bgc||'var(--chat)';b.title=id;if(id==='none')b.textContent='None';
+    b.onclick=()=>{convSet(k,{wall:id}).then(()=>{closeModal();toast('🖼️ Wallpaper changed')}).catch(e=>toast(niceErr(e)))};$('mcard').querySelector('.walls').appendChild(b)});
+}
+
+/* ---------- nudges ---------- */
+let lastNudge=0;
+function sendNudge(k){if(Date.now()-lastNudge<15000)return toast('Wait a bit before nudging again 😅');lastNudge=Date.now();sendMsg(k,{text:'👋 Nudge!'}).then(()=>toast('👋 Nudged!')).catch(e=>toast(niceErr(e)))}
+function shake(){const a=$('app');a.classList.remove('shake');void a.offsetWidth;a.classList.add('shake');ping(true);setTimeout(()=>ping(false),180);if(navigator.vibrate)try{navigator.vibrate([80,40,80])}catch(e){}}
+
+/* ---------- question of the day ---------- */
+const QOTD=['If you could have any superpower, what would it be?','What’s the best snack of all time?','Would you rather fly or be invisible?','What game are you obsessed with right now?','What’s the funniest thing that happened this week?','If you could live anywhere, where?','What’s your hot take that everyone disagrees with?','Pizza or burgers? Defend your answer.','What song is stuck in your head?','If you had $1,000,000, what’s the first thing you’d buy?','What’s the best movie ever made?','Cats or dogs?','What would your dream birthday party be?','If you were a YouTuber, what would your channel be about?','What’s one thing you’re really good at?','Would you rather be a pro athlete or a famous gamer?','What’s the weirdest food you’ve ever tried?','If animals could talk, which would be the rudest?','Beach or mountains?','What’s your favorite emoji and why?','Would you rather time travel to the past or the future?','What’s the best thing about today?','Which app could you never delete?','What’s your go-to comfort food?'];
+function qotd(){const d=Math.floor(Date.now()/864e5);return QOTD[d%QOTD.length]}
+function qotdCard(){
+  const c=el('div','qotd');c.innerHTML='<small>🤔 QUESTION OF THE DAY</small><b></b><button class="send">Ask a friend</button>';
+  c.querySelector('b').textContent=qotd();
+  c.querySelector('button').onclick=()=>{const fids=Object.keys(ST.friends).filter(f=>!ST.blocks.has(f));
+    if(!fids.length)return toast('Add a friend first!');
+    modal(`<h1>🤔 Ask who?</h1><div class="pick" id="qpick"></div><button class="big ghost" onclick="closeModal()">Cancel</button>`);
+    fids.forEach(f=>{const r=el('label','pickrow');r.innerHTML=`${avHTML(f,30)}<span></span>`;r.querySelector('span').textContent=who(f).nick;
+      r.onclick=()=>{closeModal();const k=dmKey(f);DRAFTS[draftKey(k)]='🤔 '+qotd();openConv(k)};$('qpick').appendChild(r)})};
+  return c;
+}
+
+/* ---------- hook into the app ---------- */
+{const o=redraw;redraw=function(){o.apply(this,arguments);if(!ST.started)return;syncStoryWatchers();rStoryBar();applyWall()}}
+{const o=openConv;openConv=function(){const r=o.apply(this,arguments);applyWall();return r}}
+{const o=friendsPage;friendsPage=function(box){o(box);const w=box.querySelector('.fpage');if(w&&ST.tab!=='add')w.insertBefore(qotdCard(),w.children[1]||null)}}
+{const o=plusMenu;plusMenu=function(anchor,k){o(anchor,k);const p=document.querySelector('.pmenu');if(!p)return;
+  [['👋','Nudge',()=>sendNudge(k)],['🖼️','Chat wallpaper',()=>wallModal(k)]].forEach(([e,t,fn])=>{const b=el('button',null,e+'  '+t);b.onclick=ev=>{ev.stopPropagation();p.remove();fn()};p.appendChild(b)})}}
+{const o=notify;notify=function(k,c){if(c&&c.last&&c.last.text==='👋 Nudge!'&&c.last.by!==ME.uid){shake();if(ST.conv!==k)toast('👋 '+who(c.last.by).nick+' nudged you!');return}return o.apply(this,arguments)}}
+{const o=signOut;signOut=async function(){stopStories();const b=$('storybar');if(b)b.innerHTML='';return o.apply(this,arguments)}}
 
 /* ---------- chrome ---------- */
 function closeDrawers(){['rail','side','note'].forEach(i=>$(i).classList.remove('open'));$('scrim').classList.remove('show')}
