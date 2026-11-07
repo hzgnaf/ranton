@@ -768,6 +768,36 @@ body.pop #topbar .tnav #coinBtn,#topbar .tnav #coinBtn{background:#ffd23f!import
   #topbar .tnav #coinBtn{padding:7px 12px!important;white-space:nowrap}
 }
 @media(max-width:360px){#topbar .tnav #navChats{display:none}}
+/* ===== ADMIN ===== */
+#admBtn{background:#1a1a1a!important;color:#ffd23f!important}
+.admcard{max-width:860px!important}
+.admhead{display:flex;align-items:center;justify-content:space-between;gap:10px}.admcount{background:#1a1a1a;color:#ffd23f;font-weight:900;padding:5px 12px;border-radius:999px;font-size:13px}
+.admfind{display:flex;gap:8px;margin:10px 0}.admfind input{flex:1}
+.admwho{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;background:#3a86ff18;margin-bottom:8px}.admwho div{display:flex;flex-direction:column}.admwho small{opacity:.75;font-weight:700}
+.admgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin:8px 0;max-height:46vh;overflow:auto;padding:4px}
+.admbtn{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:10px 12px;border-radius:14px;border:2px solid #0002;background:#fff;color:#1a1a1a;cursor:pointer;text-align:left;font:inherit}
+.admbtn span{font-size:22px}.admbtn b{font-size:13.5px;line-height:1.2}.admbtn small{opacity:.5;font-family:ui-monospace,Consolas,monospace;font-size:11px}
+.admbtn:hover{border-color:#3a86ff}.admbtn.danger b{color:#d6283b}
+body.pop .admbtn{border:2.5px solid #1a1a1a;box-shadow:3px 3px 0 #1a1a1a}body.pop .admbtn:active{transform:translate(2px,2px);box-shadow:1px 1px 0 #1a1a1a}
+.admcmd{display:flex;gap:8px;margin-top:10px}.admcmd input{flex:1;font-family:ui-monospace,Consolas,monospace!important}
+#admout{background:#111;color:#39ff7a;font:12.5px/1.45 ui-monospace,Consolas,monospace;padding:10px 12px;border-radius:12px;min-height:46px;max-height:130px;overflow:auto;white-space:pre-wrap;margin:8px 0}
+#admout:empty{display:none}
+.admlist{max-height:48vh;overflow:auto;display:flex;flex-direction:column;gap:6px;margin-top:8px;padding:4px}.admlist .lbrow small{opacity:.8}
+.admstats{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;margin:10px 0}
+.admstat{padding:14px;border-radius:16px;background:#fff;border:2.5px solid #1a1a1a;box-shadow:3px 3px 0 #1a1a1a;display:flex;flex-direction:column;gap:2px}.admstat span{font-size:24px}.admstat b{font-size:22px;font-family:Fredoka,Poppins,sans-serif;word-break:break-word}.admstat small{font-weight:800;opacity:.6}
+.admpick{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;margin:12px 0}
+#announce{display:flex;align-items:center;gap:10px;margin:0 16px 8px;padding:10px 14px;border-radius:14px;background:linear-gradient(135deg,#ff006e,#8338ec);color:#fff;font-weight:800;border:3px solid #1a1a1a;box-shadow:3px 3px 0 #1a1a1a}
+#announce b{flex:1}#announce button{background:#fff3;border:0;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer}
+#maintov,#banov{position:fixed;inset:0;z-index:9990;background:#fff3d6;display:flex;align-items:center;justify-content:center;padding:20px;text-align:center}
+#maintov .card{max-width:420px}
+.notice{text-align:center}.notice .nicon{font-size:56px}.notice.warn h1{color:#d6283b}.notice .ntext{font-size:17px;font-weight:700;margin:10px 0 16px;white-space:pre-wrap}
+.saleban{background:#ff006e;color:#fff;font-weight:900;padding:8px 12px;border-radius:12px;margin:8px 0;text-align:center}.saleban.dbl{background:#8338ec}
+body.rainbowall .nm,body.rainbowall .msg .nm{background:linear-gradient(90deg,#ff006e,#fb5607,#ffbe0b,#06d6a0,#3a86ff,#8338ec,#ff006e);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent;animation:rbow 3s linear infinite}
+@media(max-width:600px){#announce{margin:0 8px 6px;font-size:13px}.admgrid{grid-template-columns:1fr 1fr}}
+#announce{position:fixed;top:14px;left:50%;transform:translateX(-50%);width:min(440px,calc(100vw - 560px));min-width:260px;margin:0;z-index:60;font-size:14px;padding:8px 12px}
+@media(max-width:900px){#announce{top:auto;bottom:86px;width:calc(100vw - 24px)}}
+
+#announce{top:auto!important;bottom:96px!important;width:min(560px,calc(100vw - 24px))!important}
 
 .callbtn{background:#ffffff12;color:var(--txt);border-radius:10px;width:38px;height:34px;font-size:17px;margin-left:6px}
 .callbtn:hover{background:var(--good);color:#14121c}
@@ -1122,7 +1152,7 @@ function enterApp(){
     if(ST.conv&&isGroup(ST.conv)&&!ST.groups[cid(ST.conv)]){toast('You’re no longer in that group.');openHome()}
     ST.firstGroups=false;redraw();rTyping();if(ST.conv&&isGroup(ST.conv)){markSeen(ST.conv);rWatch();rChBar()}},W));
   ST.unsub.push(F.onSnapshot(q(c('calls'),F.where('users','array-contains',u)),onCallsSnap,W));
-  ST.unsub.push(F.onSnapshot(F.doc(db,'bans',u),d=>{ST.banned=d.exists();bannedScreen(ST.banned)},()=>{}));
+  ST.unsub.push(F.onSnapshot(F.doc(db,'bans',u),d=>{const v=d.exists()?d.data():null;ST.banned=!!v&&(!v.until||v.until>Date.now());bannedScreen(ST.banned,v);if(v&&v.until&&v.until>Date.now())setTimeout(()=>{ST.banned=false;bannedScreen(false)},Math.min(v.until-Date.now()+500,2e9))},()=>{}));
   setTimeout(()=>{if(ST.started){bdayCheck();handleInvite()}},2500);
   ST.unsub.push(F.onSnapshot(F.doc(db,'users',u,'private','nicks'),d=>{ST.nicks=(d.exists()&&d.data().map)||{};redraw()},()=>{}));
   openHome();
@@ -1483,7 +1513,7 @@ function settingsModal(sec){
     $('tsd').onchange=e=>{PREF.tsound=e.target.checked;savePref()};
     $('ntf').onchange=async e=>{if(e.target.checked){const p=await Notification.requestPermission();PREF.notif=p==='granted';if(!PREF.notif)toast('Notifications weren’t allowed.')}else PREF.notif=false;savePref();settingsModal('notif')};
   }else if(sec==='admin'&&isAdmin()){
-    adminPanel(b);
+    closeModal();adminConsole('user');
   }else if(sec==='blocked'){
     const list=[...ST.blocks];
     b.innerHTML=list.length?'':'<div class="empty">You haven’t blocked anyone.</div>';
@@ -2312,10 +2342,11 @@ function handleInvite(){
 }
 
 /* ---------- bans ---------- */
-function bannedScreen(on){
+function bannedScreen(on,v){
   let ov=$('banov');
   if(!on){if(ov)ov.remove();return}
-  if(ov)return;ov=el('div');ov.id='banov';ov.innerHTML='<div class="card"><h1>🚫 You’ve been banned</h1><p>The owner of Ranton banned this account, so you can’t send messages, add friends or make groups.</p><button class="big ghost" id="banout">Sign out</button></div>';
+  if(ov)return;ov=el('div');ov.id='banov';ov.innerHTML='<div class="card"><h1>🚫 You’ve been banned</h1><p>The owner of Ranton banned this account, so you can’t send messages, add friends or make groups.</p><p class="banwhy"></p><button class="big ghost" id="banout">Sign out</button></div>';
+  const bw=ov.querySelector('.banwhy');if(v){bw.textContent=(v.reason?'Reason: '+v.reason+'. ':'')+(v.until?'Ban ends: '+new Date(v.until).toLocaleString()+'.':'')}
   document.body.appendChild(ov);$('banout').onclick=()=>{ov.remove();signOut()};
 }
 
@@ -2521,11 +2552,11 @@ function eqOf(id){const e=prof(id).eq||{},r={};for(const s in SHOP)if(e[s]&&SHOP
 const weekId=()=>Math.floor((Date.now()/864e5+3)/7);
 const wkMsgsOf=id=>prof(id).wk===weekId()?Number(prof(id).wkMsgs)||0:0;
 function meDoc(){return F.doc(db,'profiles',ME.uid)}
-function earn(n,why){if(!ME.uid||ST.banned)return;F.setDoc(meDoc(),{coins:F.increment(n)},{merge:true}).catch(()=>{});coinPop('+'+n+' 🪙'+(why?' '+why:''))}
+function earn(n,why){if(!ME.uid||ST.banned)return;n*=coinMult();F.setDoc(meDoc(),{coins:F.increment(n)},{merge:true}).catch(()=>{});coinPop('+'+n+' 🪙'+(why?' '+why:''))}
 function coinPop(t){const c=el('div','coinpop',t);document.body.appendChild(c);setTimeout(()=>c.remove(),1800);const b=$('coinBtn');if(b){b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump')}}
 function welcomeCoins(){const p=prof(ME.uid);if(ST.profiles[ME.uid]&&p.coins==null&&!welcomeCoins.done){welcomeCoins.done=1;F.setDoc(meDoc(),{coins:50},{merge:true}).then(()=>toast('🪙 You got 50 free coins! Tap 🪙 at the top to visit the Shop.')).catch(()=>{})}}
 const dailyReady=()=>prof(ME.uid).lastDaily!==todayKey();
-async function claimDaily(){if(!dailyReady())return;const p=prof(ME.uid),streak=p.lastDaily===yesterdayKey()?Math.min(7,(Number(p.dailyRun)||0)+1):1,amt=15+streak*5;
+async function claimDaily(){if(!dailyReady())return;const p=prof(ME.uid),streak=p.lastDaily===yesterdayKey()?Math.min(7,(Number(p.dailyRun)||0)+1):1,amt=(15+streak*5)*coinMult();
   try{await F.setDoc(meDoc(),{lastDaily:todayKey(),dailyRun:streak,coins:F.increment(amt)},{merge:true});coinPop('+'+amt+' 🪙 daily reward');confetti()}catch(e){toast(niceErr(e))}}
 
 /* coin button in the top bar */
@@ -2543,14 +2574,14 @@ function shopModal(){
   const p=prof(ME.uid),owned=new Set(Array.isArray(p.owned)?p.owned:[]),eq=eqOf(ME.uid),coins=coinsOf(ME.uid);
   modal(`<div class="shophead"><h1>🛍️ Shop</h1><div class="wallet">🪙 ${coins}</div></div>
     <div class="daily ${dailyReady()?'ready':''}">${dailyReady()?`<span>🎁 Your daily reward is ready!</span><button class="send" id="dclaim">Claim</button>`:`<span>✅ Daily reward claimed. Come back tomorrow! Day ${Number(p.dailyRun)||1} of 7 🔥</span>`}</div>
-    <p class="hint">Earn coins: 1 per message (up to 40 a day) · 🎁 daily reward · 🏆 win games (+10)</p>
+    ${CFG.sale>0?`<div class="saleban">🏷️ SALE! ${CFG.sale}% off everything</div>`:''}${CFG.double?'<div class="saleban dbl">⚡ DOUBLE COINS event is on!</div>':''}<p class="hint">Earn coins: 1 per message (up to 40 a day) · 🎁 daily reward · 🏆 win games (+10)</p>
     <div class="tabs" id="shtabs"></div><p class="hint" id="shsub"></p><div class="shopgrid" id="shgrid"></div><div class="err" id="sherr"></div>
     <button class="big ghost" onclick="closeModal()">Close</button>`);
   $('mcard').classList.add('wide');
   if($('dclaim'))$('dclaim').onclick=async()=>{await claimDaily();setTimeout(shopModal,400)};
   Object.entries(SHOP).forEach(([s,S])=>{const b=el('button',s===shopTab?'on':'',S.title);b.onclick=()=>{shopTab=s;shopModal()};$('shtabs').appendChild(b)});
   const S=SHOP[shopTab];$('shsub').textContent=S.sub;
-  Object.entries(S.items).forEach(([id,[name,price]])=>{
+  Object.entries(S.items).forEach(([id,[name,price0]])=>{const price=priceOf(price0);
     const have=owned.has(id),on=eq[shopTab]===id;
     const c=el('div','shopitem'+(on?' on':''));
     c.innerHTML=`<div class="prev"></div><b></b><button class="send"></button>`;
@@ -2717,7 +2748,7 @@ function checkWin(m){const g=m.game;if(!g||!m.id||REWARDED.has(m.id))return;
   if(p&&p.fx)playFx(p.fx);
   try{const wk=weekId(),pr=prof(ME.uid);F.setDoc(meDoc(),pr.wk===wk?{wkMsgs:F.increment(1)}:{wk,wkMsgs:1},{merge:true}).catch(()=>{});
     const day=todayKey(),c=JSON.parse(localStorage.getItem('ranton-coinday')||'{}');if(c.d!==day){c.d=day;c.n=0}
-    if(c.n<40){c.n++;localStorage.setItem('ranton-coinday',JSON.stringify(c));F.setDoc(meDoc(),{coins:F.increment(1)},{merge:true}).catch(()=>{})}}catch(e){}
+    if(c.n<40){c.n++;localStorage.setItem('ranton-coinday',JSON.stringify(c));F.setDoc(meDoc(),{coins:F.increment(coinMult())},{merge:true}).catch(()=>{})}}catch(e){}
 }}
 {const o=rComposer;rComposer=function(){o.apply(this,arguments);const f=document.querySelector('#composer form, #composer .cbox');const send=document.querySelector('#composer button.send');const emo=$('emo');
   if(emo&&!$('fxBtn')){const b=el('button','att');b.type='button';b.id='fxBtn';b.onclick=e=>{e.stopPropagation();fxMenu(b)};emo.parentNode.insertBefore(b,emo);rFxBtn()}}}
@@ -2727,6 +2758,210 @@ function checkWin(m){const g=m.game;if(!g||!m.id||REWARDED.has(m.id))return;
   const a=el('button','funcard shopc');a.innerHTML=`<span>🛍️</span><div><b>Shop</b><small>${dailyReady()?'🎁 Daily reward ready!':'🪙 '+coinsOf(ME.uid)+' coins'}</small></div>`;a.onclick=shopModal;
   const b=el('button','funcard lbc');b.innerHTML='<span>🏆</span><div><b>Leaderboard</b><small>Who’s #1 this week?</small></div>';b.onclick=()=>leaderModal();
   row.append(a,b);w.insertBefore(row,w.children[1]||null)}}
+
+/* =================== ADMIN CONSOLE (only hzgnaf) =================== */
+const CFG={};let CFGSUB=null,NOTSUB=null,MUTESUB=null,MUTED_UNTIL=0,lastParty=Number(localStorage.getItem('ranton-party')||0);
+const coinMult=()=>CFG.double?2:1;
+const priceOf=p=>Math.max(1,Math.round(p*(1-(Math.min(90,Math.max(0,Number(CFG.sale)||0)))/100)));
+const ADMIN_BADGES={vip:['💎','VIP'],mod:['🛡️','Moderator'],star:['🌟','Star'],event:['🎉','Event winner'],og:['🦖','OG'],helper:['🤝','Helper'],goat:['🐐','GOAT'],artist:['🎨','Artist']};
+{const o=who;who=function(id){const w=o(id),p=ST.profiles[id]||{};w.abadges=Array.isArray(p.abadges)?p.abadges:[];w.verified=p.verified===true;return w}}
+BADGES.unshift({id:'verified',e:'✔️',n:'Verified',t:w=>w.verified});
+Object.entries(ADMIN_BADGES).forEach(([id,[e,n]])=>BADGES.push({id:'a_'+id,e,n,t:w=>(w.abadges||[]).includes(id)}));
+{const o=qotd;qotd=function(){return CFG.qotd?String(CFG.qotd).slice(0,140):o()}}
+
+/* ---------- things every user listens to ---------- */
+function adminListeners(){
+  if(CFGSUB||!ME.uid)return;
+  CFGSUB=F.onSnapshot(F.doc(db,'config','site'),d=>{for(const k in CFG)delete CFG[k];Object.assign(CFG,d.exists()?d.data():{});applyCfg()},()=>{});
+  NOTSUB=F.onSnapshot(F.collection(db,'notices',ME.uid,'items'),s=>{s.forEach(d=>showNotice(d.id,d.data()))},()=>{});
+  MUTESUB=F.onSnapshot(F.doc(db,'mutes',ME.uid),d=>{MUTED_UNTIL=d.exists()?Number(d.data().until)||0:0},()=>{});
+}
+function stopAdminListeners(){[CFGSUB,NOTSUB,MUTESUB].forEach(u=>{try{u&&u()}catch(e){}});CFGSUB=NOTSUB=MUTESUB=null}
+const SHOWN_NOTICES=new Set();
+function showNotice(id,n){
+  if(SHOWN_NOTICES.has(id))return;SHOWN_NOTICES.add(id);
+  F.deleteDoc(F.doc(db,'notices',ME.uid,'items',id)).catch(()=>{});
+  if(Date.now()-(Number(n.at)||0)>7*864e5)return;
+  if(n.type==='kick'){toast('You were signed out by the owner.');setTimeout(()=>signOut(),1200);return}
+  if(n.type==='coins'){coinPop((n.amount>0?'+':'')+n.amount+' 🪙 from the owner');return}
+  const warn=n.type==='warn';
+  modal(`<div class="notice ${warn?'warn':''}"><div class="nicon">${warn?'⚠️':'📣'}</div><h1>${warn?'Warning from Ranton':'Message from Ranton'}</h1><p class="ntext"></p><button class="big" onclick="closeModal()">${warn?'I understand':'OK'}</button></div>`);
+  $('mcard').querySelector('.ntext').textContent=String(n.text||'').slice(0,300);
+}
+function applyCfg(){
+  // announcement banner
+  let a=$('announce');const ann=CFG.announce&&CFG.announce.text,dismissed=Number(localStorage.getItem('ranton-ann-x')||0);
+  if(ann&&dismissed!==Number(CFG.announce.at)){if(!a){a=el('div');a.id='announce';document.body.appendChild(a)}
+    a.innerHTML='<span>📣</span><b></b><button title="Hide">✕</button>';a.querySelector('b').textContent=String(ann).slice(0,200);
+    a.querySelector('button').onclick=()=>{localStorage.setItem('ranton-ann-x',String(CFG.announce.at));a.remove()}}
+  else if(a)a.remove();
+  // maintenance
+  let mo=$('maintov');
+  if(CFG.maint&&!isAdmin()){if(!mo){mo=el('div');mo.id='maintov';document.body.appendChild(mo)}
+    mo.innerHTML='<div class="card"><div style="font-size:64px">🛠️</div><h1>Ranton is getting an update</h1><p></p><p class="hint">This page will open by itself when it’s done.</p></div>';mo.querySelector('p').textContent=CFG.maintMsg||'Be right back! Check again in a few minutes.'}
+  else if(mo)mo.remove();
+  document.body.classList.toggle('rainbowall',!!CFG.rainbow);
+  // party
+  const pt=Number(CFG.party)||0;
+  if(pt>lastParty){lastParty=pt;localStorage.setItem('ranton-party',String(pt));if(Date.now()-pt<120000){fireworks();setTimeout(confetti,600);emojiRain(['🎉','🥳','🎊','✨','🪩']);toast('🎉 PARTY TIME! 🎉')}}
+  if(typeof rCoinBtn==='function')rCoinBtn();
+}
+function isMuted(){return MUTED_UNTIL>Date.now()}
+{const o=sendMsg;sendMsg=async function(k,p){if(isMuted()&&!isAdmin()){const m=Math.ceil((MUTED_UNTIL-Date.now())/60000);toast(`🔇 You’re muted for ${m>=60?Math.ceil(m/60)+' more hour(s)':m+' more minute(s)'}.`);throw {msg:'You are muted.'}}return o.apply(this,arguments)}}
+{const o=redraw;redraw=function(){o.apply(this,arguments);if(!ST.started)return;adminListeners();rAdminBtn()}}
+{const o=signOut;signOut=async function(){stopAdminListeners();return o.apply(this,arguments)}}
+function rAdminBtn(){if(!isAdmin()||$('admBtn'))return;const nav=document.querySelector('#topbar .tnav');if(!nav)return;const b=el('button');b.id='admBtn';b.innerHTML='🛡️ <span>Admin</span>';b.onclick=()=>adminConsole();nav.insertBefore(b,$('setBtn'))}
+
+/* ---------- admin helpers ---------- */
+const P=uid=>F.doc(db,'profiles',uid);
+const setCfg=data=>F.setDoc(F.doc(db,'config','site'),data,{merge:true});
+const notice=(uid,data)=>F.addDoc(F.collection(db,'notices',uid,'items'),{...data,at:Date.now()});
+async function findUser(name){
+  const lc=String(name||'').trim().toLowerCase().replace(/^@/,'');if(!lc)throw{msg:'Type a username.'};
+  const s=await F.getDoc(F.doc(db,'usernames',lc));if(!s.exists())throw{msg:'Nobody has the username “'+lc+'”.'};
+  const uid=s.data().uid;watchProfile(uid);const p=await F.getDoc(P(uid));
+  if(p.exists())ST.profiles[uid]={...ST.profiles[uid],...p.data()};return{uid,lc};
+}
+const DUR={'10m':6e5,'1h':36e5,'1d':864e5,'7d':6048e5,'30d':2592e6};
+const durName=d=>({'10m':'10 minutes','1h':'1 hour','1d':'1 day','7d':'1 week','30d':'30 days'}[d]||d);
+async function allProfiles(){const s=await F.getDocs(F.collection(db,'profiles'));const a=[];s.forEach(d=>{ST.profiles[d.id]={...ST.profiles[d.id],...d.data()};a.push({uid:d.id,...d.data()})});return a}
+
+/* every admin command. u = {uid,lc}, a = extra text/number */
+const ADM={
+ user:[
+  ['info','📋','User info',async u=>{const p=prof(u.uid),w=who(u.uid),b=await F.getDoc(F.doc(db,'bans',u.uid)).catch(()=>null),m=await F.getDoc(F.doc(db,'mutes',u.uid)).catch(()=>null);
+    const lines=[['Username','@'+u.lc],['Name',w.real],['Joined',w.joined?new Date(w.joined).toLocaleDateString():'?'],['Messages',w.msgs],['Level',levelOf(w.msgs).lv],['Coins',coinsOf(u.uid)],['Game wins',Number(p.wins)||0],
+      ['Online',isOnline(u.uid)?'yes 🟢':'no'],['Verified',w.verified?'yes ✔️':'no'],['Badges',w.abadges.map(x=>ADMIN_BADGES[x]?ADMIN_BADGES[x][0]:'').join(' ')||'none'],
+      ['Banned',b&&b.exists()?(b.data().until?'until '+new Date(b.data().until).toLocaleString():'forever'):'no'],['Muted',m&&m.exists()&&m.data().until>Date.now()?'until '+new Date(m.data().until).toLocaleString():'no'],['Account ID',u.uid]];
+    return lines.map(([k,v])=>k+': '+v).join('\n')}],
+  ['ban','🚫','Ban forever',async(u,a)=>{await F.setDoc(F.doc(db,'bans',u.uid),{by:ME.uid,name:u.lc,reason:String(a||'Broke the rules').slice(0,80),at:Date.now()});return'🚫 Banned @'+u.lc},'reason'],
+  ['tempban','⏳','Temp ban',async(u,a)=>{const d=DUR[a]?a:'1d';await F.setDoc(F.doc(db,'bans',u.uid),{by:ME.uid,name:u.lc,reason:'Temporary ban',until:Date.now()+DUR[d],at:Date.now()});return'⏳ Banned @'+u.lc+' for '+durName(d)},'time'],
+  ['unban','✅','Unban',async u=>{await F.deleteDoc(F.doc(db,'bans',u.uid));return'✅ Unbanned @'+u.lc}],
+  ['mute','🔇','Mute',async(u,a)=>{const d=DUR[a]?a:'1h';await F.setDoc(F.doc(db,'mutes',u.uid),{until:Date.now()+DUR[d],name:u.lc,at:Date.now()});await notice(u.uid,{type:'warn',text:'You were muted for '+durName(d)+'. You can read chats but can’t send messages.'});return'🔇 Muted @'+u.lc+' for '+durName(d)},'time'],
+  ['unmute','🔊','Unmute',async u=>{await F.deleteDoc(F.doc(db,'mutes',u.uid));return'🔊 Unmuted @'+u.lc}],
+  ['warn','⚠️','Send a warning',async(u,a)=>{if(!a)throw{msg:'Type the warning.'};await notice(u.uid,{type:'warn',text:a});return'⚠️ Warned @'+u.lc},'text'],
+  ['msg','📣','Send a system message',async(u,a)=>{if(!a)throw{msg:'Type the message.'};await notice(u.uid,{type:'msg',text:a});return'📣 Sent to @'+u.lc},'text'],
+  ['kick','👢','Kick (sign them out)',async u=>{await notice(u.uid,{type:'kick'});return'👢 Kicked @'+u.lc}],
+  ['give','🪙','Give coins',async(u,a)=>{const n=Math.abs(parseInt(a)||0);if(!n)throw{msg:'Type how many coins.'};await F.setDoc(P(u.uid),{coins:F.increment(n)},{merge:true});await notice(u.uid,{type:'coins',amount:n});return'🪙 Gave @'+u.lc+' '+n+' coins'},'number'],
+  ['take','💸','Take coins',async(u,a)=>{const n=Math.min(Math.abs(parseInt(a)||0),coinsOf(u.uid));if(!n)throw{msg:'Type how many coins (they have '+coinsOf(u.uid)+').'};await F.setDoc(P(u.uid),{coins:F.increment(-n)},{merge:true});return'💸 Took '+n+' coins from @'+u.lc},'number'],
+  ['setcoins','🏦','Set coins',async(u,a)=>{const n=Math.max(0,parseInt(a));if(isNaN(n))throw{msg:'Type a number.'};await F.setDoc(P(u.uid),{coins:n},{merge:true});return'🏦 @'+u.lc+' now has '+n+' coins'},'number'],
+  ['giveitem','🎁','Give a shop item',async(u,a)=>{const id=String(a||'').toLowerCase();let slot=null;for(const s in SHOP)if(SHOP[s].items[id])slot=s;if(!slot)throw{msg:'Item names: '+Object.values(SHOP).flatMap(s=>Object.keys(s.items)).join(', ')};
+    await F.setDoc(P(u.uid),{owned:F.arrayUnion(id)},{merge:true});return'🎁 Gave @'+u.lc+' '+SHOP[slot].items[id][0]},'item'],
+  ['giveall','🎊','Give every shop item',async u=>{await F.setDoc(P(u.uid),{owned:F.arrayUnion(...Object.values(SHOP).flatMap(s=>Object.keys(s.items)))},{merge:true});return'🎊 @'+u.lc+' now owns everything in the shop'}],
+  ['resetlook','🧽','Remove their glow/bubble/frame',async u=>{await F.setDoc(P(u.uid),{eq:{}},{merge:true});return'🧽 Reset @'+u.lc+'’s look'}],
+  ['badge','🏅','Give a badge',async(u,a)=>{const id=String(a||'').toLowerCase();if(!ADMIN_BADGES[id])throw{msg:'Badges: '+Object.keys(ADMIN_BADGES).join(', ')};await F.setDoc(P(u.uid),{abadges:F.arrayUnion(id)},{merge:true});return'🏅 Gave @'+u.lc+' the '+ADMIN_BADGES[id].join(' ')+' badge'},'badge'],
+  ['unbadge','🗑️','Remove all their badges',async u=>{await F.setDoc(P(u.uid),{abadges:[]},{merge:true});return'🗑️ Removed @'+u.lc+'’s badges'}],
+  ['verify','✔️','Verify (✔️ badge)',async u=>{await F.setDoc(P(u.uid),{verified:true},{merge:true});return'✔️ Verified @'+u.lc}],
+  ['unverify','✖️','Unverify',async u=>{await F.setDoc(P(u.uid),{verified:false},{merge:true});return'✖️ Unverified @'+u.lc}],
+  ['rename','✏️','Change display name',async(u,a)=>{const n=String(a||'').trim().slice(0,16);if(!n)throw{msg:'Type the new name.'};await F.setDoc(P(u.uid),{nick:n},{merge:true});return'✏️ @'+u.lc+' is now called '+n},'text'],
+  ['resetbio','📝','Clear bio',async u=>{await F.setDoc(P(u.uid),{bio:''},{merge:true});return'📝 Cleared @'+u.lc+'’s bio'}],
+  ['resetpic','🖼️','Remove profile picture',async u=>{await F.setDoc(P(u.uid),{pic:null},{merge:true});return'🖼️ Removed @'+u.lc+'’s picture'}],
+  ['resetbanner','🎨','Remove banner color',async u=>{await F.setDoc(P(u.uid),{banner:null},{merge:true});return'🎨 Removed @'+u.lc+'’s banner'}],
+  ['resetstatus','💭','Clear custom status',async u=>{await F.setDoc(P(u.uid),{status:''},{merge:true});return'💭 Cleared @'+u.lc+'’s status'}],
+  ['setmsgs','⭐','Set message count (level)',async(u,a)=>{const n=Math.max(0,parseInt(a));if(isNaN(n))throw{msg:'Type a number.'};await F.setDoc(P(u.uid),{msgCount:n},{merge:true});return'⭐ @'+u.lc+' is now level '+levelOf(n).lv},'number'],
+  ['setwins','🎮','Set game wins',async(u,a)=>{const n=Math.max(0,parseInt(a)||0);await F.setDoc(P(u.uid),{wins:n},{merge:true});return'🎮 @'+u.lc+' now has '+n+' wins'},'number'],
+  ['resetweek','📉','Reset weekly messages',async u=>{await F.setDoc(P(u.uid),{wkMsgs:0,wk:weekId()},{merge:true});return'📉 Reset @'+u.lc+'’s weekly messages'}],
+  ['delstories','📸','Delete all their stories',async u=>{const s=await F.getDocs(F.collection(db,'stories',u.uid,'items'));let n=0;for(const d of s.docs){await F.deleteDoc(d.ref);n++}return'📸 Deleted '+n+' stor'+(n===1?'y':'ies')}],
+ ],
+ all:[
+  ['announce','📣','Announcement banner for everyone',async a=>{if(!a)throw{msg:'Type the announcement.'};await setCfg({announce:{text:String(a).slice(0,200),at:Date.now()}});return'📣 Announcement posted'},'text'],
+  ['unannounce','🔕','Remove announcement',async()=>{await setCfg({announce:null});return'🔕 Announcement removed'}],
+  ['maint','🛠️','Maintenance mode ON',async a=>{await setCfg({maint:true,maintMsg:String(a||'').slice(0,150)});return'🛠️ Maintenance ON — only you can use Ranton'},'text?'],
+  ['unmaint','🟢','Maintenance mode OFF',async()=>{await setCfg({maint:false});return'🟢 Ranton is open again'}],
+  ['double','⚡','Double coins event ON',async()=>{await setCfg({double:true});return'⚡ Double coins ON'}],
+  ['undouble','⚪','Double coins event OFF',async()=>{await setCfg({double:false});return'⚪ Double coins OFF'}],
+  ['sale','🏷️','Shop sale (% off)',async a=>{const n=Math.min(90,Math.max(0,parseInt(a)||0));await setCfg({sale:n});return n?'🏷️ Shop is '+n+'% off':'🏷️ Sale ended'},'number'],
+  ['coinrain','🌧️','Coin rain (everyone gets coins)',async a=>{const n=Math.min(1000,Math.abs(parseInt(a)||0));if(!n)throw{msg:'Type how many coins.'};const all=await allProfiles();
+    for(const p of all){await F.setDoc(P(p.uid),{coins:F.increment(n)},{merge:true}).catch(()=>{});notice(p.uid,{type:'coins',amount:n}).catch(()=>{})}return'🌧️ Gave '+n+' coins to '+all.length+' people'},'number'],
+  ['party','🎉','Party! (fireworks on everyone’s screen)',async()=>{await setCfg({party:Date.now()});return'🎉 Party started!'}],
+  ['rainbow','🌈','Rainbow names for everyone ON',async()=>{await setCfg({rainbow:true});return'🌈 Everyone has rainbow names'}],
+  ['unrainbow','⬜','Rainbow names OFF',async()=>{await setCfg({rainbow:false});return'⬜ Rainbow names off'}],
+  ['qotd','🤔','Set question of the day',async a=>{await setCfg({qotd:String(a||'').slice(0,140)});return a?'🤔 Question set':'🤔 Back to the normal questions'},'text?'],
+  ['lock','🔒','Lock new sign-ups',async()=>{await setCfg({lock:true});return'🔒 Nobody new can make an account'}],
+  ['unlock','🔓','Unlock sign-ups',async()=>{await setCfg({lock:false});return'🔓 New accounts are allowed again'}],
+  ['msgall','📨','Message everyone (pop-up)',async a=>{if(!a)throw{msg:'Type the message.'};const all=await allProfiles();for(const p of all)if(p.uid!==ME.uid)await notice(p.uid,{type:'msg',text:a}).catch(()=>{});return'📨 Sent to '+(all.length-1)+' people'},'text'],
+ ]
+};
+const ADM_COUNT=ADM.user.length+ADM.all.length+3;  // + stats, user list, reports
+
+/* ---------- the console ---------- */
+let admTab='user',admTarget=null,admLog=[];
+function adminConsole(tab){
+  if(!isAdmin())return toast('Only the owner can open this.');
+  admTab=tab||admTab;
+  modal(`<div class="admhead"><h1>🛡️ Admin console</h1><span class="admcount">${ADM_COUNT} commands</span></div>
+    <div class="tabs" id="admtabs"></div><div id="admbody"></div>
+    <div class="admcmd"><input type="text" id="admin" placeholder="Type a command… e.g. /give maya 100   (/help)" autocomplete="off"><button class="send" id="admgo">Run</button></div>
+    <pre id="admout"></pre><button class="big ghost" onclick="closeModal()">Close</button>`);
+  $('mcard').classList.add('wide','admcard');
+  [['user','👤 Users'],['all','🌍 Everyone'],['people','📋 All users'],['reports','🚩 Reports'],['stats','📊 Stats']].forEach(([k,t])=>{const b=el('button',k===admTab?'on':'',t);b.onclick=()=>adminConsole(k);$('admtabs').appendChild(b)});
+  $('admout').textContent=admLog.slice(-6).join('\n');
+  $('admgo').onclick=()=>runAdminLine($('admin').value);$('admin').onkeydown=e=>{if(e.key==='Enter')runAdminLine($('admin').value)};
+  const B=$('admbody');
+  if(admTab==='user'){
+    B.innerHTML=`<div class="admfind"><input type="text" id="adu" placeholder="username" maxlength="16" value="${esc(admTarget?admTarget.lc:'')}"><button class="send" id="adfind">Find</button></div><div id="adwho"></div><div class="admgrid" id="adgrid"></div>`;
+    $('adfind').onclick=async()=>{try{admTarget=await findUser($('adu').value);adminConsole('user')}catch(e){log('❌ '+(e.msg||niceErr(e)))}};$('adu').onkeydown=e=>{if(e.key==='Enter')$('adfind').click()};
+    if(!admTarget){$('adgrid').innerHTML='<div class="empty">Find someone by username first (or pick from 📋 All users).</div>';return}
+    const w=who(admTarget.uid);$('adwho').innerHTML=`<div class="admwho">${avHTML(admTarget.uid,44)}<div><b></b><small></small></div></div>`;
+    $('adwho').querySelector('b').textContent=w.real+' (@'+admTarget.lc+')';$('adwho').querySelector('small').textContent='🪙 '+coinsOf(admTarget.uid)+' · ⭐ level '+levelOf(w.msgs).lv+' · '+(isOnline(admTarget.uid)?'🟢 online':'offline');
+    ADM.user.forEach(c=>$('adgrid').appendChild(admButton(c,true)));
+  }else if(admTab==='all'){
+    const st=[CFG.maint&&'🛠️ Maintenance ON',CFG.double&&'⚡ Double coins',CFG.sale>0&&'🏷️ '+CFG.sale+'% sale',CFG.rainbow&&'🌈 Rainbow names',CFG.lock&&'🔒 Sign-ups locked',CFG.announce&&CFG.announce.text&&'📣 Announcement up',CFG.qotd&&'🤔 Custom question'].filter(Boolean);
+    B.innerHTML=`<p class="hint">Right now: ${st.length?st.join(' · '):'nothing special is on'}</p><div class="admgrid" id="adgrid"></div>`;
+    ADM.all.forEach(c=>$('adgrid').appendChild(admButton(c,false)));
+  }else if(admTab==='people'){
+    B.innerHTML='<input type="text" id="adsearch" placeholder="Search…"><div class="admlist" id="adlist"><div class="empty">Loading…</div></div>';
+    allProfiles().then(async all=>{
+      let bans=new Set(),mutes=new Set();try{(await F.getDocs(F.collection(db,'bans'))).forEach(d=>{const v=d.data();if(!v.until||v.until>Date.now())bans.add(d.id)})}catch(e){}
+      try{(await F.getDocs(F.collection(db,'mutes'))).forEach(d=>{if(d.data().until>Date.now())mutes.add(d.id)})}catch(e){}
+      const draw=q=>{const L=$('adlist');if(!L)return;L.innerHTML='';
+        all.filter(p=>!q||String(p.nick||'').toLowerCase().includes(q)||String(p.uname||'').includes(q)).sort((a,b)=>(Number(b.msgCount)||0)-(Number(a.msgCount)||0)).forEach(p=>{
+          const r=el('div','lbrow');r.innerHTML=`${avHTML(p.uid,34)}<span class="nm"></span><small></small><b></b>`;
+          r.querySelector('.nm').textContent=(p.nick||'?')+(p.uname?' @'+p.uname:'');r.querySelector('small').textContent=(bans.has(p.uid)?'🚫 banned ':'')+(mutes.has(p.uid)?'🔇 muted ':'')+(isOnline(p.uid)?'🟢':'');
+          r.querySelector('b').textContent=(Number(p.msgCount)||0)+' msgs';r.onclick=()=>{admTarget={uid:p.uid,lc:p.uname||String(p.nick||'').toLowerCase()};adminConsole('user')};L.appendChild(r)});
+        if(!L.children.length)L.innerHTML='<div class="empty">No one found.</div>'};
+      draw('');$('adsearch').oninput=e=>draw(e.target.value.trim().toLowerCase());
+      log('📋 '+all.length+' accounts · '+bans.size+' banned · '+mutes.size+' muted');
+    }).catch(e=>log('❌ '+niceErr(e)));
+  }else if(admTab==='reports'){adminPanel(B)}
+  else if(admTab==='stats'){
+    B.innerHTML='<div class="admstats" id="adst"><div class="empty">Counting…</div></div>';
+    allProfiles().then(all=>{const on=all.filter(p=>isOnline(p.uid)).length,msgs=all.reduce((s,p)=>s+(Number(p.msgCount)||0),0),coins=all.reduce((s,p)=>s+(Number(p.coins)||0),0),
+      newWeek=all.filter(p=>Date.now()-ms(p.joined)<6048e5).length,top=[...all].sort((a,b)=>(Number(b.msgCount)||0)-(Number(a.msgCount)||0))[0],rich=[...all].sort((a,b)=>(Number(b.coins)||0)-(Number(a.coins)||0))[0];
+      const S=[['👥','Accounts',all.length],['🟢','Online now',on],['🆕','New this week',newWeek],['💬','Messages sent',msgs],['🪙','Coins in the world',coins],['🏆','Top chatter',top?top.nick:'-'],['💰','Richest',rich?rich.nick:'-'],['🎮','Games won',all.reduce((s,p)=>s+(Number(p.wins)||0),0)]];
+      $('adst').innerHTML='';S.forEach(([e,t,v])=>{const c=el('div','admstat');c.innerHTML=`<span>${e}</span><b></b><small>${t}</small>`;c.querySelector('b').textContent=v;$('adst').appendChild(c)})}).catch(e=>log('❌ '+niceErr(e)));
+  }
+}
+function admButton([cmd,icon,label,fn,arg],isUser){
+  const b=el('button','admbtn'+(['ban','tempban','kick','mute','maint','lock','delstories','take'].includes(cmd)?' danger':''));
+  b.innerHTML=`<span>${icon}</span><b></b><small>/${cmd}</small>`;b.querySelector('b').textContent=label;
+  b.onclick=async()=>{
+    let a='';
+    if(arg==='time'){a=await pickModal(label,['10m','1h','1d','7d','30d'].map(d=>[d,durName(d)]));if(!a)return adminConsole()}
+    else if(arg==='item'){a=await pickModal(label,Object.values(SHOP).flatMap(s=>Object.entries(s.items).map(([id,[n]])=>[id,n])));if(!a)return adminConsole()}
+    else if(arg==='badge'){a=await pickModal(label,Object.entries(ADMIN_BADGES).map(([id,[e,n]])=>[id,e+' '+n]));if(!a)return adminConsole()}
+    else if(arg){a=prompt(label+(arg==='number'?' — how many?':arg==='reason'?' — reason?':arg.endsWith('?')?' (you can leave it empty)':' — type it:'),'');if(a===null)return;if(!a&&!arg.endsWith('?')&&arg!=='reason')return}
+    runAdmin(isUser,cmd,a);
+  };return b;
+}
+function pickModal(title,opts){return new Promise(res=>{modal(`<h1></h1><div class="admpick"></div><button class="big ghost" id="pkx">Cancel</button>`);$('mcard').querySelector('h1').textContent=title;
+  opts.forEach(([v,t])=>{const b=el('button','fbtn',t);b.onclick=()=>res(v);$('mcard').querySelector('.admpick').appendChild(b)});$('pkx').onclick=()=>res(null)})}
+function log(t){admLog.push(t);const o=$('admout');if(o){o.textContent=admLog.slice(-6).join('\n');o.scrollTop=1e9}}
+async function runAdmin(isUser,cmd,a){
+  const c=(isUser?ADM.user:ADM.all).find(x=>x[0]===cmd);if(!c)return;
+  if(isUser&&!admTarget)return log('❌ Pick a user first.');
+  if(isUser&&admTarget.uid===ME.uid&&['ban','tempban','mute','kick'].includes(cmd)){adminConsole();return log('❌ You can’t do that to yourself 😄')}
+  try{const r=await c[3](isUser?admTarget:a,a);adminConsole();log(r);if(!['info'].includes(cmd))toast(String(r).split('\n')[0])}
+  catch(e){adminConsole();log('❌ '+(e.msg||niceErr(e)))}
+}
+async function runAdminLine(line){
+  line=String(line||'').trim();if(!line)return;$('admin').value='';log('> '+line);
+  const parts=line.replace(/^\//,'').split(/\s+/),cmd=(parts.shift()||'').toLowerCase();
+  if(cmd==='help'){return log('USER: '+ADM.user.map(c=>'/'+c[0]+' @name'+(c[4]?' <'+c[4].replace('?','')+'>':'')).join('  ')+'\nEVERYONE: '+ADM.all.map(c=>'/'+c[0]+(c[4]?' <'+c[4].replace('?','')+'>':'')).join('  '))}
+  if(ADM.user.find(c=>c[0]===cmd)){try{admTarget=await findUser(parts.shift())}catch(e){return log('❌ '+(e.msg||niceErr(e)))}return runAdmin(true,cmd,parts.join(' '))}
+  if(ADM.all.find(c=>c[0]===cmd))return runAdmin(false,cmd,parts.join(' '));
+  log('❌ Unknown command. Type /help');
+}
 
 /* ---------- chrome ---------- */
 function closeDrawers(){['rail','side','note'].forEach(i=>$(i).classList.remove('open'));$('scrim').classList.remove('show')}
