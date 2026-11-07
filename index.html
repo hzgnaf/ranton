@@ -798,6 +798,83 @@ body.rainbowall .nm,body.rainbowall .msg .nm{background:linear-gradient(90deg,#f
 @media(max-width:900px){#announce{top:auto;bottom:86px;width:calc(100vw - 24px)}}
 
 #announce{top:auto!important;bottom:96px!important;width:min(560px,calc(100vw - 24px))!important}
+/* ===== BATCHES 2-5 ===== */
+.boomtag{display:inline-block;margin-top:4px;font-size:11px;font-weight:900;background:#1a1a1a;color:#ffd23f;padding:2px 8px;border-radius:999px}
+.msg.boommsg .body{outline:2px dashed #ff006e;outline-offset:2px;border-radius:14px}
+.boomed{font-style:italic;opacity:.6}
+.dtheart{position:absolute;left:50%;top:50%;font-size:46px;pointer-events:none;animation:dth .8s forwards;z-index:3}
+.msg .mb{position:relative}
+@keyframes dth{0%{transform:translate(-50%,-50%) scale(.2);opacity:0}30%{transform:translate(-50%,-50%) scale(1.3);opacity:1}100%{transform:translate(-50%,-120%) scale(1);opacity:0}}
+.svrow{padding:10px 12px;border-radius:14px;background:#0000000a;margin-bottom:8px}.svrow p{margin:4px 0 8px;white-space:pre-wrap;word-break:break-word}.svrow .svb{display:flex;gap:6px}.svrow .mimg{max-width:180px;border-radius:10px;display:block;margin-bottom:6px}
+body.pop .svrow{background:#fff;border:2.5px solid #1a1a1a}
+.av .mood{position:absolute;right:-6px;bottom:-4px;font-size:max(11px,38%);font-style:normal;line-height:1;background:#fff;border-radius:50%;padding:1px;box-shadow:0 0 0 1.5px #1a1a1a;z-index:2}
+.moods{display:flex;flex-wrap:wrap;gap:6px}.moods button{width:38px;height:38px;border-radius:12px;border:2px solid #0002;background:#fff;font-size:19px;cursor:pointer}.moods button.on{border-color:#3a86ff;background:#3a86ff22;transform:scale(1.08)}
+.favs{display:flex;flex-direction:column;gap:6px}.favrow{display:flex;align-items:center;gap:8px}.favrow span{width:150px;font-weight:800;font-size:13.5px;flex-shrink:0}.favrow input{flex:1}
+.ucard.colored{border-radius:18px;padding-bottom:6px}.ucard.darkcard{color:#fff}.ucard.darkcard .hint,.ucard.darkcard .uname{color:#fffb}
+.ufavs{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0}.ufav{background:#ffffffaa;border:2px solid #0002;border-radius:12px;padding:6px 10px;text-align:left}.ufav small{display:block;font-size:11px;font-weight:800;opacity:.7}.ufav b{font-size:14px;color:#1a1a1a}
+.achbtn{margin:8px auto 0;display:block;background:#ffd23f;border:2.5px solid #1a1a1a;border-radius:999px;padding:6px 14px;font-weight:900;cursor:pointer;color:#1a1a1a;box-shadow:2px 2px 0 #1a1a1a}
+.achgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:8px;margin:10px 0;max-height:55vh;overflow:auto;padding:4px}
+.ach{display:flex;flex-direction:column;align-items:center;text-align:center;gap:4px;padding:10px;border-radius:14px;border:2px dashed #0003;opacity:.45;filter:grayscale(1)}
+.ach span{font-size:28px}.ach b{font-size:12.5px}.ach.got{opacity:1;filter:none;border:2.5px solid #1a1a1a;background:#fff7d6;box-shadow:2px 2px 0 #1a1a1a}
+.achpop{position:fixed;top:80px;right:16px;display:flex;align-items:center;gap:12px;background:#1a1a1a;color:#fff;padding:12px 16px;border-radius:16px;z-index:10001;animation:achin .5s cubic-bezier(.2,1.4,.4,1),achout .4s 3.4s forwards;box-shadow:4px 4px 0 #ffd23f}
+.achpop span{font-size:32px}.achpop div{display:flex;flex-direction:column}.achpop small{font-size:10px;font-weight:900;letter-spacing:.1em;color:#ffd23f}.achpop i{font-style:normal;font-size:12px;opacity:.8}
+@keyframes achin{from{transform:translateX(120%)}}@keyframes achout{to{transform:translateX(130%);opacity:0}}
+.wheelwrap{position:relative;width:240px;height:240px;margin:14px auto}.wptr{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font-size:28px;z-index:2;color:#1a1a1a;text-shadow:0 2px 0 #fff}
+.wheel{width:240px;height:240px;border-radius:50%;border:4px solid #1a1a1a;box-shadow:4px 4px 0 #1a1a1a;position:relative}
+.wheel span{position:absolute;left:50%;top:50%;margin:-11px 0 0 -26px;width:52px;text-align:center;font-weight:900;color:#fff;font-size:14px;text-shadow:0 1px 3px #0008}
+.spinres{text-align:center;font-weight:900;font-size:20px;min-height:28px;font-family:Fredoka,Poppins,sans-serif}
+.scrw{font:800 28px Fredoka,Poppins,monospace;letter-spacing:4px;margin:8px 0;color:#8338ec}
+.scrin{display:flex;gap:6px;margin-bottom:8px}.scrin input{flex:1;text-transform:uppercase;font-weight:800}.scrin input.wrong{animation:nudge .35s;border-color:#ef4444!important}
+.funrow.five .spinc{background:linear-gradient(135deg,#ff006e,#8338ec)}.funrow.five .achc{background:linear-gradient(135deg,#ffbe0b,#ff7a59)}.funrow.five .savc{background:linear-gradient(135deg,#3a86ff,#06d6a0)}
+.funrow.five{grid-template-columns:repeat(auto-fill,minmax(210px,1fr))}
+.pickrow.on{background:#3a86ff22}
+body.fs-s #msgs .mt{font-size:13px}body.fs-l #msgs .mt{font-size:17.5px}body.fs-xl #msgs .mt{font-size:21px}
+body.fs-l #chlist .nm{font-size:16px}body.fs-xl #chlist .nm{font-size:18px}
+.ucard.colored:not(.darkcard) .uname,.ucard.colored:not(.darkcard) .ust,.ucard.colored:not(.darkcard) .ujoin{color:#1a1a1aaa!important}.ucard.colored:not(.darkcard) .unick{color:#1a1a1a}
+/* ===== TIDY ===== */
+/* top bar: fewer buttons */
+#topbar .tnav #lbBtn{display:none}
+@media(min-width:901px){#topbar .tnav #navChats{display:none}}
+/* friends page shortcuts become small chips */
+.funrow.chips{display:flex!important;flex-wrap:wrap;gap:8px;margin:12px 0 4px}
+.funrow.chips .funcard{background:#fff!important;color:#1a1a1a;padding:7px 14px 7px 10px;border-radius:999px;gap:7px;border:2px solid #1a1a1a!important;box-shadow:2px 2px 0 #1a1a1a!important;position:relative;flex:0 0 auto}
+.funrow.chips .funcard span{font-size:18px}.funrow.chips .funcard b{font-size:14px;font-family:inherit;font-weight:800}.funrow.chips .funcard small{display:none}
+.funrow.chips .funcard.ready:after{content:'';position:absolute;top:-3px;right:-3px;width:11px;height:11px;border-radius:50%;background:#ff006e;border:2px solid #fff}
+.funrow.chips .funcard:hover{background:#fff7d6!important}
+/* question of the day: calmer and smaller */
+.qotd{flex-direction:row!important;align-items:center!important;flex-wrap:wrap;gap:4px 12px!important;padding:12px 14px!important;background:#f3ecff!important;color:#2a1a4a!important;border:2px solid #1a1a1a!important;box-shadow:2px 2px 0 #1a1a1a!important;border-radius:14px!important;margin:8px 0 12px!important}
+.qotd small{width:100%;color:#8338ec;opacity:1!important}.qotd b{flex:1;font-size:16px!important;min-width:180px}
+.qotd button.send{background:#8338ec!important;color:#fff!important;-webkit-text-fill-color:#fff!important;margin:0!important;padding:7px 14px!important}
+/* softer shadows overall in Pop */
+body.pop .msg .body{box-shadow:2px 2px 0 #1a1a1a!important}
+body.pop #side,body.pop #chat{box-shadow:4px 4px 0 #1a1a1a!important}
+body.pop .frow{box-shadow:2px 2px 0 #1a1a1a!important}
+/* message tools: compact bar + ⋯ menu */
+.msg .mtools{gap:0!important;padding:2px!important;border-radius:10px!important}
+body.pop .mtools{border-width:2px!important;box-shadow:2px 2px 0 #1a1a1a!important}
+.mtools button{width:30px;height:28px}
+.moremenu{display:none;position:absolute;right:0;top:34px;background:#fff;border:2px solid #1a1a1a;border-radius:12px;box-shadow:3px 3px 0 #1a1a1a;padding:4px;flex-direction:column;min-width:170px;z-index:30}
+.moremenu.up{top:auto;bottom:34px}
+.moremenu.open{display:flex}
+.moremenu button.mmi{width:auto!important;height:auto!important;display:flex;align-items:center;gap:6px;padding:8px 10px!important;border-radius:8px;text-align:left;font-size:14px;color:#1a1a1a;justify-content:flex-start}
+.moremenu button.mmi span{font-weight:700;font-size:13.5px}
+.moremenu button.mmi:hover{background:#0000000d}
+.moremenu button.mmi[title=Delete],.moremenu button.mmi[title=Report]{color:#d6283b}
+/* ＋ menu becomes a tidy grid */
+.pmenu:not(.fxmenu){display:grid!important;grid-template-columns:repeat(3,1fr);gap:4px;min-width:330px;padding:8px!important}
+.pmenu:not(.fxmenu) button{display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:2px;padding:10px 4px!important;border-radius:12px;font-size:12px!important;font-weight:800;line-height:1.2;white-space:normal!important;min-height:66px}
+.pmenu:not(.fxmenu) .pi{font-size:22px;line-height:1}
+.pmenu:not(.fxmenu) button:hover{background:#fff1b8}
+@media(max-width:420px){.pmenu:not(.fxmenu){min-width:0;width:calc(100vw - 40px)}}
+/* story bar hint smaller */
+#storybar .shint{font-size:11.5px;opacity:.6}
+body.pop .qotd button.send,body .qotd button.send{background:#8338ec!important;color:#fff!important;-webkit-text-fill-color:#fff!important}
+@media(max-width:600px){.funrow.chips{flex-wrap:nowrap!important;overflow-x:auto;scrollbar-width:none;padding:2px 4px 6px 2px;margin-right:-14px}.funrow.chips::-webkit-scrollbar{display:none}}
+/* call sound */
+#raud,.tile audio{display:none}
+.taphear{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:20;background:#ffd23f;color:#1a1a1a;font:800 20px Fredoka,Nunito,sans-serif;padding:16px 26px;border-radius:999px;border:3px solid #1a1a1a;box-shadow:4px 4px 0 #1a1a1a;cursor:pointer;animation:pulse 1.2s infinite}
+.taphear.show{display:block}
+#callov #cname,#callov #cstat,#callov h2{color:#fff!important}
 
 .callbtn{background:#ffffff12;color:var(--txt);border-radius:10px;width:38px;height:34px;font-size:17px;margin-left:6px}
 .callbtn:hover{background:var(--good);color:#14121c}
@@ -1185,16 +1262,16 @@ function rSide(){
   fb.onclick=openHome;box.appendChild(fb);
   const hdr=document.createElement('div');hdr.className='grp grow';hdr.innerHTML='<span>Chats</span>';
   const ng=document.createElement('button');ng.className='newg';ng.title='New group';ng.textContent='＋';ng.onclick=newGroupModal;hdr.appendChild(ng);box.appendChild(hdr);
-  const keys=[...Object.keys(ST.dms).filter(id=>ST.dms[id].last&&!ST.blocks.has(otherOf(id))).map(id=>'d:'+id),...Object.keys(ST.groups).map(id=>'g:'+id)].sort((a,b)=>lastAt(b)-lastAt(a));
+  const keys=[...Object.keys(ST.dms).filter(id=>ST.dms[id].last&&!ST.blocks.has(otherOf(id))).map(id=>'d:'+id),...Object.keys(ST.groups).map(id=>'g:'+id)].sort((a,b)=>bestRank(b)-bestRank(a)||lastAt(b)-lastAt(a));
   if(!keys.length)box.insertAdjacentHTML('beforeend','<div class="empty" style="padding:6px 10px">No chats yet. Message a friend, or press ＋ to make a group.</div>');
   for(const k of keys){const c=convData(k),un=isUnread(k),g=isGroup(k);
-    const b=document.createElement('button');b.className='ch dmrow'+(ST.conv===k?' on':'')+(un?' unread':'');
+    const b=document.createElement('button');b.className='ch dmrow'+(ST.conv===k?' on':'')+(un?' unread':'');b.dataset.k=k;
     const live=g&&c.call&&c.call.session&&liveParts(c.call).length;
     b.innerHTML=`${g?gavHTML(c,30):avHTML(otherOf(cid(k)),30)}<span class="lbl"><span class="nm"></span><small class="pv"></small></span>${live?'<span class="badge live">🔊</span>':un?'<span class="badge">new</span>':''}`;
     const sk=streakOf(k),bd=!g&&isBday(otherOf(cid(k)));b.querySelector('.nm').textContent=convTitle(k)+(bd?' 🎂':'')+(sk>=2?' 🔥'+sk:'');
     b.querySelector('.pv').textContent=c.last?(c.last.by===ME.uid?'You: ':g?who(c.last.by).nick+': ':'')+(c.last.text||'📷 Picture'):(g?(c.users||[]).length+' members':'');
     b.onclick=()=>openConv(k);box.appendChild(b)}
-  const dot=keys.some(isUnread)||ST.reqIn.length;document.title=(dot?'(•) ':'')+'Ranton';
+  const dot=keys.filter(isUnread).length+ST.reqIn.length;document.title=(dot?'('+dot+') ':'')+'Ranton';
 }
 function rHead(){
   const k=ST.conv,ok=canChat(k);
@@ -1571,7 +1648,8 @@ const CALL={pc:null,cid:null,session:null,role:null,type:null,local:null,remote:
 function callUI(){
   let ov=$('callov');
   if(!ov){ov=document.createElement('div');ov.id='callov';ov.innerHTML=`
-    <video id="rvid" autoplay playsinline></video>
+    <video id="rvid" autoplay playsinline muted></video><audio id="raud" autoplay playsinline></audio>
+    <button id="ctaphear" class="taphear">🔊 Tap to hear</button>
     <div id="cinfo"><div class="cav" id="cav"></div><h2 id="cname"></h2><p id="cstat"></p></div>
     <video id="lvid" autoplay playsinline muted></video>
     <div id="cbtns"><button id="cmute" title="Mute">🎙️</button><button id="ccam" title="Camera">📷</button><button id="cshare" title="Share screen">🖥️</button><button id="cend" class="end" title="Hang up">📞</button></div>`;
@@ -1580,6 +1658,9 @@ function callUI(){
     $('ccam').onclick=()=>{CALL.camOff=!CALL.camOff;CALL.local&&CALL.local.getVideoTracks().forEach(t=>t.enabled=!CALL.camOff);callUI()};
     $('cshare').onclick=()=>CALL.screen?stopShare1():share1();
     $('cend').onclick=()=>hangUp('ended');
+    $('ctaphear').onclick=e=>{e.stopPropagation();unlockSound()};
+    ov.addEventListener('click',unlockSound);
+    unlockSound();
   }
   const o=otherOf(CALL.cid),w=who(o),c=ST.calls[CALL.cid]||{};
   const remoteShares=c.screen===o;
@@ -1598,8 +1679,15 @@ function callStatus(){
 }
 function makePC(){
   const pc=new RTCPeerConnection(ICE);
-  CALL.remote=new MediaStream();$('rvid').srcObject=CALL.remote;
-  pc.ontrack=e=>{if(!CALL.remote.getTracks().includes(e.track))CALL.remote.addTrack(e.track);$('rvid').play().catch(()=>{})};
+  CALL.remote=new MediaStream();$('rvid').srcObject=null;$('raud').srcObject=null;
+  pc.ontrack=e=>{
+    if(!CALL.remote.getTracks().includes(e.track))CALL.remote.addTrack(e.track);
+    // sound gets its own player (phones won't play sound from a hidden video)
+    const a=CALL.remote.getAudioTracks(),v=CALL.remote.getVideoTracks();
+    if(e.track.kind==='audio'){$('raud').srcObject=new MediaStream(a);playSound($('raud'))}
+    else{$('rvid').srcObject=new MediaStream(v);$('rvid').muted=true;$('rvid').play().catch(()=>{})}
+    e.track.onunmute=()=>{if(e.track.kind==='audio')playSound($('raud'));else $('rvid').play().catch(()=>{})};
+  };
   pc.onicecandidate=e=>{if(e.candidate)F.addDoc(F.collection(db,'calls',CALL.cid,'cands'),{session:CALL.session,side:CALL.role,c:JSON.stringify(e.candidate.toJSON())}).catch(()=>{})};
   pc.onconnectionstatechange=()=>{
     const s=pc.connectionState;
@@ -1673,7 +1761,7 @@ function hangUp(status){
   if(status&&CALL.cid){const cur=ST.calls[CALL.cid];if(!cur||cur.session===CALL.session)F.updateDoc(F.doc(db,'calls',CALL.cid),{status,screen:null}).catch(()=>{})}
   const wasLive=CALL.status==='live';
   Object.assign(CALL,{pc:null,cid:null,session:null,role:null,type:null,local:null,remote:null,status:null,candUnsub:null});
-  const ov=$('callov');if(ov){ov.className='';$('rvid').srcObject=null;$('lvid').srcObject=null}
+  const ov=$('callov');if(ov){ov.className='';$('rvid').srcObject=null;$('lvid').srcObject=null;$('raud').srcObject=null;$('ctaphear').classList.remove('show')}
   if(wasLive)toast('📴 Call ended');
 }
 function onCallsSnap(s){
@@ -1833,13 +1921,14 @@ function leaveGroupCall(remoteEnded){
 function rGC(){
   let ov=$('gcall');
   if(!GC.gid){if(ov)ov.classList.remove('show');return}
-  if(!ov){ov=document.createElement('div');ov.id='gcall';ov.innerHTML=`<div class="gtop"><b id="gctitle"></b><span id="gctime"></span></div><div class="ggrid"></div>
+  if(!ov){ov=document.createElement('div');ov.id='gcall';ov.innerHTML=`<div class="gtop"><b id="gctitle"></b><span id="gctime"></span></div><div class="ggrid"></div><button id="gtaphear" class="taphear">🔊 Tap to hear</button>
     <div id="gbtns" class="cbtns2"><button id="gmute" title="Mute">🎙️</button><button id="gcam" title="Camera">📷</button><button id="gshare" title="Share screen">🖥️</button><button id="gend" class="end" title="Leave call">📞</button></div>`;
     document.body.appendChild(ov);
     $('gmute').onclick=()=>{GC.muted=!GC.muted;GC.local&&GC.local.getAudioTracks().forEach(t=>t.enabled=!GC.muted);rGC()};
     $('gcam').onclick=()=>{GC.camOff=!GC.camOff;GC.local&&GC.local.getVideoTracks().forEach(t=>t.enabled=!GC.camOff);rGC()};
     $('gshare').onclick=()=>GC.screen?stopShareG():shareG();
     $('gend').onclick=()=>leaveGroupCall();
+    $('gtaphear').onclick=e=>{e.stopPropagation();unlockSound()};ov.addEventListener('click',unlockSound);
   }
   ov.classList.add('show');
   const g=ST.groups[GC.gid]||{},c=g.call||{};
@@ -1853,11 +1942,13 @@ function rGC(){
   [...grid.children].forEach(t=>{if(!ids.includes(t.dataset.uid))t.remove()});
   ids.forEach(uid=>{
     let t=grid.querySelector(`[data-uid="${CSS.escape(uid)}"]`);
-    if(!t){t=document.createElement('div');t.className='tile';t.dataset.uid=uid;t.innerHTML=`<video autoplay playsinline ${uid===ME.uid?'muted':''}></video><div class="tav"></div><div class="tname"></div>`;grid.appendChild(t)}
+    if(!t){t=document.createElement('div');t.className='tile';t.dataset.uid=uid;t.innerHTML=`<video autoplay playsinline muted></video>${uid===ME.uid?'':'<audio autoplay playsinline></audio>'}<div class="tav"></div><div class="tname"></div>`;grid.appendChild(t)}
     const w=who(uid),v=t.querySelector('video'),me=uid===ME.uid,p=GC.peers[uid];
     const src=me?(GC.screen?new MediaStream([GC.screen]):GC.local):p&&p.stream;
     if(me){if(v._src!==(GC.screen||GC.local)){v.srcObject=src;v._src=GC.screen||GC.local}}
-    else if(v.srcObject!==src)v.srcObject=src||null;
+    else{const vt=src?src.getVideoTracks():[],at=src?src.getAudioTracks():[],key=vt.map(x=>x.id).join(),akey=at.map(x=>x.id).join();
+      if(v._key!==key){v._key=key;v.srcObject=vt.length?new MediaStream(vt):null}
+      const au=t.querySelector('audio');if(au&&au._key!==akey){au._key=akey;au.srcObject=at.length?new MediaStream(at):null;playSound(au)}}
     v.play&&v.play().catch(()=>{});
     const showVid=me?((GC.type==='video'&&!GC.camOff)||!!GC.screen):(GC.type==='video'||c.share===uid);
     t.classList.toggle('vid',showVid);t.classList.toggle('mine',me&&!GC.screen);
@@ -1865,6 +1956,12 @@ function rGC(){
     t.querySelector('.tname').textContent=(me?'You':w.nick)+(c.share===uid?' · 🖥️':'')+(!me&&p&&p.state!=='connected'?' · connecting…':'');
   });
 }
+
+/* ---------- make sure call sound actually plays on phones ---------- */
+function playSound(a){if(!a||!a.srcObject)return;a.muted=false;a.volume=1;const p=a.play();if(p&&p.catch)p.then(()=>hideTapHear()).catch(()=>showTapHear())}
+function showTapHear(){['ctaphear','gtaphear'].forEach(id=>{const b=$(id);if(b)b.classList.add('show')})}
+function hideTapHear(){const blocked=[...document.querySelectorAll('#callov audio,#gcall audio')].some(a=>a.srcObject&&a.paused);if(!blocked)['ctaphear','gtaphear'].forEach(id=>{const b=$(id);if(b)b.classList.remove('show')})}
+function unlockSound(){document.querySelectorAll('#callov audio,#gcall audio').forEach(a=>{if(a.srcObject)playSound(a);else{a.play&&a.play().catch(()=>{})}})}
 
 /* =================== EXTRA FEATURES =================== */
 const EMOJI_SETS={
@@ -1891,7 +1988,7 @@ function mentionsMe(t){if(!t)return false;t=String(t).toLowerCase();const me=who
 function isFun(t){return /(^|\s)(gg|ggs|happy birthday|congrats|congratulations|lets go|let's go|🎉|🥳)(\s|!|$)/i.test(String(t||''))}
 function ytId(u){const m=String(u||'').match(/(?:youtube\.com\/(?:watch\?(?:.*&)?v=|shorts\/|embed\/|live\/)|youtu\.be\/)([A-Za-z0-9_-]{11})/);return m?m[1]:null}
 function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
-function lastSummary(p){if(p.text)return p.text.slice(0,60);if(p.img)return'📷 Picture';if(p.audio)return'🎤 Voice message';if(p.file)return'📄 '+String(p.file.name).slice(0,40);if(p.sticker)return'🏷️ Sticker';if(p.poll)return'📊 '+String(p.poll.q).slice(0,50);if(p.game)return'🎮 '+GAMES[p.game.kind].name;return''}
+function lastSummary(p){if(p.boom)return'💣 Secret message';if(p.text)return p.text.slice(0,60);if(p.img)return'📷 Picture';if(p.audio)return'🎤 Voice message';if(p.file)return'📄 '+String(p.file.name).slice(0,40);if(p.sticker)return'🏷️ Sticker';if(p.poll)return'📊 '+String(p.poll.q).slice(0,50);if(p.game)return'🎮 '+GAMES[p.game.kind].name;return''}
 
 /* ---------- confetti ---------- */
 function confetti(){
@@ -2189,7 +2286,7 @@ function rComposer(){
 }
 async function sendMsg(k,p){
   const msg={by:ME.uid,text:p.text||'',at:F.serverTimestamp()};
-  for(const key of['img','audio','file','sticker','poll','game','fx'])if(p[key])msg[key]=p[key];
+  for(const key of['img','audio','file','sticker','poll','game','fx','boom'])if(p[key])msg[key]=p[key];
   if(p.poll)msg.votes={};
   if(ST.replyTo){msg.reply=ST.replyTo;ST.replyTo=null;rComposer()}
   await F.addDoc(msgsCol(k),msg);
@@ -2962,6 +3059,267 @@ async function runAdminLine(line){
   if(ADM.all.find(c=>c[0]===cmd))return runAdmin(false,cmd,parts.join(' '));
   log('❌ Unknown command. Type /help');
 }
+
+/* =================== BATCHES 2–5 =================== */
+const LS={get:(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch(e){return d}},set:(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+
+/* ---------- BATCH 2 · chat upgrades ---------- */
+// forward
+function forwardModal(m){
+  const targets=[...Object.keys(ST.friends).filter(f=>!ST.blocks.has(f)).map(f=>dmKey(f)),...Object.keys(ST.groups).map(g=>'g:'+g)];
+  if(!targets.length)return toast('Add a friend first!');
+  modal(`<h1>↪️ Forward to…</h1><div class="pick" id="fwlist"></div><button class="big ghost" onclick="closeModal()">Cancel</button>`);
+  targets.forEach(k2=>{const r=el('label','pickrow');r.innerHTML=`${isGroup(k2)?gavHTML(convData(k2)||{},30):avHTML(otherOf(cid(k2)),30)}<span></span>`;r.querySelector('span').textContent=convTitle(k2);
+    r.onclick=async()=>{closeModal();const p={};
+      if(m.text)p.text=('↪️ '+who(m.by).nick+': '+m.text).slice(0,2000);
+      for(const key of['img','sticker','file','audio'])if(m[key])p[key]=m[key];
+      if(!Object.keys(p).length)return toast('That kind of message can’t be forwarded.');
+      try{const keep=ST.ch;if(isGroup(k2))ST.ch='general';await sendMsg(k2,p);ST.ch=keep;toast('↪️ Sent to '+convTitle(k2))}catch(e){toast(e.msg||niceErr(e))}};
+    $('fwlist').appendChild(r)});
+}
+// saved messages (private to you)
+const savedCol=()=>F.collection(db,'users',ME.uid,'saved');
+async function saveMsg(m,k){try{await F.setDoc(F.doc(savedCol(),m.id),{text:String(m.text||lastSummary(m)).slice(0,500),img:m.img&&m.img.length<300000?m.img:null,by:m.by,name:who(m.by).nick,k,at:ms(m.at)||Date.now(),saved:Date.now()});toast('⭐ Saved! Find it on the Friends page.')}catch(e){toast(niceErr(e))}}
+async function savedModal(){
+  modal(`<h1>⭐ Saved messages</h1><p class="hint">Only you can see these.</p><div class="alist" id="svl"><div class="empty">Loading…</div></div><button class="big ghost" onclick="closeModal()">Close</button>`);
+  try{const s=await F.getDocs(savedCol());const L=$('svl');L.innerHTML='';const arr=[];s.forEach(d=>arr.push({id:d.id,...d.data()}));arr.sort((a,b)=>b.saved-a.saved);
+    if(!arr.length)L.innerHTML='<div class="empty">Nothing saved yet. Tap a message, then ⭐ to save it.</div>';
+    arr.forEach(x=>{const r=el('div','svrow');r.innerHTML='<div><b></b><small></small></div><p></p><div class="svb"><button class="fbtn go">Open chat</button><button class="fbtn no">Remove</button></div>';
+      r.querySelector('b').textContent=x.name||'?';r.querySelector('small').textContent=' · '+new Date(x.at).toLocaleDateString();r.querySelector('p').textContent=x.text;
+      if(x.img&&goodPic(x.img)){const im=el('img','mimg');im.src=x.img;r.insertBefore(im,r.querySelector('.svb'))}
+      const [o,rm]=r.querySelectorAll('button');o.onclick=()=>{if(convData(x.k)){closeModal();openConv(x.k)}else toast('That chat is gone.')};
+      rm.onclick=()=>F.deleteDoc(F.doc(savedCol(),x.id)).then(()=>r.remove());L.appendChild(r)})}
+  catch(e){$('svl').innerHTML='';$('svl').appendChild(el('div','empty',niceErr(e)))}
+}
+// read aloud
+function speak(text){if(!('speechSynthesis' in window))return toast('Your browser can’t read out loud.');speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(String(text).replace(/[*|`]/g,'').slice(0,400));u.rate=1.05;speechSynthesis.speak(u)}
+// self-destruct messages
+const BOOMS=[[60,'1 minute'],[600,'10 minutes'],[3600,'1 hour'],[86400,'1 day']];
+function boomModal(k){
+  let secs=600;
+  modal(`<h1>💣 Self-destruct message</h1><p class="hint">It blows up and disappears for everyone after the time runs out.</p>
+    <textarea id="bmt" maxlength="500" rows="3" placeholder="Type your secret message…"></textarea><div class="modes" id="bmw"></div><div class="err" id="bme"></div>
+    <button class="big" id="bmgo">💣 Send</button><button class="big ghost" onclick="closeModal()">Cancel</button>`);
+  BOOMS.forEach(([s,t])=>{const b=el('button',s===secs?'on':'','⏱️ '+t);b.onclick=()=>{secs=s;$('bmw').querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b))};$('bmw').appendChild(b)});
+  setTimeout(()=>$('bmt').focus(),50);
+  $('bmgo').onclick=async()=>{const t=$('bmt').value.trim();if(!t)return $('bme').textContent='Type something first.';$('bmgo').disabled=true;
+    try{await sendMsg(k,{text:t,boom:secs});closeModal()}catch(e){$('bmgo').disabled=false;$('bme').textContent=e.msg||niceErr(e)}};
+}
+const BOOM_T={};
+function boomLeft(m){return (ms(m.at)||Date.now())+Number(m.boom)*1000-Date.now()}
+function fmtLeft(t){t=Math.max(0,Math.ceil(t/1000));if(t<60)return t+'s';if(t<3600)return Math.ceil(t/60)+'m';if(t<86400)return Math.ceil(t/3600)+'h';return Math.ceil(t/86400)+'d'}
+
+/* ---------- BATCH 3 · profiles ---------- */
+const MOODS=['😀','😎','😴','🤒','🥳','😤','🤔','😭','🎮','📚','⚽','🎧','🍕','❤️','🔥','💀'];
+const CARDCOLS={sunset:'linear-gradient(160deg,#ffecd2,#fcb69f)',ocean:'linear-gradient(160deg,#c2e9fb,#a1c4fd)',mint:'linear-gradient(160deg,#e0ffe8,#96e6a1)',grape:'linear-gradient(160deg,#f3e8ff,#c4b5fd)',candy:'linear-gradient(160deg,#ffe0ec,#fecfef)',night:'linear-gradient(160deg,#1e1b4b,#312e81)',gold:'linear-gradient(160deg,#fff7d6,#ffd23f)'};
+const FAVS=[['game','🎮 Favorite game'],['food','🍕 Favorite food'],['song','🎵 Favorite song'],['show','📺 Favorite show']];
+const BEST=()=>LS.get('ranton-best',[]);
+function bestRank(k){if(isGroup(k))return 0;const b=BEST(),i=b.indexOf(otherOf(cid(k)));return i<0?0:10-i}
+function toggleBest(f){let b=BEST();if(b.includes(f))b=b.filter(x=>x!==f);else{if(b.length>=5)return toast('You can have 5 best friends. Remove one first.');b.push(f)}LS.set('ranton-best',b);toast(b.includes(f)?'⭐ Added to best friends':'Removed from best friends');redraw()}
+function profileExtras(box){
+  const p=prof(ME.uid),fav=p.fav||{};
+  const s=el('div','pextra');
+  s.innerHTML=`<h3>Mood <span class="hint">(shows on your picture)</span></h3><div class="moods" id="smood"></div>
+    <h3>My favorites <span class="hint">(shows on your profile card)</span></h3><div class="favs" id="sfav"></div>
+    <h3>Profile card color</h3><div class="swatches" id="scard"></div>`;
+  box.insertBefore(s,box.querySelector('#sCard'));
+  const mood=$('smood');['',...MOODS].forEach(e=>{const b=el('button',(p.mood||'')===e?'on':'',e||'✖');b.title=e?'Set mood':'No mood';
+    b.onclick=()=>F.setDoc(meDoc(),{mood:e||null},{merge:true}).then(()=>{ST.profiles[ME.uid]={...prof(ME.uid),mood:e||null};settingsModal('profile');updateMe()}).catch(er=>toast(niceErr(er)));mood.appendChild(b)});
+  FAVS.forEach(([k,l])=>{const r=el('label','favrow');r.innerHTML='<span></span><input type="text" maxlength="40">';r.querySelector('span').textContent=l;const i=r.querySelector('input');i.value=fav[k]||'';i.placeholder='…';
+    i.onchange=()=>F.setDoc(meDoc(),{fav:{...(prof(ME.uid).fav||{}),[k]:i.value.trim().slice(0,40)}},{merge:true}).then(()=>{ST.profiles[ME.uid]={...prof(ME.uid),fav:{...(prof(ME.uid).fav||{}),[k]:i.value.trim().slice(0,40)}};toast('✅ Saved')}).catch(er=>toast(niceErr(er)));$('sfav').appendChild(r)});
+  [['','#fff'],...Object.entries(CARDCOLS)].forEach(([id,bg])=>{const b=el('button',(p.cardc||'')===id?'on':'');b.style.background=bg;b.title=id||'default';
+    b.onclick=()=>F.setDoc(meDoc(),{cardc:id||null},{merge:true}).then(()=>{ST.profiles[ME.uid]={...prof(ME.uid),cardc:id||null};settingsModal('profile')}).catch(er=>toast(niceErr(er)));$('scard').appendChild(b)});
+}
+
+/* ---------- BATCH 4 · fun ---------- */
+// spin wheel
+const PRIZES=[5,10,25,5,50,10,100,15];
+const spinReady=()=>prof(ME.uid).lastSpin!==todayKey();
+function spinModal(){
+  const ready=spinReady();
+  modal(`<h1>🎡 Daily spin</h1><p class="hint">${ready?'One free spin every day!':'You already spun today. Come back tomorrow!'}</p>
+    <div class="wheelwrap"><div class="wptr">▼</div><div class="wheel" id="wheel"></div></div><div class="spinres" id="spres"></div>
+    <button class="big" id="spgo" ${ready?'':'disabled'}>${ready?'SPIN!':'Come back tomorrow'}</button><button class="big ghost" onclick="closeModal()">Close</button>`);
+  const W=$('wheel'),n=PRIZES.length,cols=['#ff006e','#ffbe0b','#3a86ff','#06d6a0','#8338ec','#fb5607','#ff5d8f','#118ab2'];
+  W.style.background=`conic-gradient(${PRIZES.map((_,i)=>`${cols[i]} ${i*360/n}deg ${(i+1)*360/n}deg`).join(',')})`;
+  PRIZES.forEach((p,i)=>{const s=el('span',null,'🪙'+p);s.style.transform=`rotate(${(i+.5)*360/n}deg) translateY(-92px)`;W.appendChild(s)});
+  if(!ready)return;
+  $('spgo').onclick=async()=>{
+    $('spgo').disabled=true;const i=Math.floor(Math.random()*n),prize=PRIZES[i]*coinMult();
+    try{await F.setDoc(meDoc(),{lastSpin:todayKey()},{merge:true})}catch(e){$('spgo').disabled=false;return toast(niceErr(e))}
+    ST.profiles[ME.uid]={...prof(ME.uid),lastSpin:todayKey()};
+    W.style.transition='transform 3.6s cubic-bezier(.15,.85,.2,1)';W.style.transform=`rotate(${360*6-(i+.5)*360/n}deg)`;
+    setTimeout(()=>{F.setDoc(meDoc(),{coins:F.increment(prize)},{merge:true}).catch(()=>{});coinPop('+'+prize+' 🪙');confetti();$('spres').textContent='🎉 You won '+prize+' coins!';$('spgo').textContent='See you tomorrow!'},3700);
+  };
+}
+// word scramble race
+const SCRAM='APPLE BEACH CANDY DANCE EAGLE FLAME GHOST HONEY JUICE LEMON MAGIC NIGHT OCEAN PIANO QUEEN RIVER SMILE TIGER WATER ZEBRA PLANET SCHOOL SUMMER WINTER FRIEND CASTLE ROCKET GARDEN MONKEY PENCIL'.split(' ');
+GAMES.scram={name:'Word scramble race',icon:'🔀',init:()=>{const w=SCRAM[Math.floor(Math.random()*SCRAM.length)];let s;do{s=shuffle([...w]).join('')}while(s===w);return{w,s}}};
+function scramEl(m,k){
+  const g=m.game,me=g.p.indexOf(ME.uid),names=[who(g.p[0]).nick,who(g.p[1]).nick],box=el('div','game arc scram');
+  box.appendChild(el('b','gt','🔀 Word scramble race: '+names[0]+' vs '+names[1]));
+  box.appendChild(el('div','scrw',g.winner?g.w:g.s.split('').join(' ')));
+  if(!g.winner&&me>=0){const f=el('div','scrin');f.innerHTML='<input type="text" maxlength="12" placeholder="Unscramble it!"><button class="send">Go</button>';const i=f.querySelector('input');
+    const go=()=>{const v=i.value.trim().toUpperCase();if(!v)return;if(v===g.w){gameMove(k,m,{...g,winner:ME.uid});confetti()}else{i.value='';i.classList.add('wrong');setTimeout(()=>i.classList.remove('wrong'),400);toast('❌ Nope, try again!')}};
+    f.querySelector('button').onclick=go;i.onkeydown=e=>{if(e.key==='Enter')go()};box.appendChild(f)}
+  box.appendChild(el('div','gs',g.winner?`${who(g.winner).nick} got it first! 🎉`:'First one to type the word wins!'));
+  if(g.winner&&me>=0&&canChat(k)){const r=el('button','fbtn go','🔁 Rematch');r.onclick=()=>sendMsg(k,{game:{kind:'scram',p:[g.p[1],g.p[0]],turn:0,winner:null,...GAMES.scram.init()}}).catch(e=>toast(niceErr(e)));box.appendChild(r)}
+  return box;
+}
+// fun commands
+const JOKES=['Why did the math book look sad? It had too many problems.','What do you call a sleeping dinosaur? A dino-snore.','Why can’t a bicycle stand up by itself? It’s two tired.','What do you call fake spaghetti? An impasta.','Why did the scarecrow win an award? He was outstanding in his field.','Why don’t eggs tell jokes? They’d crack each other up.','What has ears but can’t hear? A cornfield.','Why did the student eat his homework? The teacher said it was a piece of cake.','What do you call a bear with no teeth? A gummy bear.','Why was the computer cold? It left its Windows open.','How does the moon cut his hair? Eclipse it.','Why are ghosts bad liars? You can see right through them.'];
+const FACTS=['Octopuses have three hearts.','Honey never spoils. People found 3,000-year-old honey that was still good.','A day on Venus is longer than a year on Venus.','Bananas are berries, but strawberries aren’t.','Sharks existed before trees.','Wombat poop is shaped like cubes.','A group of flamingos is called a flamboyance.','Your stomach gets a new lining every few days.','Sloths can hold their breath longer than dolphins.','The Eiffel Tower gets about 15 cm taller in summer.','Cows have best friends.','There are more stars in space than grains of sand on Earth.'];
+const WYR=[['be able to fly','be invisible'],['have no homework ever','have no tests ever'],['live in a treehouse','live in a castle'],['only eat pizza forever','never eat pizza again'],['be a famous gamer','be a famous athlete'],['talk to animals','speak every language'],['have a pet dragon','have a pet dinosaur'],['always be 10 minutes late','always be 2 hours early'],['explore space','explore the ocean'],['have super speed','have super strength'],['be the funniest person','be the smartest person'],['never use your phone again','never watch TV again']];
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+function hashPct(s){let h=7;for(const c of s.toLowerCase())h=(h*31+c.charCodeAt(0))%1000003;return h%101}
+// achievements
+const ACH=[
+ ['first','💬','First message',w=>w.msgs>=1],['m100','💯','100 messages',w=>w.msgs>=100],['m1000','🗣️','1,000 messages',w=>w.msgs>=1000],
+ ['lv10','⭐','Reach level 10',w=>levelOf(w.msgs).lv>=10],['f5','👯','5 friends',()=>Object.keys(ST.friends).length>=5],['f20','🎉','20 friends',()=>Object.keys(ST.friends).length>=20],
+ ['streak7','🔥','7-day streak',()=>Object.keys(ST.friends).some(f=>streakOf(dmKey(f))>=7)],['story','📸','Post a story',()=>LS.get('ranton-posted-story',false)],
+ ['win1','🎮','Win a game',(w,p)=>(Number(p.wins)||0)>=1],['win10','🏆','Win 10 games',(w,p)=>(Number(p.wins)||0)>=10],
+ ['buy','🛍️','Buy something',(w,p)=>(p.owned||[]).length>=1],['buy5','👑','Own 5 shop items',(w,p)=>(p.owned||[]).length>=5],['rich','💰','Have 1,000 coins',(w,p)=>(Number(p.coins)||0)>=1000],
+ ['daily7','📅','Daily reward 7 days in a row',(w,p)=>(Number(p.dailyRun)||0)>=7],['pic','🖼️','Add a profile picture',w=>!!w.pic],['bday','🎂','Add your birthday',(w,p)=>!!p.bday],
+ ['group','👥','Make or join a group',()=>Object.keys(ST.groups).length>=1],['mood','😎','Set a mood',(w,p)=>!!p.mood]];
+function achOf(id){const w=who(id),p=prof(id);return ACH.filter(a=>{try{return a[3](w,p)}catch(e){return false}})}
+let achT=0;
+function checkAch(){
+  if(!ST.started||!ST.profiles[ME.uid]||Date.now()-achT<4000)return;achT=Date.now();
+  const p=prof(ME.uid),have=new Set(Array.isArray(p.ach)?p.ach:[]),now=achOf(ME.uid).filter(a=>!have.has(a[0]));
+  if(!now.length)return;
+  F.setDoc(meDoc(),{ach:F.arrayUnion(...now.map(a=>a[0])),coins:F.increment(20*now.length)},{merge:true}).then(()=>{
+    now.slice(0,3).forEach((a,i)=>setTimeout(()=>{const t=el('div','achpop');t.innerHTML=`<span>${a[1]}</span><div><small>ACHIEVEMENT UNLOCKED</small><b></b><i>+20 🪙</i></div>`;t.querySelector('b').textContent=a[2];document.body.appendChild(t);setTimeout(()=>t.remove(),3800)},i*1500))}).catch(()=>{});
+}
+function achModal(id){
+  const got=new Set(achOf(id).map(a=>a[0]));
+  modal(`<h1>🏅 Achievements</h1><p class="hint"></p><div class="achgrid" id="achg"></div><button class="big ghost" onclick="closeModal()">Close</button>`);
+  $('mcard').querySelector('.hint').textContent=(id===ME.uid?'You have':who(id).nick+' has')+` ${got.size} of ${ACH.length}`+(id===ME.uid?'. Each one gives you 20 coins!':'');
+  ACH.forEach(a=>{const c=el('div','ach'+(got.has(a[0])?' got':''));c.innerHTML=`<span>${a[1]}</span><b></b>`;c.querySelector('b').textContent=a[2];$('achg').appendChild(c)});
+}
+
+/* ---------- BATCH 5 · comfort ---------- */
+// chat lock
+const LOCKS=()=>LS.get('ranton-locks',{});const UNLOCKED=new Set();
+const pinHash=s=>{let h=5381;for(const c of 'rn'+s)h=((h<<5)+h+c.charCodeAt(0))|0;return String(h)};
+function lockModal(k){
+  const L=LOCKS(),on=!!L[k];
+  if(on)return pinAsk('Turn off the lock?',ok=>{if(!ok)return;const L2=LOCKS();delete L2[k];LS.set('ranton-locks',L2);toast('🔓 Chat unlocked');redraw()},k);
+  modal(`<h1>🔒 Lock this chat</h1><p class="hint">Pick a 4-digit PIN. You’ll need it to open this chat on this device. Don’t forget it!</p>
+    <input type="password" id="pin1" inputmode="numeric" maxlength="4" placeholder="PIN"><input type="password" id="pin2" inputmode="numeric" maxlength="4" placeholder="Type it again" style="margin-top:8px">
+    <div class="err" id="pine"></div><button class="big" id="pingo">🔒 Lock</button><button class="big ghost" onclick="closeModal()">Cancel</button>`);
+  $('pingo').onclick=()=>{const a=$('pin1').value,b=$('pin2').value;if(!/^\d{4}$/.test(a))return $('pine').textContent='The PIN must be 4 numbers.';if(a!==b)return $('pine').textContent='The PINs don’t match.';
+    const L2=LOCKS();L2[k]=pinHash(a);LS.set('ranton-locks',L2);UNLOCKED.add(k);closeModal();toast('🔒 Chat locked');redraw()};
+}
+function pinAsk(title,cb,k){
+  modal(`<h1>🔒 ${esc(title)}</h1><input type="password" id="pinx" inputmode="numeric" maxlength="4" placeholder="PIN" autocomplete="off"><div class="err" id="pine"></div>
+    <button class="big" id="pingo">Unlock</button><button class="big ghost" id="pinno">Cancel</button>`);
+  let tries=0;setTimeout(()=>$('pinx')&&$('pinx').focus(),50);
+  const go=()=>{if(pinHash($('pinx').value)===LOCKS()[k]){UNLOCKED.add(k);closeModal();cb(true)}else{tries++;$('pinx').value='';$('pine').textContent=tries>=5?'Too many tries. Wait a bit.':'Wrong PIN.';if(tries>=5)$('pingo').disabled=true}};
+  $('pingo').onclick=go;$('pinx').onkeydown=e=>{if(e.key==='Enter')go()};$('pinno').onclick=()=>{closeModal();cb(false)};
+}
+// quick switcher
+function quickSwitch(){
+  if(!ST.started)return;
+  modal(`<h1>⚡ Jump to…</h1><input type="text" id="qsin" placeholder="Type a name…" autocomplete="off"><div class="pick" id="qsl"></div><p class="hint">Tip: press Ctrl + K anytime. ↑ ↓ to move, Enter to open.</p>`);
+  const items=[...Object.keys(ST.friends).filter(f=>!ST.blocks.has(f)).map(f=>({k:dmKey(f),t:who(f).nick,h:avHTML(f,28)})),...Object.keys(ST.groups).map(g=>({k:'g:'+g,t:convTitle('g:'+g),h:gavHTML(ST.groups[g],28)}))];
+  let sel=0,shown=[];
+  const draw=()=>{const q=$('qsin').value.trim().toLowerCase();shown=items.filter(x=>x.t.toLowerCase().includes(q)).sort((a,b)=>lastAt(b.k)-lastAt(a.k)).slice(0,8);sel=Math.min(sel,Math.max(0,shown.length-1));
+    const L=$('qsl');L.innerHTML='';shown.forEach((x,i)=>{const r=el('div','pickrow'+(i===sel?' on':''));r.innerHTML=x.h+'<span></span>';r.querySelector('span').textContent=x.t;r.onclick=()=>{closeModal();openConv(x.k)};L.appendChild(r)});
+    if(!shown.length)L.appendChild(el('div','empty','No one found.'))};
+  $('qsin').oninput=()=>{sel=0;draw()};$('qsin').onkeydown=e=>{if(e.key==='ArrowDown'){sel=Math.min(sel+1,shown.length-1);draw();e.preventDefault()}else if(e.key==='ArrowUp'){sel=Math.max(0,sel-1);draw();e.preventDefault()}else if(e.key==='Enter'&&shown[sel]){closeModal();openConv(shown[sel].k)}};
+  draw();setTimeout(()=>$('qsin').focus(),30);
+}
+document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();quickSwitch()}});
+// export chat
+function exportChat(k){
+  const lines=[`Ranton chat: ${convTitle(k)}`,`Saved ${new Date().toLocaleString()}`,''];
+  ST.msgs.forEach(m=>{lines.push(`[${new Date(ms(m.at)||Date.now()).toLocaleString()}] ${who(m.by).nick}: ${m.boom?'💣 (secret message)':lastSummary(m)==='' ? '…' : (m.text||lastSummary(m))}`)});
+  const blob=new Blob([lines.join('\n')],{type:'text/plain'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=('ranton-'+convTitle(k)).replace(/[^\w-]+/g,'_')+'.txt';document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},500);
+  toast('📄 Saved '+ST.msgs.length+' messages');
+}
+// text size
+const FSIZES=[['s','Small'],['m','Normal'],['l','Big'],['xl','Huge']];
+function applyFs(){FSIZES.forEach(([f])=>document.body.classList.toggle('fs-'+f,(PREF.fs||'m')===f))}
+applyFs();
+
+/* ---------- hooks ---------- */
+{const o=msgEl;msgEl=function(m,k,cont,q){const d=o(m,k,cont,q);if(!d||!m||!m.id)return d;
+  // self-destruct
+  if(m.boom){const left=boomLeft(m),body=d.querySelector('.body');
+    if(left<=0){body.innerHTML='<div class="mt boomed">💥 This message exploded</div>';d.querySelector('.mtools').innerHTML='';if(m.by===ME.uid)F.deleteDoc(F.doc(msgsCol(k),m.id)).catch(()=>{})}
+    else{const t=el('span','boomtag','💣 '+fmtLeft(left));body.appendChild(t);d.classList.add('boommsg');
+      if(!BOOM_T[m.id]&&left<2147e6)BOOM_T[m.id]=setTimeout(()=>{delete BOOM_T[m.id];if(ST.conv===k)rMsgs(true)},left+200)}}
+  // double-tap ❤️
+  if(canChat(k)&&!m.game&&!m.poll)d.addEventListener('dblclick',e=>{if(e.target.closest('button,a,input,audio'))return;e.preventDefault();const has=(((m.react||{}).h)||[]).includes(ME.uid);if(!has)toggleReact(k,m,'h');
+    const h=el('div','dtheart','❤️');d.querySelector('.mb').appendChild(h);setTimeout(()=>h.remove(),800)});
+  // extra tools
+  const tools=d.querySelector('.mtools');if(!tools||m.boom)return d;const last=tools.lastElementChild;
+  const add=(t,title,fn)=>{const b=el('button',null,t);b.title=title;b.onclick=e=>{e.stopPropagation();fn()};tools.insertBefore(b,last)};
+  if(canChat(k)||Object.keys(ST.friends).length)add('↪️','Forward',()=>forwardModal(m));
+  add('⭐','Save',()=>saveMsg(m,k));
+  if(m.text)add('🔊','Read out loud',()=>speak(m.text));
+  return d}}
+{const o=gameEl;gameEl=function(m,k){return m.game.kind==='scram'?(checkWin(m),scramEl(m,k)):o(m,k)}}
+{const o=avHTML;avHTML=function(id,size){let h=o(id,size);const md=prof(id).mood;if(md&&MOODS.includes(md)&&(size||36)>=28)h=h.replace(/<\/div>$/,`<em class="mood">${md}</em></div>`);return h}}
+{const o=runCommand;runCommand=function(text){const t=String(text).trim();let m;
+  if(/^\/joke$/i.test(t))return'😂 '+pick(JOKES);
+  if(/^\/fact$/i.test(t))return'🧠 Fun fact: '+pick(FACTS);
+  if((m=t.match(/^\/ship\s+(.+?)\s*(?:\+|and|&|\s)\s*(.+)$/i))){const a=m[1].slice(0,20),b=m[2].slice(0,20),p=hashPct([a,b].sort().join('+'));return`💘 ${a} + ${b} = **${p}%** ${p>80?'💞 perfect match!':p>50?'😊 cute!':p>25?'🤔 maybe…':'😬 yikes'}`}
+  if((m=t.match(/^\/choose\s+(.+)$/i))){const opts=m[1].split(/\s*(?:,|\bor\b)\s*/i).filter(Boolean);if(opts.length<2){toast('Try: /choose pizza, tacos, burgers');return null}return'🤔 I choose… **'+pick(opts).slice(0,40)+'**'}
+  if((m=t.match(/^\/rate\s+(.+)$/i))){const n=Math.round(hashPct(m[1])/10);return`⭐ ${m[1].slice(0,40)}: **${n}/10** ${'⭐'.repeat(Math.max(1,Math.round(n/2)))}`}
+  if(/^\/saved$/i.test(t)){savedModal();return null}
+  if(/^\/spin$/i.test(t)){spinModal();return null}
+  if(/^\/(help|commands)$/i.test(t)){toast('Commands: /roll /flip /8ball /joke /fact /ship a b /choose a, b /rate thing /spin /saved');return null}
+  return o(text)}}
+{const o=plusMenu;plusMenu=function(anchor,k){o(anchor,k);const p=document.querySelector('.pmenu');if(!p)return;
+  const locked=!!LOCKS()[k];
+  [['💣','Self-destruct message',()=>boomModal(k)],['🤔','Would you rather…',()=>{const [a,b]=pick(WYR);sendMsg(k,{poll:{q:'Would you rather…',opts:[a,b]}}).catch(e=>toast(e.msg||niceErr(e)))}],
+   [locked?'🔓':'🔒',locked?'Remove chat lock':'Lock this chat',()=>lockModal(k)],['📄','Save chat as a file',()=>exportChat(k)]]
+   .forEach(([e,t,fn])=>{const b=el('button',null,e+'  '+t);b.onclick=ev=>{ev.stopPropagation();p.remove();fn()};p.appendChild(b)})}}
+{const o=openConv;openConv=function(k,...r){if(LOCKS()[k]&&!UNLOCKED.has(k)&&ST.conv!==k){pinAsk('This chat is locked',ok=>{if(ok)openConv(k,...r)},k);return}return o.call(this,k,...r)}}
+{const o=rSide;rSide=function(){o.apply(this,arguments);const L=LOCKS(),B=BEST();document.querySelectorAll('#chlist .ch.dmrow').forEach(b=>{const k=b.dataset.k;if(!k)return;
+  if(L[k]&&!UNLOCKED.has(k)){const pv=b.querySelector('.pv');if(pv)pv.textContent='🔒 Locked'}
+  if(!isGroup(k)&&B.includes(otherOf(cid(k)))){const n=b.querySelector('.nm');if(n)n.textContent='⭐ '+n.textContent}})}}
+{const o=userCard;userCard=function(f){o(f);if(!f)return;const p=prof(f),card=$('mcard').querySelector('.ucard');if(!card)return;
+  if(p.cardc&&CARDCOLS[p.cardc]){card.style.background=CARDCOLS[p.cardc];card.classList.add('colored');if(p.cardc==='night')card.classList.add('darkcard')}
+  const fav=p.fav||{},chips=FAVS.filter(([k])=>fav[k]);
+  if(chips.length){const fw=el('div','ufavs');chips.forEach(([k,l])=>{const c=el('div','ufav');c.innerHTML='<small></small><b></b>';c.querySelector('small').textContent=l;c.querySelector('b').textContent=fav[k];fw.appendChild(c)});card.insertBefore(fw,card.querySelector('.ubio').nextSibling)}
+  const got=achOf(f).length,ab=el('button','achbtn','🏅 '+got+'/'+ACH.length+' achievements');ab.onclick=()=>achModal(f);card.insertBefore(ab,card.querySelector('.ujoin'));
+  if(ST.friends[f]){F.getDoc(F.doc(db,'friends',ST.friends[f])).then(d=>{const at=d.exists()&&ms(d.data().at);const j=card.querySelector('.ujoin');if(at&&j)j.textContent+=(j.textContent?' · ':'')+'👯 Friends since '+new Date(at).toLocaleDateString()}).catch(()=>{});
+    const acts=card.querySelector('.uacts'),isB=BEST().includes(f),b=el('button','big ghost',isB?'⭐ Remove from best friends':'⭐ Add to best friends');b.onclick=()=>{toggleBest(f);userCard(f)};acts.insertBefore(b,acts.children[1]||null)}}}
+{const o=settingsModal;settingsModal=function(sec){o(sec);sec=sec||'profile';const b=$('sbody');if(!b)return;
+  if(sec==='profile'&&b.querySelector('#sCard'))profileExtras(b);
+  if(sec==='look'){const s=el('div');s.innerHTML='<h3>Text size</h3><div class="modes" id="sfs"></div>';b.appendChild(s);
+    FSIZES.forEach(([f,l])=>{const x=el('button',(PREF.fs||'m')===f?'on':'',l);x.onclick=()=>{PREF.fs=f;savePref();applyFs();settingsModal('look')};$('sfs').appendChild(x)})}}}
+{const o=redraw;redraw=function(){o.apply(this,arguments);if(ST.started)checkAch()}}
+{const o=friendsPage;friendsPage=function(box){o(box);const row=box.querySelector('.funrow');if(!row)return;
+  const c=(e,t,s,cls,fn)=>{const b=el('button','funcard '+cls);b.innerHTML=`<span>${e}</span><div><b>${t}</b><small></small></div>`;b.querySelector('small').textContent=s;b.onclick=fn;row.appendChild(b)};
+  c('🎡','Daily spin',spinReady()?'🎁 Free spin ready!':'Come back tomorrow','spinc',spinModal);
+  c('🏅','Achievements',achOf(ME.uid).length+' of '+ACH.length+' unlocked','achc',()=>achModal(ME.uid));
+  c('⭐','Saved',' Messages you saved','savc',savedModal);
+  row.classList.add('five')}}
+// remember when you post a story (for the achievement)
+document.addEventListener('click',e=>{if(e.target&&e.target.id==='sgo')LS.set('ranton-posted-story',true)},true);
+/* =================== TIDY UP =================== */
+// message tools: keep React + Reply visible, put the rest in a ⋯ menu
+{const o=msgEl;msgEl=function(m,k,cont,q){const d=o(m,k,cont,q);const tools=d&&d.querySelector('.mtools');if(!tools)return d;
+  const btns=[...tools.children];if(btns.length<=3)return d;
+  const keep=btns.filter(b=>['React','Reply','Jump to message'].includes(b.title)),rest=btns.filter(b=>!keep.includes(b));
+  if(!rest.length)return d;
+  const more=el('button','moreb','⋯');more.title='More';const menu=el('div','moremenu');
+  rest.forEach(b=>{const lbl=el('span',null,' '+b.title);b.appendChild(lbl);b.classList.add('mmi');const fn=b.onclick;b.onclick=e=>{menu.classList.remove('open');fn&&fn(e)};menu.appendChild(b)});
+  more.onclick=e=>{e.stopPropagation();document.querySelectorAll('.moremenu.open').forEach(x=>x!==menu&&x.classList.remove('open'));menu.classList.toggle('open');
+    if(menu.classList.contains('open')){const r=more.getBoundingClientRect();menu.classList.toggle('up',r.top>window.innerHeight*.55)}};
+  tools.appendChild(more);tools.appendChild(menu);return d}}
+document.addEventListener('click',e=>{if(!e.target.closest('.moremenu,.moreb'))document.querySelectorAll('.moremenu.open').forEach(x=>x.classList.remove('open'))});
+// friends page: neat shortcut chips, with a dot when something is ready
+{const o=friendsPage;friendsPage=function(box){o(box);const row=box.querySelector('.funrow');if(!row)return;row.className='funrow chips';
+  row.querySelectorAll('.funcard').forEach(c=>{const s=c.querySelector('small');if(s&&/🎁|ready/i.test(s.textContent))c.classList.add('ready')});
+  const q=box.querySelector('.qotd');if(q)row.after(q)}}
+// ＋ menu: icon on top, short labels
+const SHORT={'Picture or file':'Photo / file','Draw something':'Draw','Play a game':'Games','Watch together':'Watch','Chat wallpaper':'Wallpaper','Self-destruct message':'Secret 💣','Would you rather…':'Would you rather','Lock this chat':'Lock chat','Remove chat lock':'Unlock chat','Save chat as a file':'Save chat'};
+{const o=plusMenu;plusMenu=function(anchor,k){o(anchor,k);const p=document.querySelector('.pmenu:not(.fxmenu)');if(!p)return;
+  p.querySelectorAll('button').forEach(b=>{const m=b.textContent.match(/^(\S+)\s+(.+)$/);if(!m)return;const lbl=SHORT[m[2]]||m[2];b.innerHTML='<span class="pi"></span><span class="pl"></span>';b.querySelector('.pi').textContent=m[1];b.querySelector('.pl').textContent=lbl.replace(' 💣','');b.title=m[2]})}}
 
 /* ---------- chrome ---------- */
 function closeDrawers(){['rail','side','note'].forEach(i=>$(i).classList.remove('open'));$('scrim').classList.remove('show')}
