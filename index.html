@@ -673,6 +673,101 @@ body.pop .sprev,body.pop .wall{border:3px solid #111}
 body.pop #storybar .ring>*{border-color:#fff3d6}
 body .qotd button.send,body.pop .qotd button.send{background:#fff!important;color:#8338ec!important;-webkit-text-fill-color:#8338ec;font-weight:900;padding:8px 16px}
 body #storyov input.sreply,body.pop #storyov input.sreply{background:#0006!important;color:#fff!important;border:2px solid #fff8!important;box-shadow:none!important}
+/* ===== COINS / SHOP ===== */
+#coinBtn{position:relative;background:#ffd23f!important;font-weight:900}
+#coinBtn .dot{position:absolute;top:-3px;right:-3px;width:12px;height:12px;border-radius:50%;background:#ff006e;border:2px solid #fff;animation:pulse 1.2s infinite}
+@keyframes pulse{50%{transform:scale(1.3)}}
+#coinBtn.bump{animation:bump .5s}@keyframes bump{40%{transform:scale(1.25) rotate(-6deg)}}
+.coinpop{position:fixed;top:70px;left:50%;transform:translateX(-50%);background:#ffd23f;color:#1a1a1a;font-weight:900;padding:8px 16px;border-radius:999px;border:3px solid #1a1a1a;box-shadow:3px 3px 0 #1a1a1a;z-index:10000;animation:cpop 1.8s forwards;font-family:Fredoka,Poppins,sans-serif}
+@keyframes cpop{0%{opacity:0;transform:translate(-50%,20px) scale(.6)}15%{opacity:1;transform:translate(-50%,0) scale(1.1)}25%{transform:translate(-50%,0) scale(1)}80%{opacity:1}100%{opacity:0;transform:translate(-50%,-30px)}}
+.shophead{display:flex;align-items:center;justify-content:space-between;gap:10px}.wallet{background:#ffd23f;color:#1a1a1a;font-weight:900;padding:6px 14px;border-radius:999px;font-size:18px;border:2.5px solid #1a1a1a}
+.daily{display:flex;align-items:center;gap:10px;justify-content:space-between;padding:10px 14px;border-radius:14px;background:#0001;margin:10px 0 4px;font-weight:800}
+.daily.ready{background:linear-gradient(135deg,#ff006e,#ffbe0b);color:#fff}.daily.ready .send{background:#fff!important;color:#ff006e!important}
+.shopgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin:10px 0}
+.shopitem{border:2.5px solid #0002;border-radius:16px;padding:10px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.shopitem.on{border-color:#06d6a0;background:#06d6a015}
+.shopitem .prev{height:64px;display:flex;align-items:center;justify-content:center;width:100%;overflow:hidden}
+.shopitem .prev .msg{padding:0;margin:0;background:none}.shopitem .prev .mb{max-width:none}
+.shopitem .prev .nm{font-weight:900;font-size:18px}
+.shopitem button{width:100%}.shopitem button.poor{opacity:.55}
+body.pop .shopitem{border:2.5px solid #1a1a1a;box-shadow:3px 3px 0 #1a1a1a;background:#fff}
+body.pop .shopitem.on{background:#d9fff2}
+/* name glows */
+.glow-rainbow{background:linear-gradient(90deg,#ff006e,#fb5607,#ffbe0b,#06d6a0,#3a86ff,#8338ec,#ff006e);background-size:200% auto;-webkit-background-clip:text;background-clip:text;color:transparent!important;-webkit-text-fill-color:transparent;animation:rbow 3s linear infinite}
+@keyframes rbow{to{background-position:200% center}}
+.glow-gold{color:#e6a800!important;text-shadow:0 0 8px #ffd23f,0 0 2px #fff6}
+.glow-fire{color:#ff4d00!important;text-shadow:0 0 6px #ff9100,0 -2px 10px #ff3d00;animation:flick 1.2s infinite alternate}
+@keyframes flick{to{text-shadow:0 0 10px #ffbe0b,0 -3px 14px #ff3d00}}
+.glow-ice{color:#2fb8ff!important;text-shadow:0 0 8px #9be7ff}
+.glow-neon{color:#ff2bd6!important;text-shadow:0 0 4px #ff2bd6,0 0 12px #ff2bd6,0 0 20px #8338ec}
+/* bubble styles (override every theme) */
+body .msg.bub-candy .body{background:linear-gradient(135deg,#ff9a9e,#fecfef)!important;color:#5a1030!important}
+body .msg.bub-ocean .body{background:linear-gradient(135deg,#2193b0,#6dd5ed)!important;color:#fff!important}
+body .msg.bub-galaxy .body{background:radial-gradient(#fff 1px,transparent 1.5px) 0 0/14px 14px,linear-gradient(135deg,#1e1b4b,#6d28d9,#db2777)!important;color:#fff!important}
+body .msg.bub-matrix .body{background:#031b0a!important;color:#39ff7a!important;font-family:ui-monospace,Consolas,monospace!important;text-shadow:0 0 6px #39ff7a88}
+body .msg.bub-goldb .body{background:linear-gradient(135deg,#bf953f,#fcf6ba,#b38728,#fbf5b7)!important;color:#3d2a00!important}
+body .msg[class*=bub-] .body .lnk,body .msg[class*=bub-] .body .mention{color:inherit!important;text-decoration:underline}
+/* frames */
+.av[class*=fr-]{overflow:visible}
+.av .fic{position:absolute;font-style:normal;font-size:max(12px,45%);line-height:1;pointer-events:none;z-index:2}
+.av.fr-crown .fic{top:-38%;left:50%;transform:translateX(-50%) rotate(-12deg)}
+.av.fr-hearts .fic,.av.fr-stars .fic,.av.fr-flame .fic{top:-18%;right:-18%}
+.av.fr-crown{box-shadow:0 0 0 3px #ffd23f}
+.av.fr-hearts{box-shadow:0 0 0 3px #ff5d8f,0 0 10px #ff5d8f}
+.av.fr-stars{box-shadow:0 0 0 3px #ffbe0b,0 0 10px #ffbe0b}
+.av.fr-flame{box-shadow:0 0 0 3px #ff4d00,0 0 12px #ff9100;animation:fflame 1s infinite alternate}@keyframes fflame{to{box-shadow:0 0 0 3px #ff9100,0 0 18px #ff3d00}}
+.av.fr-rainbowf{box-shadow:0 0 0 3px #ff006e,0 0 0 6px #ffbe0b,0 0 0 9px #3a86ff}
+/* friends page cards */
+.funrow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:12px 0 0}
+.funcard{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:16px;border:0;cursor:pointer;text-align:left;color:#fff;font:inherit}
+.funcard span{font-size:30px}.funcard div{display:flex;flex-direction:column}.funcard b{font-size:16px;font-family:Fredoka,Poppins,sans-serif}.funcard small{opacity:.9;font-weight:700}
+.funcard.shopc{background:linear-gradient(135deg,#ffbe0b,#fb5607)}.funcard.lbc{background:linear-gradient(135deg,#06d6a0,#118ab2)}
+body.pop .funcard{border:3px solid #1a1a1a;box-shadow:4px 4px 0 #1a1a1a}
+.funcard:active{transform:translate(2px,2px)}
+/* leaderboard */
+.lb{display:flex;flex-direction:column;gap:6px;margin:10px 0;max-height:55vh;overflow:auto;padding:4px}
+.lbrow{display:flex;align-items:center;gap:10px;padding:8px 12px;border-radius:14px;background:#0000000a;cursor:pointer}
+.lbrow.me{background:#3a86ff22}.lbrow.first{background:linear-gradient(135deg,#ffd23f55,#ffbe0b33)}
+.lbrow .rk{width:34px;text-align:center;font-weight:900;font-size:18px}.lbrow .nm{flex:1;font-weight:800}.lbrow b{font-weight:900}
+body.pop .lbrow{border:2.5px solid #1a1a1a;background:#fff}body.pop .lbrow.me{background:#dbe8ff}body.pop .lbrow.first{background:#fff1b8}
+#lbBtn{font-weight:800}
+/* message effects */
+#fxBtn.on{background:#ffd23f!important;border-radius:50%;animation:pulse 1.2s infinite}
+.fxmenu .fxh{font-weight:900;font-size:12px;opacity:.6;padding:4px 10px;text-transform:uppercase;letter-spacing:.06em}
+.fxmenu button.on{background:#ffd23f55}
+.msg.fx-ink .body{filter:blur(7px);cursor:pointer;user-select:none;transition:filter .5s}
+.msg.fx-ink.revealed .body{filter:none}
+.msg.fx-ink:not(.revealed) .body:after{content:'';}
+.msg.fx-slam.fxnew .body{animation:slam .55s cubic-bezier(.2,1.6,.4,1)}
+@keyframes slam{0%{transform:scale(3.2);opacity:0}60%{transform:scale(.92);opacity:1}100%{transform:scale(1)}}
+#app.slamshake{animation:nudge .45s}
+.erain{position:fixed;inset:0;pointer-events:none;z-index:9998;overflow:hidden}
+.erain span{position:absolute;top:-60px;animation:fall 2.6s linear forwards}
+@keyframes fall{to{transform:translateY(115vh) rotate(25deg)}}
+/* arcade */
+.game.arc{min-width:250px}
+.hman{font-size:18px;margin:6px 0;letter-spacing:1px}
+.hword{font:800 26px Fredoka,Poppins,monospace;letter-spacing:4px;margin:6px 0 10px;word-break:break-all}
+.hkeys{display:grid;grid-template-columns:repeat(9,1fr);gap:4px;margin-bottom:8px}
+.hk{padding:7px 0;border-radius:8px;border:2px solid #0003;background:#fff;color:#1a1a1a;font-weight:900;cursor:pointer}
+.hk:disabled{cursor:default;opacity:.55}.hk.good{background:#06d6a0;color:#fff;opacity:1}.hk.bad{background:#ef4444;color:#fff}
+.tq{font-weight:800;margin:6px 0 8px;font-size:15px}
+.topts{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px}
+.topt{padding:10px;border-radius:12px;border:2.5px solid #1a1a1a;background:#fff;color:#1a1a1a;font-weight:800;cursor:pointer;box-shadow:2px 2px 0 #1a1a1a}
+.topt:nth-child(1){background:#ffd6e0}.topt:nth-child(2){background:#d6e8ff}.topt:nth-child(3){background:#d9fff2}.topt:nth-child(4){background:#fff1b8}
+.mgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:8px 0}
+.mcard{aspect-ratio:1;border-radius:12px;border:2.5px solid #1a1a1a;background:#8338ec;font-size:24px;cursor:pointer;color:#fff;transition:transform .2s}
+.mcard.open{background:#fff;transform:rotateY(0)}.mcard.own0{background:#ffd23f}.mcard.own1{background:#7bdff2}
+.mcard:disabled{cursor:default}
+@media(max-width:600px){#topbar .tnav #lbBtn span{display:none}.funrow{grid-template-columns:1fr}}
+body.pop #topbar .tnav #coinBtn,#topbar .tnav #coinBtn{background:#ffd23f!important;color:#1a1a1a!important}
+@media(max-width:600px){
+  #topbar .brand span,#topbar .brand b,#topbar .brand h1,#topbar .brand div{display:none}
+  #topbar .tnav{gap:6px}
+  #topbar .tnav button{padding:7px 10px!important;font-size:13px}
+  #topbar .tnav #coinBtn{padding:7px 12px!important;white-space:nowrap}
+}
+@media(max-width:360px){#topbar .tnav #navChats{display:none}}
 
 .callbtn{background:#ffffff12;color:var(--txt);border-radius:10px;width:38px;height:34px;font-size:17px;margin-left:6px}
 .callbtn:hover{background:var(--good);color:#14121c}
@@ -2064,7 +2159,7 @@ function rComposer(){
 }
 async function sendMsg(k,p){
   const msg={by:ME.uid,text:p.text||'',at:F.serverTimestamp()};
-  for(const key of['img','audio','file','sticker','poll','game'])if(p[key])msg[key]=p[key];
+  for(const key of['img','audio','file','sticker','poll','game','fx'])if(p[key])msg[key]=p[key];
   if(p.poll)msg.votes={};
   if(ST.replyTo){msg.reply=ST.replyTo;ST.replyTo=null;rComposer()}
   await F.addDoc(msgsCol(k),msg);
@@ -2412,6 +2507,226 @@ function qotdCard(){
   [['👋','Nudge',()=>sendNudge(k)],['🖼️','Chat wallpaper',()=>wallModal(k)]].forEach(([e,t,fn])=>{const b=el('button',null,e+'  '+t);b.onclick=ev=>{ev.stopPropagation();p.remove();fn()};p.appendChild(b)})}}
 {const o=notify;notify=function(k,c){if(c&&c.last&&c.last.text==='👋 Nudge!'&&c.last.by!==ME.uid){shake();if(ST.conv!==k)toast('👋 '+who(c.last.by).nick+' nudged you!');return}return o.apply(this,arguments)}}
 {const o=signOut;signOut=async function(){stopStories();const b=$('storybar');if(b)b.innerHTML='';return o.apply(this,arguments)}}
+
+/* =================== COINS + SHOP · ARCADE · MESSAGE EFFECTS · LEADERBOARD =================== */
+const SHOP={
+  glow:{title:'✨ Name glows',sub:'Your name shines in every chat',items:{rainbow:['🌈 Rainbow',60],gold:['🥇 Gold',80],fire:['🔥 Fire',100],ice:['🧊 Ice',100],neon:['💡 Neon',150]}},
+  bubble:{title:'💬 Bubble styles',sub:'Everyone sees your messages in this style',items:{candy:['🍬 Candy',60],ocean:['🌊 Ocean',60],galaxy:['🌌 Galaxy',80],matrix:['🟩 Hacker',100],goldb:['👑 Royal gold',120]}},
+  frame:{title:'🖼️ Picture frames',sub:'A frame around your profile picture',items:{hearts:['💖 Hearts',80],stars:['⭐ Stars',80],flame:['🔥 Flame',100],rainbowf:['🌈 Rainbow',120],crown:['👑 Crown',150]}}
+};
+const FRAME_ICON={hearts:'💖',stars:'⭐',flame:'🔥',crown:'👑',rainbowf:''};
+const prof=id=>ST.profiles[id]||{};
+const coinsOf=id=>Math.max(0,Number(prof(id).coins)||0);
+function eqOf(id){const e=prof(id).eq||{},r={};for(const s in SHOP)if(e[s]&&SHOP[s].items[e[s]])r[s]=e[s];return r}
+const weekId=()=>Math.floor((Date.now()/864e5+3)/7);
+const wkMsgsOf=id=>prof(id).wk===weekId()?Number(prof(id).wkMsgs)||0:0;
+function meDoc(){return F.doc(db,'profiles',ME.uid)}
+function earn(n,why){if(!ME.uid||ST.banned)return;F.setDoc(meDoc(),{coins:F.increment(n)},{merge:true}).catch(()=>{});coinPop('+'+n+' 🪙'+(why?' '+why:''))}
+function coinPop(t){const c=el('div','coinpop',t);document.body.appendChild(c);setTimeout(()=>c.remove(),1800);const b=$('coinBtn');if(b){b.classList.remove('bump');void b.offsetWidth;b.classList.add('bump')}}
+function welcomeCoins(){const p=prof(ME.uid);if(ST.profiles[ME.uid]&&p.coins==null&&!welcomeCoins.done){welcomeCoins.done=1;F.setDoc(meDoc(),{coins:50},{merge:true}).then(()=>toast('🪙 You got 50 free coins! Tap 🪙 at the top to visit the Shop.')).catch(()=>{})}}
+const dailyReady=()=>prof(ME.uid).lastDaily!==todayKey();
+async function claimDaily(){if(!dailyReady())return;const p=prof(ME.uid),streak=p.lastDaily===yesterdayKey()?Math.min(7,(Number(p.dailyRun)||0)+1):1,amt=15+streak*5;
+  try{await F.setDoc(meDoc(),{lastDaily:todayKey(),dailyRun:streak,coins:F.increment(amt)},{merge:true});coinPop('+'+amt+' 🪙 daily reward');confetti()}catch(e){toast(niceErr(e))}}
+
+/* coin button in the top bar */
+function rCoinBtn(){
+  const nav=document.querySelector('#topbar .tnav');if(!nav)return;
+  let b=$('coinBtn');
+  if(!b){b=el('button');b.id='coinBtn';b.onclick=shopModal;nav.insertBefore(b,nav.firstChild);
+    const lb=el('button');lb.id='lbBtn';lb.innerHTML='🏆 <span>Ranks</span>';lb.onclick=()=>leaderModal();nav.insertBefore(lb,b.nextSibling)}
+  b.innerHTML=`🪙 <b>${coinsOf(ME.uid)}</b>${ST.profiles[ME.uid]&&dailyReady()?'<i class="dot"></i>':''}`;
+}
+
+/* ---------- shop ---------- */
+let shopTab='glow';
+function shopModal(){
+  const p=prof(ME.uid),owned=new Set(Array.isArray(p.owned)?p.owned:[]),eq=eqOf(ME.uid),coins=coinsOf(ME.uid);
+  modal(`<div class="shophead"><h1>🛍️ Shop</h1><div class="wallet">🪙 ${coins}</div></div>
+    <div class="daily ${dailyReady()?'ready':''}">${dailyReady()?`<span>🎁 Your daily reward is ready!</span><button class="send" id="dclaim">Claim</button>`:`<span>✅ Daily reward claimed. Come back tomorrow! Day ${Number(p.dailyRun)||1} of 7 🔥</span>`}</div>
+    <p class="hint">Earn coins: 1 per message (up to 40 a day) · 🎁 daily reward · 🏆 win games (+10)</p>
+    <div class="tabs" id="shtabs"></div><p class="hint" id="shsub"></p><div class="shopgrid" id="shgrid"></div><div class="err" id="sherr"></div>
+    <button class="big ghost" onclick="closeModal()">Close</button>`);
+  $('mcard').classList.add('wide');
+  if($('dclaim'))$('dclaim').onclick=async()=>{await claimDaily();setTimeout(shopModal,400)};
+  Object.entries(SHOP).forEach(([s,S])=>{const b=el('button',s===shopTab?'on':'',S.title);b.onclick=()=>{shopTab=s;shopModal()};$('shtabs').appendChild(b)});
+  const S=SHOP[shopTab];$('shsub').textContent=S.sub;
+  Object.entries(S.items).forEach(([id,[name,price]])=>{
+    const have=owned.has(id),on=eq[shopTab]===id;
+    const c=el('div','shopitem'+(on?' on':''));
+    c.innerHTML=`<div class="prev"></div><b></b><button class="send"></button>`;
+    c.querySelector('b').textContent=name;
+    const pv=c.querySelector('.prev');
+    if(shopTab==='glow'){pv.innerHTML=`<span class="nm glow-${id}"></span>`;pv.firstChild.textContent=ME.nick}
+    else if(shopTab==='bubble'){pv.innerHTML=`<div class="msg mine bub-${id}"><div class="mb"><div class="body">hey!! 👋</div></div></div>`}
+    else{pv.innerHTML=avHTML(ME.uid,46).replace('class="av','class="av fr-'+id).replace('</div>',(FRAME_ICON[id]?`<em class="fic">${FRAME_ICON[id]}</em>`:'')+'</div>')}
+    const btn=c.querySelector('button');
+    if(on){btn.textContent='Unequip';btn.className='fbtn no';btn.onclick=()=>equip(shopTab,null)}
+    else if(have){btn.textContent='Use it';btn.onclick=()=>equip(shopTab,id)}
+    else{btn.textContent='🪙 '+price;if(coins<price){btn.classList.add('poor');btn.onclick=()=>$('sherr').textContent=`You need ${price-coins} more coins. Keep chatting! 💬`}
+      else btn.onclick=()=>buy(shopTab,id,price)}
+    $('shgrid').appendChild(c);
+  });
+}
+async function buy(slot,id,price){
+  if(coinsOf(ME.uid)<price)return;
+  try{await F.setDoc(meDoc(),{coins:F.increment(-price),owned:F.arrayUnion(id),eq:{...eqOf(ME.uid),[slot]:id}},{merge:true});confetti();toast('🛍️ Bought '+SHOP[slot].items[id][0]+'! Everyone can see it now.');setTimeout(shopModal,250)}
+  catch(e){$('sherr').textContent=niceErr(e)}
+}
+async function equip(slot,id){const e={...eqOf(ME.uid)};if(id)e[slot]=id;else delete e[slot];
+  try{await F.setDoc(meDoc(),{eq:e},{merge:true});ST.profiles[ME.uid]={...prof(ME.uid),eq:e};setTimeout(shopModal,150)}catch(er){toast(niceErr(er))}}
+
+/* ---------- leaderboard ---------- */
+const LB={week:['🔥 This week',id=>wkMsgsOf(id),'messages'],level:['⭐ Level',id=>levelOf(who(id).msgs).lv,'level'],wins:['🎮 Game wins',id=>Number(prof(id).wins)||0,'wins'],coins:['🪙 Richest',id=>coinsOf(id),'coins']};
+function leaderModal(tab){
+  tab=tab||'week';
+  const ids=[ME.uid,...Object.keys(ST.friends).filter(f=>!ST.blocks.has(f))];
+  const [title,score,unit]=LB[tab];
+  const rows=ids.map(id=>({id,s:score(id)})).sort((a,b)=>b.s-a.s||(a.id===ME.uid?-1:1));
+  modal(`<h1>🏆 Friend leaderboard</h1><div class="tabs" id="lbt"></div><div class="lb" id="lbl"></div>
+    ${ids.length<2?'<p class="hint">Add friends to compete with them!</p>':''}${tab==='week'?'<p class="hint">Resets every Monday. Send messages to climb!</p>':''}<button class="big ghost" onclick="closeModal()">Close</button>`);
+  Object.entries(LB).forEach(([k2,[t]])=>{const b=el('button',k2===tab?'on':'',t);b.onclick=()=>leaderModal(k2);$('lbt').appendChild(b)});
+  let rank=0,prev=null;
+  rows.forEach((r,i)=>{if(r.s!==prev){rank=i+1;prev=r.s}
+    const row=el('div','lbrow'+(r.id===ME.uid?' me':'')+(rank===1&&r.s>0?' first':''));
+    row.innerHTML=`<span class="rk">${rank===1&&r.s>0?'👑':rank===2?'🥈':rank===3?'🥉':'#'+rank}</span>${avHTML(r.id,38)}<span class="nm"></span><b></b>`;
+    const n=row.querySelector('.nm');n.textContent=who(r.id).nick+(r.id===ME.uid?' (you)':'');const g=eqOf(r.id).glow;if(g)n.classList.add('glow-'+g);
+    row.querySelector('b').textContent=r.s+' '+unit;row.onclick=()=>{closeModal();userCard(r.id)};$('lbl').appendChild(row)});
+}
+
+/* ---------- message effects ---------- */
+const FX={slam:['💥','Slam'],fireworks:['🎆','Fireworks'],confetti:['🎉','Confetti'],hearts:['💖','Love rain'],ink:['🫥','Invisible ink']};
+const PLAYED=new Set();
+function fxMenu(anchor){
+  const old=document.querySelector('.fxmenu');if(old){old.remove();return}
+  const p=el('div','pmenu fxmenu');p.appendChild(el('div','fxh','Send with effect'));
+  Object.entries(FX).forEach(([id,[e,t]])=>{const b=el('button',ST.fx===id?'on':'',e+'  '+t);b.onclick=ev=>{ev.stopPropagation();p.remove();ST.fx=ST.fx===id?null:id;rFxBtn();$('rin')&&$('rin').focus()};p.appendChild(b)});
+  if(ST.fx){const b=el('button',null,'✖  No effect');b.onclick=ev=>{ev.stopPropagation();p.remove();ST.fx=null;rFxBtn()};p.appendChild(b)}
+  anchor.appendChild(p);setTimeout(()=>document.addEventListener('click',()=>p.remove(),{once:true}),0);
+}
+function rFxBtn(){const b=$('fxBtn');if(!b)return;b.classList.toggle('on',!!ST.fx);b.textContent=ST.fx?FX[ST.fx][0]:'✨';b.title=ST.fx?'Effect: '+FX[ST.fx][1]:'Send with effect'}
+function playFx(fx,d){
+  if(fx==='confetti')return confetti();
+  if(fx==='slam'){const a=$('app');a.classList.remove('slamshake');void a.offsetWidth;a.classList.add('slamshake');ping(true);return}
+  if(fx==='hearts')return emojiRain(['💖','💕','💗','❤️','💘']);
+  if(fx==='fireworks')return fireworks();
+}
+function emojiRain(set){const w=el('div','erain');document.body.appendChild(w);
+  for(let i=0;i<34;i++){const s=el('span',null,set[i%set.length]);s.style.left=Math.random()*100+'vw';s.style.animationDelay=Math.random()*1.4+'s';s.style.fontSize=18+Math.random()*26+'px';w.appendChild(s)}
+  setTimeout(()=>w.remove(),4200)}
+function fireworks(){
+  const cv=el('canvas','confetti');cv.width=innerWidth;cv.height=innerHeight;document.body.appendChild(cv);const cx=cv.getContext('2d');
+  const cols=['#ff006e','#ffbe0b','#3a86ff','#8338ec','#06d6a0','#fb5607'];let P=[];const t0=performance.now();let next=0;
+  (function f(t){if(t>=next&&t-t0<2200){next=t+380;const x=cv.width*(.2+Math.random()*.6),y=cv.height*(.15+Math.random()*.35),c=cols[Math.floor(Math.random()*cols.length)];
+      for(let i=0;i<70;i++){const a=Math.random()*6.283,v=1.5+Math.random()*4.5;P.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,l:1,c})}}
+    cx.fillStyle='rgba(0,0,0,0)';cx.clearRect(0,0,cv.width,cv.height);
+    P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.06;p.vx*=.985;p.l-=.012;cx.globalAlpha=Math.max(0,p.l);cx.fillStyle=p.c;cx.beginPath();cx.arc(p.x,p.y,2.6,0,6.3);cx.fill()});
+    P=P.filter(p=>p.l>0);if(t-t0<3800)requestAnimationFrame(f);else cv.remove()})(t0);
+}
+
+/* ---------- arcade: hangman, trivia, memory ---------- */
+const HWORDS='PIZZA BANANA ROCKET DRAGON PENGUIN GUITAR SOCCER PLANET CASTLE JUNGLE PIRATE ZOMBIE ROBOT TIGER WIZARD VOLCANO DIAMOND HAMBURGER POPCORN DOLPHIN SPIDER UNICORN MONSTER BASKETBALL SKATEBOARD CHOCOLATE KEYBOARD TORNADO LIGHTNING TREASURE PANCAKE GIRAFFE CACTUS NINJA PUZZLE MUSEUM JELLYFISH SNOWMAN TROPHY HOMEWORK'.split(' ');
+const TRIVIA=[
+ ['How many legs does a spider have?',['6','8','10','12'],1],['What planet is known as the Red Planet?',['Venus','Jupiter','Mars','Saturn'],2],
+ ['What is the largest ocean?',['Atlantic','Indian','Arctic','Pacific'],3],['How many minutes are in 2 hours?',['100','120','140','160'],1],
+ ['What gas do plants take in?',['Oxygen','Carbon dioxide','Helium','Nitrogen'],1],['Which animal is the fastest on land?',['Lion','Horse','Cheetah','Greyhound'],2],
+ ['What is 9 × 7?',['56','63','72','81'],1],['How many continents are there?',['5','6','7','8'],2],
+ ['What is frozen water called?',['Steam','Ice','Fog','Dew'],1],['Which is the biggest planet?',['Earth','Saturn','Neptune','Jupiter'],3],
+ ['How many sides does a hexagon have?',['5','6','7','8'],1],['What color do you get mixing blue and yellow?',['Green','Purple','Orange','Brown'],0],
+ ['Which country has the Eiffel Tower?',['Italy','Spain','France','Germany'],2],['How many days are in a leap year?',['364','365','366','367'],2],
+ ['What do bees make?',['Milk','Honey','Silk','Wax only'],1],['What is the closest star to Earth?',['The Sun','Polaris','Sirius','The Moon'],0],
+ ['How many players are on a soccer team on the field?',['9','10','11','12'],2],['What is the hardest natural material?',['Gold','Iron','Diamond','Quartz'],2],
+ ['Which bone protects your brain?',['Rib cage','Skull','Spine','Pelvis'],1],['What is 15 + 27?',['42','41','43','32'],0],
+ ['Which animal is called the King of the Jungle?',['Tiger','Elephant','Lion','Gorilla'],2],['What is the capital of Japan?',['Kyoto','Tokyo','Osaka','Seoul'],1],
+ ['How many hearts does an octopus have?',['1','2','3','4'],2],['What is the boiling point of water in °C?',['50','90','100','120'],2],
+ ['Which instrument has 88 keys?',['Guitar','Piano','Violin','Drums'],1],['What shape has 3 sides?',['Square','Circle','Triangle','Pentagon'],2],
+ ['Which planet has rings you can easily see?',['Mars','Saturn','Mercury','Venus'],1],['How many hours are in a day?',['12','20','24','30'],2],
+ ['What is the largest mammal?',['Elephant','Blue whale','Giraffe','Shark'],1],['What do caterpillars turn into?',['Bees','Butterflies','Spiders','Worms'],1]];
+const MEMO='🍕🚀🐶🎮⚽🌈🦄🍩';
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+Object.assign(GAMES,{
+  hang:{name:'Hangman battle',icon:'🔤',init:()=>({w:HWORDS[Math.floor(Math.random()*HWORDS.length)],g:'',pts:[0,0],wrong:0})},
+  trivia:{name:'Trivia battle',icon:'🧠',init:()=>({qs:shuffle([...TRIVIA.keys()]).slice(0,5),a0:'',a1:''})},
+  memo:{name:'Memory match',icon:'🃏',init:()=>({c:shuffle([...'0011223344556677']).join(''),own:'.'.repeat(16),fl:'',pts:[0,0]})}
+});
+function decideWinner(g,pts){return pts[0]===pts[1]?'draw':g.p[pts[0]>pts[1]?0:1]}
+function arcadeEl(m,k){
+  const g=m.game,G=GAMES[g.kind],box=el('div','game arc '+g.kind),me=g.p.indexOf(ME.uid),[p0,p1]=g.p,names=[who(p0).nick,who(p1).nick];
+  box.appendChild(el('b','gt',G.icon+' '+G.name+': '+names[0]+' vs '+names[1]));
+  const status=el('div','gs');const myTurn=!g.winner&&me===g.turn;
+  if(g.kind==='hang'){
+    const word=g.w,done=[...word].every(ch=>g.g.includes(ch)),lost=g.wrong>=7;
+    box.appendChild(el('div','hman',['😀','😐','😟','😧','😨','😱','🫣','💀'][Math.min(7,g.wrong)]+'  '+'❤️'.repeat(Math.max(0,7-g.wrong))+'🖤'.repeat(Math.min(7,g.wrong))));
+    box.appendChild(el('div','hword',[...word].map(ch=>g.g.includes(ch)||g.winner?ch:'_').join(' ')));
+    if(!g.winner){const kb=el('div','hkeys');[...'ABCDEFGHIJKLMNOPQRSTUVWXYZ'].forEach(L=>{const b=el('button','hk'+(g.g.includes(L)?(word.includes(L)?' good':' bad'):''),L);
+      b.disabled=!myTurn||g.g.includes(L);
+      b.onclick=()=>{const gg=g.g+L,hits=[...word].filter(x=>x===L).length,pts=[...g.pts];pts[me]+=hits;const wrong=g.wrong+(hits?0:1);
+        const fin=[...word].every(ch=>gg.includes(ch))||wrong>=7;
+        gameMove(k,m,{...g,g:gg,pts,wrong,turn:hits&&!fin?g.turn:1-g.turn,winner:fin?decideWinner(g,pts):null})};kb.appendChild(b)});box.appendChild(kb)}
+    status.textContent=g.winner?`The word was ${word}! `+(g.winner==='draw'?'It’s a tie!':who(g.winner).nick+' wins! 🎉')+` (${g.pts[0]}–${g.pts[1]})`
+      :`${names[0]} ${g.pts[0]} · ${g.pts[1]} ${names[1]} — `+(myTurn?'Your turn! Guess a letter (right guess = go again)':names[g.turn]+'’s turn');
+  }else if(g.kind==='trivia'){
+    const A=[g.a0||'',g.a1||''],score=a=>[...a].filter((x,i)=>TRIVIA[g.qs[i]]&&+x===TRIVIA[g.qs[i]][2]).length;
+    const mine=me>=0?A[me]:null;
+    if(me>=0&&mine.length<5&&!g.winner){const Q=TRIVIA[g.qs[mine.length]];
+      box.appendChild(el('div','tq',`Question ${mine.length+1} of 5: `+Q[0]));const opts=el('div','topts');
+      Q[1].forEach((o,i)=>{const b=el('button','topt',o);b.onclick=()=>{const na=mine+i,A2=[...A];A2[me]=na;
+        const right=i===Q[2];toast(right?'✅ Correct!':'❌ Nope, it was '+Q[1][Q[2]]);
+        const both=A2[0].length===5&&A2[1].length===5;gameMove(k,m,{...g,['a'+me]:na,winner:both?decideWinner(g,[score(A2[0]),score(A2[1])]):null})};opts.appendChild(b)});box.appendChild(opts)}
+    status.textContent=g.winner?`${names[0]} ${score(A[0])}/5 · ${score(A[1])}/5 ${names[1]} → `+(g.winner==='draw'?'It’s a tie!':who(g.winner).nick+' wins! 🎉')
+      :`${names[0]}: ${A[0].length}/5 answered · ${names[1]}: ${A[1].length}/5 answered`+(me>=0&&A[me].length===5?' — waiting for the other player…':'');
+  }else if(g.kind==='memo'){
+    const fl=g.fl?g.fl.split(',').map(Number):[],grid=el('div','mgrid');
+    const showPair=fl.length===2;
+    for(let i=0;i<16;i++){const open=g.own[i]!=='.'||fl.includes(i);
+      const c=el('button','mcard'+(open?' open':'')+(g.own[i]!=='.'?' own'+g.own[i]:''),open?[...MEMO][+g.c[i]]:'❓');
+      c.disabled=!myTurn||g.own[i]!=='.'||(fl.length===1&&fl[0]===i);
+      c.onclick=()=>{let cur=showPair?[]:fl;cur=[...cur,i];
+        if(cur.length===1)return gameMove(k,m,{...g,fl:String(i)});
+        const [a,b]=cur;if(g.c[a]===g.c[b]){const own=g.own.split('');own[a]=own[b]=String(me);const pts=[...g.pts];pts[me]++;const ow=own.join('');
+          gameMove(k,m,{...g,own:ow,fl:'',pts,winner:ow.includes('.')?null:decideWinner(g,pts)})}
+        else gameMove(k,m,{...g,fl:a+','+b,turn:1-g.turn})};
+      grid.appendChild(c)}
+    box.appendChild(grid);
+    status.textContent=g.winner?`${g.pts[0]}–${g.pts[1]} → `+(g.winner==='draw'?'It’s a tie!':who(g.winner).nick+' wins! 🎉')
+      :`${names[0]} ${g.pts[0]} · ${g.pts[1]} ${names[1]} — `+(myTurn?'Your turn! Find a pair (match = go again)':names[g.turn]+'’s turn');
+  }
+  box.appendChild(status);
+  if(g.winner&&me>=0&&canChat(k)){const r=el('button','fbtn go','🔁 Rematch');r.onclick=()=>sendMsg(k,{game:{kind:g.kind,p:[g.p[1],g.p[0]],turn:0,winner:null,...G.init()}}).catch(e=>toast(niceErr(e)));box.appendChild(r)}
+  return box;
+}
+/* reward winners once per game */
+const REWARDED=(()=>{try{return new Set(JSON.parse(localStorage.getItem('ranton-rewarded')||'[]'))}catch(e){return new Set()}})();
+function checkWin(m){const g=m.game;if(!g||!m.id||REWARDED.has(m.id))return;
+  let w=g.winner;if(g.kind==='rps'&&g.picks&&g.picks[g.p[0]]&&g.picks[g.p[1]]){const r=rpsWin(g.picks[g.p[0]],g.picks[g.p[1]]);w=r==='draw'?'draw':g.p[r]}
+  if(!w)return;REWARDED.add(m.id);try{localStorage.setItem('ranton-rewarded',JSON.stringify([...REWARDED].slice(-300)))}catch(e){}
+  if(w===ME.uid&&Date.now()-ms(m.at)<36e5*6){F.setDoc(meDoc(),{wins:F.increment(1)},{merge:true}).catch(()=>{});earn(10,'you won!')}}
+
+/* ---------- hook it all in ---------- */
+{const o=gameEl;gameEl=function(m,k){checkWin(m);return ['hang','trivia','memo'].includes(m.game.kind)?arcadeEl(m,k):o(m,k)}}
+{const o=avHTML;avHTML=function(id,size){let h=o(id,size);const f=eqOf(id).frame;if(f)h=h.replace('class="av','class="av fr-'+f).replace(/<\/div>$/,(FRAME_ICON[f]?`<em class="fic">${FRAME_ICON[f]}</em>`:'')+'</div>');return h}}
+{const o=msgEl;msgEl=function(m,k,cont,q){const d=o(m,k,cont,q);if(!d||!m)return d;const e=eqOf(m.by);
+  if(e.bubble&&!m.sticker&&!m.game&&!m.poll)d.classList.add('bub-'+e.bubble);
+  if(e.glow){const n=d.querySelector('.nm');if(n)n.classList.add('glow-'+e.glow)}
+  if(m.fx&&FX[m.fx]){d.classList.add('fx-'+m.fx);
+    if(m.fx==='ink'){const b=d.querySelector('.body');if(b&&!m._shown){b.title='Tap to reveal';b.addEventListener('click',ev=>{ev.stopPropagation();m._shown=1;d.classList.add('revealed')},{once:true})}else d.classList.add('revealed')}
+    if(m.id&&!PLAYED.has(m.id)){PLAYED.add(m.id);if(Date.now()-ms(m.at)<20000&&ST.conv===k&&!document.hidden){d.classList.add('fxnew');setTimeout(()=>playFx(m.fx,d),60)}}}
+  return d}}
+{const o=sendMsg;sendMsg=async function(k,p){
+  if(ST.fx&&p&&p.text&&!p.img&&!p.game&&!p.poll){p={...p,fx:ST.fx};ST.fx=null;rFxBtn()}
+  await o(k,p);
+  if(p&&p.fx)playFx(p.fx);
+  try{const wk=weekId(),pr=prof(ME.uid);F.setDoc(meDoc(),pr.wk===wk?{wkMsgs:F.increment(1)}:{wk,wkMsgs:1},{merge:true}).catch(()=>{});
+    const day=todayKey(),c=JSON.parse(localStorage.getItem('ranton-coinday')||'{}');if(c.d!==day){c.d=day;c.n=0}
+    if(c.n<40){c.n++;localStorage.setItem('ranton-coinday',JSON.stringify(c));F.setDoc(meDoc(),{coins:F.increment(1)},{merge:true}).catch(()=>{})}}catch(e){}
+}}
+{const o=rComposer;rComposer=function(){o.apply(this,arguments);const f=document.querySelector('#composer form, #composer .cbox');const send=document.querySelector('#composer button.send');const emo=$('emo');
+  if(emo&&!$('fxBtn')){const b=el('button','att');b.type='button';b.id='fxBtn';b.onclick=e=>{e.stopPropagation();fxMenu(b)};emo.parentNode.insertBefore(b,emo);rFxBtn()}}}
+{const o=redraw;redraw=function(){o.apply(this,arguments);if(!ST.started)return;rCoinBtn();welcomeCoins()}}
+{const o=friendsPage;friendsPage=function(box){o(box);const w=box.querySelector('.fpage');if(!w||ST.tab==='add')return;
+  const row=el('div','funrow');
+  const a=el('button','funcard shopc');a.innerHTML=`<span>🛍️</span><div><b>Shop</b><small>${dailyReady()?'🎁 Daily reward ready!':'🪙 '+coinsOf(ME.uid)+' coins'}</small></div>`;a.onclick=shopModal;
+  const b=el('button','funcard lbc');b.innerHTML='<span>🏆</span><div><b>Leaderboard</b><small>Who’s #1 this week?</small></div>';b.onclick=()=>leaderModal();
+  row.append(a,b);w.insertBefore(row,w.children[1]||null)}}
 
 /* ---------- chrome ---------- */
 function closeDrawers(){['rail','side','note'].forEach(i=>$(i).classList.remove('open'));$('scrim').classList.remove('show')}
