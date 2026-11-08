@@ -1,5 +1,5 @@
 // Ranton app helper: lets Ranton be installed and opens instantly.
-const C='ranton-v1794094897';
+const C='ranton-v1794099157';
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(C).then(c=>c.addAll(['./','./icon.svg','./manifest.json'])).catch(()=>{}))});
 self.addEventListener('activate',e=>e.waitUntil(self.clients.claim()));
 self.addEventListener('fetch',e=>{

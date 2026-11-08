@@ -875,6 +875,33 @@ body.pop .qotd button.send,body .qotd button.send{background:#8338ec!important;c
 .taphear{display:none;position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:20;background:#ffd23f;color:#1a1a1a;font:800 20px Fredoka,Nunito,sans-serif;padding:16px 26px;border-radius:999px;border:3px solid #1a1a1a;box-shadow:4px 4px 0 #1a1a1a;cursor:pointer;animation:pulse 1.2s infinite}
 .taphear.show{display:block}
 #callov #cname,#callov #cstat,#callov h2{color:#fff!important}
+/* ===== CALL BACKGROUNDS ===== */
+.bgpanel{position:absolute;left:50%;bottom:110px;transform:translateX(-50%);width:min(560px,calc(100vw - 20px));max-height:60vh;overflow:auto;background:#fff;color:#1a1a1a;border:3px solid #1a1a1a;border-radius:20px;box-shadow:5px 5px 0 #1a1a1a;z-index:30;padding:12px 14px;font-family:Nunito,sans-serif;text-align:left}
+.bghead{display:flex;align-items:center;justify-content:space-between;font-size:17px;margin-bottom:4px}.bgx{background:#0001;border:0;width:30px;height:30px;border-radius:50%;cursor:pointer;font-size:14px}
+.bgpanel h4{margin:10px 0 6px;font-size:13px;text-transform:uppercase;letter-spacing:.06em;opacity:.6}
+.bgrow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}.bgrow.small{grid-template-columns:repeat(4,1fr)}
+.bgopt{aspect-ratio:16/10;border-radius:12px;border:2.5px solid #1a1a1a;background-size:cover;background-position:center;cursor:pointer;position:relative;display:flex;align-items:flex-end;justify-content:center;padding:0;overflow:hidden;color:#1a1a1a}
+.bgopt span{background:#fffe;font-size:11.5px;font-weight:800;padding:2px 6px;border-radius:8px 8px 0 0;white-space:nowrap}
+.bgopt.plain{background:#f1f1f1;align-items:center}.bgopt.plain span{background:none;font-size:13px}
+.bgopt.on{outline:3px solid #3a86ff;outline-offset:2px}
+.bgrow.small .bgopt{aspect-ratio:2/1}
+.bgstat{font-size:12.5px;font-weight:800;color:#8338ec;min-height:2px}
+.bghint{font-size:12px;opacity:.6;margin:10px 0 0}
+@media(max-width:500px){.bgrow,.bgrow.small{grid-template-columns:repeat(3,1fr)}.bgpanel{bottom:96px}}
+/* call screen colors */
+#callov.ct-sunset,#gcall.ct-sunset,.ctp.ct-sunset{background:linear-gradient(160deg,#ff7e5f,#a8326d)!important}
+#callov.ct-ocean,#gcall.ct-ocean,.ctp.ct-ocean{background:linear-gradient(160deg,#0f4c81,#1fa2c7)!important}
+#callov.ct-galaxy,#gcall.ct-galaxy,.ctp.ct-galaxy{background:radial-gradient(#fff 1px,transparent 1.5px) 0 0/34px 34px,radial-gradient(circle at 30% 20%,#4c1d95,#0b0820 70%)!important}
+#callov.ct-candy,#gcall.ct-candy,.ctp.ct-candy{background:linear-gradient(160deg,#ff9a9e,#a18cd1)!important}
+#callov.ct-forest,#gcall.ct-forest,.ctp.ct-forest{background:linear-gradient(160deg,#134e4a,#3f8f4f)!important}
+#callov.ct-pop,#gcall.ct-pop,.ctp.ct-pop{background:radial-gradient(#1a1a1a22 2px,transparent 2px) 0 0/22px 22px,#ffd23f!important}
+.ctp.ct-dark{background:#14121c!important}
+.ctp span{background:#fffe}
+#callov.ct-pop #cname,#callov.ct-pop #cstat{color:#1a1a1a!important}
+/* ringtone picker */
+.ringrow{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px}.ringrow button{padding:7px 12px;border-radius:999px;border:2px solid #0002;background:#fff;font-weight:800;cursor:pointer;color:#1a1a1a}
+.ringrow button.on{background:#3a86ff;color:#fff;border-color:#1a1a1a}
+body.pop .ringrow button{border-color:#1a1a1a}
 
 .callbtn{background:#ffffff12;color:var(--txt);border-radius:10px;width:38px;height:34px;font-size:17px;margin-left:6px}
 .callbtn:hover{background:var(--good);color:#14121c}
@@ -1627,9 +1654,9 @@ function deleteAccountModal(){
 const ICE={iceServers:[{urls:['stun:stun.l.google.com:19302','stun:stun1.l.google.com:19302','stun:stun2.l.google.com:19302']}]};
 let ringNode=null;
 function ringStart(incoming){ringStop();if(ME.mode==='dnd')return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume&&AC.resume()}catch(e){return}
-  const beepOnce=()=>{if(!ST.sound)return;try{[0,0.25].forEach((d,i)=>{const o=AC.createOscillator(),g=AC.createGain();o.type='sine';o.frequency.value=incoming?(i?660:880):440;
-    const t=AC.currentTime+d;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(incoming?.12:.05,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+.22);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+.25)})}catch(e){}};
-  beepOnce();ringNode=setInterval(beepOnce,incoming?1500:3000)}
+  const id=incoming?(PREF.ringIn||'classic'):(PREF.ringOut||'bloop'),R=RINGS[id]||RINGS.classic;
+  const beepOnce=()=>{if(!ST.sound)return;playRing(id,incoming?1:.55)};
+  beepOnce();ringNode=setInterval(beepOnce,R.every*(incoming?1:1.6))}
 function ringStop(){clearInterval(ringNode);ringNode=null}
 async function getMedia(type){
   try{return await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true},video:type==='video'?{width:{ideal:1280},height:{ideal:720},facingMode:'user'}:false})}
@@ -1748,8 +1775,8 @@ async function share1(){
 }
 async function stopShare1(){
   if(!CALL.screen)return;const tr=CALL.screen;CALL.screen=null;tr.stop();
-  if(CALL.pc){const t=videoTx(CALL.pc);const cam=CALL.local&&CALL.local.getVideoTracks()[0]||null;if(t)await t.sender.replaceTrack(cam).catch(()=>{})}
-  $('lvid').srcObject=CALL.type==='video'?CALL.local:null;
+  if(CALL.pc){const t=videoTx(CALL.pc);const cam=CFX.track||CALL.local&&CALL.local.getVideoTracks()[0]||null;if(t)await t.sender.replaceTrack(cam).catch(()=>{})}
+  $('lvid').srcObject=CALL.type==='video'?(CFX.track?new MediaStream([CFX.track]):CALL.local):null;
   if(CALL.cid)F.updateDoc(F.doc(db,'calls',CALL.cid),{screen:null}).catch(()=>{});callUI();
 }
 function hangUp(status){
@@ -1843,7 +1870,7 @@ function newPeer(uid,lid,side){
   pc.onicecandidate=e=>{if(e.candidate)F.addDoc(F.collection(db,'groups',GC.gid,'links',lid,'cands'),{side,c:JSON.stringify(e.candidate.toJSON())}).catch(()=>{})};
   pc.onconnectionstatechange=()=>{p.state=pc.connectionState;if(p.state==='failed')closePeer(uid);rGC()};
   GC.local.getAudioTracks().forEach(t=>pc.addTrack(t,GC.local));
-  const vt=GC.screen||GC.local.getVideoTracks()[0];
+  const vt=GC.screen||CFX.track||GC.local.getVideoTracks()[0];
   if(vt)pc.addTrack(vt,GC.local);else if(side==='from')pc.addTransceiver('video',{direction:'sendrecv'});
   p.unsub=F.onSnapshot(F.collection(db,'groups',GC.gid,'links',lid,'cands'),s=>{
     s.forEach(d=>{const v=d.data();if(v.side===side||p.seen.has(d.id))return;p.seen.add(d.id);
@@ -1899,7 +1926,7 @@ async function shareG(){
 }
 async function stopShareG(){
   if(!GC.screen)return;const tr=GC.screen;GC.screen=null;tr.stop();
-  const cam=GC.local&&GC.local.getVideoTracks()[0]||null;
+  const cam=CFX.track||GC.local&&GC.local.getVideoTracks()[0]||null;
   for(const p of Object.values(GC.peers)){const t=videoTx(p.pc);if(t)await t.sender.replaceTrack(cam).catch(()=>{})}
   if(GC.gid)F.updateDoc(gref(GC.gid),{'call.share':null}).catch(()=>{});rGC();
 }
@@ -1944,8 +1971,8 @@ function rGC(){
     let t=grid.querySelector(`[data-uid="${CSS.escape(uid)}"]`);
     if(!t){t=document.createElement('div');t.className='tile';t.dataset.uid=uid;t.innerHTML=`<video autoplay playsinline muted></video>${uid===ME.uid?'':'<audio autoplay playsinline></audio>'}<div class="tav"></div><div class="tname"></div>`;grid.appendChild(t)}
     const w=who(uid),v=t.querySelector('video'),me=uid===ME.uid,p=GC.peers[uid];
-    const src=me?(GC.screen?new MediaStream([GC.screen]):GC.local):p&&p.stream;
-    if(me){if(v._src!==(GC.screen||GC.local)){v.srcObject=src;v._src=GC.screen||GC.local}}
+    const mine=GC.screen||CFX.track||GC.local,src=me?(mine instanceof MediaStreamTrack?new MediaStream([mine]):mine):p&&p.stream;
+    if(me){if(v._src!==mine){v.srcObject=src;v._src=mine}}
     else{const vt=src?src.getVideoTracks():[],at=src?src.getAudioTracks():[],key=vt.map(x=>x.id).join(),akey=at.map(x=>x.id).join();
       if(v._key!==key){v._key=key;v.srcObject=vt.length?new MediaStream(vt):null}
       const au=t.querySelector('audio');if(au&&au._key!==akey){au._key=akey;au.srcObject=at.length?new MediaStream(at):null;playSound(au)}}
@@ -3320,6 +3347,150 @@ document.addEventListener('click',e=>{if(!e.target.closest('.moremenu,.moreb'))d
 const SHORT={'Picture or file':'Photo / file','Draw something':'Draw','Play a game':'Games','Watch together':'Watch','Chat wallpaper':'Wallpaper','Self-destruct message':'Secret 💣','Would you rather…':'Would you rather','Lock this chat':'Lock chat','Remove chat lock':'Unlock chat','Save chat as a file':'Save chat'};
 {const o=plusMenu;plusMenu=function(anchor,k){o(anchor,k);const p=document.querySelector('.pmenu:not(.fxmenu)');if(!p)return;
   p.querySelectorAll('button').forEach(b=>{const m=b.textContent.match(/^(\S+)\s+(.+)$/);if(!m)return;const lbl=SHORT[m[2]]||m[2];b.innerHTML='<span class="pi"></span><span class="pl"></span>';b.querySelector('.pi').textContent=m[1];b.querySelector('.pl').textContent=lbl.replace(' 💣','');b.title=m[2]})}}
+
+/* =================== RINGTONES + CALL BACKGROUNDS =================== */
+// each note: [frequency, start time, length, wave]
+const RINGS={
+  classic:{name:'📞 Classic',every:1500,notes:[[880,0,.22,'sine'],[660,.25,.22,'sine']]},
+  bloop:{name:'🫧 Bloop',every:1700,notes:[[392,0,.16,'sine'],[523,.18,.16,'sine'],[659,.36,.3,'sine']]},
+  bubbles:{name:'🎈 Bubbles',every:1500,notes:[[523,0,.09,'sine'],[659,.1,.09,'sine'],[784,.2,.09,'sine'],[1046,.3,.2,'sine']]},
+  marimba:{name:'🎹 Marimba',every:1800,notes:[[784,0,.18,'triangle'],[659,.2,.18,'triangle'],[523,.4,.18,'triangle'],[659,.6,.3,'triangle']]},
+  arcade:{name:'👾 Arcade',every:1400,notes:[[440,0,.08,'square'],[554,.09,.08,'square'],[659,.18,.08,'square'],[880,.27,.16,'square']]},
+  chill:{name:'🌙 Chill',every:2400,notes:[[392,0,.5,'sine'],[494,.35,.5,'sine'],[587,.7,.7,'sine']]},
+  jingle:{name:'🔔 Jingle',every:1900,notes:[[659,0,.14,'triangle'],[659,.16,.14,'triangle'],[784,.32,.14,'triangle'],[659,.48,.14,'triangle'],[523,.64,.3,'triangle']]},
+  phone:{name:'☎️ Old phone',every:2600,notes:[...Array.from({length:12},(_,i)=>[i%2?480:440,i*.08,.08,'square'])]}
+};
+function playRing(id,vol){
+  try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();AC.resume&&AC.resume()}catch(e){return}
+  const R=RINGS[id]||RINGS.classic,peak=(R.notes[0][3]==='square'?.05:.13)*(vol||1);
+  R.notes.forEach(([f,d,len,type])=>{try{const o=AC.createOscillator(),g=AC.createGain();o.type=type;o.frequency.value=f;const t=AC.currentTime+d;
+    g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(peak,t+.015);g.gain.exponentialRampToValueAtTime(.0001,t+len);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+len+.05)}catch(e){}});
+}
+
+/* ---------- backgrounds behind you (video calls) ---------- */
+const MP_BASE='https://cdn.jsdelivr.net/npm/@mediapipe/selfie_segmentation@0.1.1675465747/';
+const CFX={mode:'none',seg:null,loading:null,track:null,video:null,canvas:null,ctx:null,bg:null,running:false,src:null};
+const SCENES={
+  sunset:['🌅 Sunset',(c,W,H)=>{let g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#ff7e5f');g.addColorStop(.55,'#feb47b');g.addColorStop(1,'#ffd9a0');c.fillStyle=g;c.fillRect(0,0,W,H);
+    c.fillStyle='#fff3c4';c.beginPath();c.arc(W*.7,H*.55,H*.16,0,7);c.fill();c.fillStyle='#7a3b69';c.beginPath();c.moveTo(0,H);c.lineTo(0,H*.7);c.lineTo(W*.25,H*.5);c.lineTo(W*.45,H*.72);c.lineTo(W*.65,H*.55);c.lineTo(W,H*.75);c.lineTo(W,H);c.fill()}],
+  space:['🚀 Space',(c,W,H)=>{let g=c.createRadialGradient(W*.3,H*.3,10,W*.5,H*.5,W);g.addColorStop(0,'#2a1b5c');g.addColorStop(1,'#05030f');c.fillStyle=g;c.fillRect(0,0,W,H);
+    let s=7;const r=()=>(s=(s*16807)%2147483647)/2147483647;for(let i=0;i<260;i++){c.fillStyle=`rgba(255,255,255,${.3+r()*.7})`;c.fillRect(r()*W,r()*H,r()*2.2+.5,r()*2.2+.5)}
+    g=c.createRadialGradient(W*.8,H*.25,5,W*.8,H*.25,H*.18);g.addColorStop(0,'#ffb86b');g.addColorStop(1,'#c2410c');c.fillStyle=g;c.beginPath();c.arc(W*.8,H*.25,H*.15,0,7);c.fill()}],
+  beach:['🏖️ Beach',(c,W,H)=>{let g=c.createLinearGradient(0,0,0,H*.55);g.addColorStop(0,'#5ec8f2');g.addColorStop(1,'#bde9fb');c.fillStyle=g;c.fillRect(0,0,W,H*.55);
+    g=c.createLinearGradient(0,H*.55,0,H*.72);g.addColorStop(0,'#1f8fbf');g.addColorStop(1,'#4fc3e0');c.fillStyle=g;c.fillRect(0,H*.55,W,H*.17);c.fillStyle='#f4d58d';c.fillRect(0,H*.72,W,H*.28);
+    c.fillStyle='#fff8';[[.2,.18],[.32,.14],[.6,.22]].forEach(([x,y])=>{c.beginPath();c.ellipse(W*x,H*y,W*.06,H*.035,0,0,7);c.fill()})}],
+  neon:['🌆 Neon city',(c,W,H)=>{let g=c.createLinearGradient(0,0,0,H);g.addColorStop(0,'#12002b');g.addColorStop(.6,'#5b0b6e');g.addColorStop(1,'#ff2e88');c.fillStyle=g;c.fillRect(0,0,W,H);
+    c.fillStyle='#0b0016';for(let i=0;i<14;i++){const w=W/14,h=H*(.25+((i*37)%10)/22);c.fillRect(i*w,H*.62-h*.6,w-4,h)}
+    c.strokeStyle='#ff2e88aa';c.lineWidth=2;for(let i=0;i<12;i++){c.beginPath();c.moveTo(W/2,H*.62);c.lineTo(i*W/11,H);c.stroke()}for(let i=1;i<7;i++){const y=H*.62+Math.pow(i/6,1.8)*H*.38;c.beginPath();c.moveTo(0,y);c.lineTo(W,y);c.stroke()}}],
+  room:['🛋️ Cozy room',(c,W,H)=>{c.fillStyle='#e9dcc9';c.fillRect(0,0,W,H);c.fillStyle='#cdb89d';c.fillRect(0,H*.78,W,H*.22);
+    c.fillStyle='#8fd3ff';c.fillRect(W*.08,H*.14,W*.24,H*.36);c.strokeStyle='#fff';c.lineWidth=10;c.strokeRect(W*.08,H*.14,W*.24,H*.36);c.beginPath();c.moveTo(W*.2,H*.14);c.lineTo(W*.2,H*.5);c.stroke();
+    c.fillStyle='#8b5e3c';c.fillRect(W*.66,H*.3,W*.28,H*.03);['#ff6b6b','#ffd23f','#3a86ff','#06d6a0'].forEach((col,i)=>{c.fillStyle=col;c.fillRect(W*(.68+i*.05),H*.18,W*.035,H*.12)});
+    c.fillStyle='#3c8d4f';c.beginPath();c.arc(W*.9,H*.62,H*.09,0,7);c.fill();c.fillStyle='#b5651d';c.fillRect(W*.87,H*.66,W*.06,H*.12)}],
+  ranton:['💬 Ranton',(c,W,H)=>{c.fillStyle='#fff3d6';c.fillRect(0,0,W,H);c.fillStyle='#1a1a1a22';for(let x=10;x<W;x+=28)for(let y=10;y<H;y+=28){c.beginPath();c.arc(x,y,2.5,0,7);c.fill()}
+    c.font=`800 ${H*.12}px Fredoka, sans-serif`;c.fillStyle='#ffd23f';c.strokeStyle='#1a1a1a';c.lineWidth=6;c.textAlign='left';c.strokeText('Ranton',W*.05,H*.18);c.fillText('Ranton',W*.05,H*.18)}]
+};
+function sceneCanvas(id,W,H){const c=document.createElement('canvas');c.width=W;c.height=H;SCENES[id][1](c.getContext('2d'),W,H);return c}
+function loadScript(src){return new Promise((res,rej)=>{if(window.SelfieSegmentation)return res();const s=document.createElement('script');s.src=src;s.crossOrigin='anonymous';s.onload=res;s.onerror=()=>rej(new Error('load'));document.head.appendChild(s)})}
+async function fxLoad(){
+  if(CFX.seg)return CFX.seg;if(CFX.loading)return CFX.loading;
+  CFX.loading=(async()=>{await loadScript(MP_BASE+'selfie_segmentation.js');
+    const seg=new window.SelfieSegmentation({locateFile:f=>MP_BASE+f});seg.setOptions({modelSelection:1,selfieMode:false});seg.onResults(fxDraw);await seg.initialize();CFX.seg=seg;return seg})();
+  try{return await CFX.loading}catch(e){CFX.loading=null;throw e}
+}
+function camTrack(){const s=CALL.pc&&CALL.local?CALL.local:GC.gid&&GC.local?GC.local:null;return s&&s.getVideoTracks()[0]||null}
+function fxDraw(r){
+  const c=CFX.ctx;if(!c||!CFX.running)return;const W=CFX.canvas.width,H=CFX.canvas.height;
+  c.save();c.clearRect(0,0,W,H);c.drawImage(r.segmentationMask,0,0,W,H);
+  c.globalCompositeOperation='source-in';c.drawImage(r.image,0,0,W,H);
+  c.globalCompositeOperation='destination-over';
+  if(CFX.mode==='blur'){c.filter='blur(16px)';c.drawImage(r.image,-20,-20,W+40,H+40);c.filter='none'}
+  else if(CFX.bg){const b=CFX.bg,s=Math.max(W/b.width,H/b.height);c.drawImage(b,(W-b.width*s)/2,(H-b.height*s)/2,b.width*s,b.height*s)}
+  c.restore();
+}
+async function fxTick(){
+  if(!CFX.running)return;
+  const cam=CFX.src,v=CFX.video;
+  try{if(cam&&cam.enabled&&cam.readyState==='live'&&v.readyState>=2){
+      if(CFX.canvas.width!==v.videoWidth&&v.videoWidth){CFX.canvas.width=v.videoWidth;CFX.canvas.height=v.videoHeight;if(CFX.mode!=='blur'&&CFX.mode!=='none')CFX.bg=sceneCanvas(CFX.mode,v.videoWidth,v.videoHeight)}
+      await CFX.seg.send({image:v})}
+    else{CFX.ctx.fillStyle='#000';CFX.ctx.fillRect(0,0,CFX.canvas.width,CFX.canvas.height)}}catch(e){}
+  setTimeout(fxTick,45);
+}
+async function setCallBg(mode){
+  const cam=camTrack();
+  if(mode==='none'){fxStop(true);PREF.callBg='none';savePref();return}
+  if(!cam)return toast('Turn your camera on first.');
+  fxStatus('Loading… (first time takes a few seconds)');
+  try{await fxLoad()}catch(e){fxStatus('');return toast('😕 Backgrounds couldn’t load on this device or Wi-Fi.')}
+  const fresh=!CFX.running||CFX.src!==cam;if(fresh)fxStop(false);
+  CFX.mode=mode;PREF.callBg=mode;savePref();
+  const st=cam.getSettings?cam.getSettings():{},W=st.width||640,H=st.height||480;
+  if(mode!=='blur')CFX.bg=sceneCanvas(mode,W,H);
+  if(fresh){
+    CFX.src=cam;CFX.video=document.createElement('video');CFX.video.muted=true;CFX.video.playsInline=true;CFX.video.srcObject=new MediaStream([cam]);await CFX.video.play().catch(()=>{});
+    CFX.canvas=document.createElement('canvas');CFX.canvas.width=W;CFX.canvas.height=H;CFX.ctx=CFX.canvas.getContext('2d');
+    CFX.running=true;CFX.track=CFX.canvas.captureStream(24).getVideoTracks()[0];fxTick();
+    await fxSend();
+  }
+  fxStatus('');rFxPanel();
+}
+async function fxSend(){
+  const tr=CFX.track||camTrack();if(!tr)return;
+  if(CALL.pc){if(!CALL.screen){const t=videoTx(CALL.pc);if(t)await t.sender.replaceTrack(tr).catch(()=>{});$('lvid').srcObject=new MediaStream([tr])}}
+  else if(GC.gid){if(!GC.screen)for(const p of Object.values(GC.peers)){const t=videoTx(p.pc);if(t)await t.sender.replaceTrack(tr).catch(()=>{})}rGC()}
+}
+function fxStop(sendCam){
+  const had=!!CFX.track;CFX.running=false;
+  if(CFX.track){try{CFX.track.stop()}catch(e){}}
+  CFX.track=null;CFX.src=null;if(CFX.video){CFX.video.srcObject=null;CFX.video=null}CFX.mode='none';
+  if(sendCam&&had)fxSend();
+  rFxPanel();
+}
+function fxStatus(t){const s=document.querySelector('.bgpanel .bgstat');if(s)s.textContent=t}
+
+/* ---------- call screen colors (everyone picks their own) ---------- */
+const CALLTHEMES={dark:'🌑 Dark',sunset:'🌅 Sunset',ocean:'🌊 Ocean',galaxy:'🌌 Galaxy',candy:'🍬 Candy',forest:'🌲 Forest',pop:'💛 Ranton'};
+function applyCallTheme(){const t=PREF.callTheme||'dark';['callov','gcall'].forEach(id=>{const o=$(id);if(!o)return;Object.keys(CALLTHEMES).forEach(k=>o.classList.toggle('ct-'+k,k===t))})}
+
+/* ---------- the picker panel ---------- */
+function toggleFxPanel(ovId){
+  const ov=$(ovId);if(!ov)return;let p=ov.querySelector('.bgpanel');if(p){p.remove();return}
+  p=el('div','bgpanel');p.innerHTML='<div class="bghead"><b>🎨 Backgrounds</b><button class="bgx">✕</button></div><div class="bgbody"></div>';
+  p.querySelector('.bgx').onclick=()=>p.remove();ov.appendChild(p);rFxPanel();
+}
+function rFxPanel(){
+  const p=document.querySelector('.bgpanel');if(!p)return;const b=p.querySelector('.bgbody');b.innerHTML='';
+  const vid=(CALL.pc&&CALL.type==='video')||(GC.gid&&GC.type==='video');
+  if(vid){
+    b.appendChild(el('h4',null,'Behind you'));b.appendChild(el('div','bgstat',''));
+    const row=el('div','bgrow');
+    [['none','🚫 None'],['blur','💨 Blur'],...Object.entries(SCENES).map(([k,v])=>[k,v[0]])].forEach(([k,t])=>{
+      const c=el('button','bgopt'+(CFX.mode===k?' on':''));
+      if(SCENES[k]){c.style.backgroundImage=`url(${sceneCanvas(k,160,100).toDataURL()})`}else c.classList.add('plain');
+      c.innerHTML='<span></span>';c.querySelector('span').textContent=t;c.onclick=()=>setCallBg(k);row.appendChild(c)});
+    b.appendChild(row);
+  }
+  b.appendChild(el('h4',null,'Call screen color'+(vid?'':'')));
+  const row2=el('div','bgrow small');
+  Object.entries(CALLTHEMES).forEach(([k,t])=>{const c=el('button','bgopt ctp ct-'+k+((PREF.callTheme||'dark')===k?' on':''));c.innerHTML='<span></span>';c.querySelector('span').textContent=t;
+    c.onclick=()=>{PREF.callTheme=k;savePref();applyCallTheme();rFxPanel()};row2.appendChild(c)});
+  b.appendChild(row2);b.appendChild(el('p','bghint','Only you see the call screen color.'+(vid?' Everyone sees the background behind you.':'')));
+}
+
+/* ---------- hooks ---------- */
+{const o=callUI;callUI=function(){o.apply(this,arguments);const bt=$('cbtns');if(bt&&!$('cbg')){const b=el('button',null,'🎨');b.id='cbg';b.title='Backgrounds';b.onclick=e=>{e.stopPropagation();toggleFxPanel('callov')};bt.insertBefore(b,$('cend'))}applyCallTheme();autoBg()}}
+{const o=rGC;rGC=function(){o.apply(this,arguments);const bt=$('gbtns');if(bt&&!$('gbg')){const b=el('button',null,'🎨');b.id='gbg';b.title='Backgrounds';b.onclick=e=>{e.stopPropagation();toggleFxPanel('gcall')};bt.insertBefore(b,$('gend'))}applyCallTheme();autoBg()}}
+{const o=hangUp;hangUp=function(){fxStop(false);CFX.auto=false;const p=document.querySelector('#callov .bgpanel');if(p)p.remove();return o.apply(this,arguments)}}
+{const o=leaveGroupCall;leaveGroupCall=function(){fxStop(false);CFX.auto=false;const p=document.querySelector('#gcall .bgpanel');if(p)p.remove();return o.apply(this,arguments)}}
+// ringtone settings
+{const o=settingsModal;settingsModal=function(sec){o(sec);if(sec!=='notif')return;const b=$('sbody');if(!b)return;
+  const s=el('div','ringset');s.innerHTML='<h3>Ringtone <span class="hint">(when someone calls you)</span></h3><div class="ringrow" id="srin"></div><h3>Calling sound <span class="hint">(what you hear while you call someone)</span></h3><div class="ringrow" id="srout"></div>';
+  b.appendChild(s);
+  [['srin','ringIn','classic'],['srout','ringOut','bloop']].forEach(([id,key,def])=>Object.entries(RINGS).forEach(([k,R])=>{
+    const x=el('button',(PREF[key]||def)===k?'on':'',R.name);x.onclick=()=>{PREF[key]=k;savePref();playRing(k,key==='ringIn'?1:.55);$(id).querySelectorAll('button').forEach(y=>y.classList.toggle('on',y===x))};$(id).appendChild(x)}))}}
+
+// use the background you picked last time
+function autoBg(){if(CFX.auto||CFX.running||!PREF.callBg||PREF.callBg==='none')return;const ok=(CALL.pc&&CALL.type==='video'&&CALL.status==='live')||(GC.gid&&GC.type==='video');if(!ok||!camTrack())return;CFX.auto=true;setTimeout(()=>setCallBg(PREF.callBg),300)}
 
 /* ---------- chrome ---------- */
 function closeDrawers(){['rail','side','note'].forEach(i=>$(i).classList.remove('open'));$('scrim').classList.remove('show')}
